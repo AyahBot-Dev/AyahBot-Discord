@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+yarn.lock
+.env
+serviceAccount.json
+.vscode
+comments.js
+coverage/
+HadithTable.ts
+TODO.md
