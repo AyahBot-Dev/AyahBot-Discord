@@ -56,7 +56,7 @@ export default {
 
       if (!translation)
         translation =
-          (await (client.quranTrs.cache.get(message.guild.id) as number)) ||
+          (await (client.quranTrs.cache.get(message.guildId) as number)) ||
           undefined;
 
       return await message.reply({

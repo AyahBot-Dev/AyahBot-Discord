@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { Ayah, translations, translationsR } from "../lib/classes/Ayah";
+import { Ayah, translations } from "../lib/classes/Ayah";
 import {
   syntax_error,
   invalid_datatype,
@@ -79,7 +79,7 @@ export default {
 
       if (!translation)
         translation =
-          (await (client.quranTrs.cache.get(message.guild.id) as number)) ||
+          (await (client.quranTrs.cache.get(message.guildId) as number)) ||
           undefined;
 
       const isSingle = /^\d{1,}:\d{1,}$/.test(verse_key);
