@@ -1,9 +1,9 @@
 import "reflect-metadata";
-import { Client, Intents } from "discord.js";
+import { Intents } from "discord.js";
 import { Container } from "inversify";
-import { TYPES } from "./src/types";
-import { Bot } from "./src/Bot";
-import { CustomClient } from "./src/lib/classes/CustomClient";
+import { TYPES } from "./src/types.js";
+import { Bot } from "./src/Bot.js";
+import { CustomClient } from "./src/lib/classes/CustomClient.js";
 
 const container = new Container();
 

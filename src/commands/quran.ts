@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { Ayah, translations, translationsR } from "../lib/classes/Ayah";
+import { Ayah, translations } from "../lib/classes/Ayah.js";
 import {
   syntax_error,
   invalid_datatype,
   embed_error,
-} from "../lib/embeds/embeds";
-import { handleE, convertToEmbed } from "../lib/utils";
+} from "../lib/embeds/embeds.js";
+import { handleE, convertToEmbed } from "../lib/utils.js";
 
 import type {
   CacheType,
@@ -15,7 +15,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../lib/classes/CustomClient.js";
 
 export default {
   name: "quran",
@@ -79,7 +79,7 @@ export default {
 
       if (!translation)
         translation =
-          (await (client.quranTrs.cache.get(message.guild.id) as number)) ||
+          (await (client.quranTrs.cache.get(message.guildId) as number)) ||
           undefined;
 
       const isSingle = /^\d{1,}:\d{1,}$/.test(verse_key);

@@ -1,7 +1,7 @@
-import container from "./inversify.config";
-import { TYPES } from "./src/types";
+import container from "./inversify.config.js";
+import { TYPES } from "./src/types.js";
 
-import type { Bot } from "./src/Bot";
+import type { Bot } from "./src/Bot.js";
 
 const bot = container.get<Bot>(TYPES.Bot);
 

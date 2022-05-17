@@ -1,14 +1,14 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { translations } from "../lib/classes/Ayah";
+import { translations } from "../lib/classes/Ayah.js";
 import {
   invalid_datatype,
   embed_error,
   create_embed,
-} from "../lib/embeds/embeds";
-import { handleE } from "../lib/utils";
-import DBHandler from "../lib/DBHandler";
-import { colors } from "../lib/embeds/infos";
+} from "../lib/embeds/embeds.js";
+import { handleE } from "../lib/utils.js";
+import DBHandler from "../lib/DBHandler.js";
+import { colors } from "../lib/embeds/infos.js";
 
 import type {
   CacheType,
@@ -16,7 +16,8 @@ import type {
   CommandInteractionOption,
   Message,
 } from "discord.js";
-import { CustomClient } from "../lib/classes/CustomClient";
+
+import type { CustomClient } from "../lib/classes/CustomClient.js";
 
 export default {
   name: "qdefault",

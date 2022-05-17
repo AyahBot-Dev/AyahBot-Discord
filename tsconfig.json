@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "node",
     "target": "ESNext",
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "types": [
-      // add node as an option
-      "node",
-      "reflect-metadata"
-    ],
-    "typeRoots": [
-      // add path to @types
-      "./node_modules/@types",
-      "./src/types"
-    ],
+    "lib": ["ESNext"],
+    "sourceMap": false,
+    "types": ["node", "reflect-metadata"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "declaration": true,
     "preserveSymlinks": true,
-    "outDir": "dist",
+    "outDir": "build",
     "isolatedModules": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
@@ -32,5 +24,6 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

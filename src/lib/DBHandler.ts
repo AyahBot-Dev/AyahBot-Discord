@@ -1,8 +1,8 @@
 import schedule from "node-schedule";
 
-import { scheduledJobs } from "./initDB";
-import { cronTZ, handleE, task } from "./utils";
-import { translations, translationsR } from "./classes/Ayah";
+import { scheduledJobs } from "./initDB.js";
+import { cronTZ, handleE, task } from "./utils.js";
+import { translations, translationsR } from "./classes/Ayah.js";
 
 import type { Guild } from "discord.js";
 

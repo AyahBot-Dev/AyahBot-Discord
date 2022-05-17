@@ -1,15 +1,18 @@
 import * as fs from "fs/promises";
 
-import type { CustomClient } from "../classes/CustomClient";
+import type { CustomClient } from "../classes/CustomClient.js";
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
   const t1 = new Date().getTime();
 
   const command_files = await fs
-    .readdir("./src/commands")
+    .readdir(
+      (process.env.NODE_ENV.startsWith("p") ? "./build/" : "./") +
+        "src/commands"
+    )
     .then(async (file: string[]) =>
-      file.filter((file) => file.endsWith(".ts"))
+      file.filter((file) => file.endsWith(".js"))
     );
 
   for (const file of command_files) {

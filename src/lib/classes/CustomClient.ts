@@ -4,8 +4,10 @@ import {
   CommandInteraction,
   MessageEmbed,
 } from "discord.js";
-import { PrefixManager } from "./PrefixManager";
-import { QuranTrsManager } from "./QuranTrsManager";
+import { SlashCommandBuilder } from "@discordjs/builders";
+
+import { PrefixManager } from "./PrefixManager.js";
+import { QuranTrsManager } from "./QuranTrsManager.js";
 
 import type {
   ClientOptions,
@@ -13,7 +15,6 @@ import type {
   CommandInteractionOption,
   CacheType,
 } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 
 export interface Command {
   name: string;

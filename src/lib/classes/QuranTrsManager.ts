@@ -1,7 +1,8 @@
 import { CachedManager } from "discord.js";
 
 import type { Collection, Snowflake } from "discord.js";
-import type { CustomClient } from "./CustomClient";
+
+import type { CustomClient } from "./CustomClient.js";
 
 export class QuranTrs extends Number {
   constructor(quran: number) {
@@ -16,8 +17,6 @@ export class QuranTrsManager extends CachedManager<
   QuranTrs,
   QuranTrsResolvable
 > {
-  private _cache: Collection<number, number>;
-
   constructor(client: CustomClient) {
     super(client, QuranTrs);
   }
