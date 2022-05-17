@@ -7,10 +7,7 @@ export default async (client: CustomClient) => {
   const load_dir = async (dir: string) => {
     const t1 = new Date().getTime();
     const events_files = await fs
-      .readdir(
-        (process.env.NODE_ENV.startsWith("p") ? "./build/" : "./") +
-          `src/events/${dir}`
-      )
+      .readdir(`./src/events/${dir}`)
       .then(async (files) => files.filter((file) => file.endsWith(".js")));
 
     for (const file of events_files) {

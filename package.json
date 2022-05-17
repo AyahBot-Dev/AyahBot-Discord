@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "bash build.sh",
     "test": "jest",
     "teste": "jest --forceExit",
     "testd": "node -r dotenv/config node_modules/jest/bin/jest.js --detectOpenHandles",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "start": "tsm -r dotenv/config index.ts",
-    "dev": "tsc -p tsconfig.json -w"
+    "start:prod": "node -r dotenv/config index",
+    "dev": "tsm -r dotenv/config index.ts"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,6 @@
   "dependencies": {
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
-    "@types/nodemailer": "^6.4.4",
     "axios": "^0.27.2",
     "discord-api-types": "^0.32.1",
     "discord.js": "^13.7.0",
@@ -44,9 +44,9 @@
     "@types/jest": "^27.5.1",
     "@types/node": "^17.0.33",
     "@types/node-schedule": "^2.1.0",
+    "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "assert": "^2.0.0",
     "eslint": "^8.15.0",
     "jest": "^28.1.0",
     "prettier": "2.6.2",
