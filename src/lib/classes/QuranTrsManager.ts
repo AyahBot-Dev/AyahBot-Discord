@@ -1,6 +1,6 @@
 import { CachedManager } from "discord.js";
 
-import type { Collection, Snowflake } from "discord.js";
+import type { Snowflake } from "discord.js";
 
 import type { CustomClient } from "./CustomClient.js";
 

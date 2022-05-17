@@ -7,10 +7,7 @@ export default async (client: CustomClient) => {
   const t1 = new Date().getTime();
 
   const command_files = await fs
-    .readdir(
-      (process.env.NODE_ENV.startsWith("p") ? "./build/" : "./") +
-        "src/commands"
-    )
+    .readdir("./src/commands")
     .then(async (file: string[]) =>
       file.filter((file) => file.endsWith(".js"))
     );
