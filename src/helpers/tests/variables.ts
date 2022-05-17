@@ -5,7 +5,6 @@ import type { Message, Guild, TextChannel } from "discord.js";
 
 import type { DataSnapshot } from "@firebase/database-types";
 import type { Job } from "node-schedule";
-import { CustomClient } from "../../lib/classes/CustomClient";
 
 export const dataInvalid = {
   code: 404,

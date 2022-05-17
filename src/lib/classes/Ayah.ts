@@ -1,8 +1,8 @@
-import axios from "../axiosInstance";
-import { handleE } from "../utils";
+import axios from "../axiosInstance.js";
+import { handleE } from "../utils.js";
+import { colors } from "../embeds/infos.js";
 
 import type { DataForEmbed, QuranDataResp, Verse } from "../../types";
-import { colors } from "../embeds/infos";
 
 export const surahsList = [
   "Surah Al-Fatihah (الفاتحة - The Opener)",

@@ -1,7 +1,8 @@
 import { CachedManager } from "discord.js";
 
 import type { Collection, Snowflake } from "discord.js";
-import type { CustomClient } from "./CustomClient";
+
+import type { CustomClient } from "./CustomClient.js";
 
 export class Prefix extends String {
   constructor(prefix: string) {
@@ -16,8 +17,6 @@ export class PrefixManager extends CachedManager<
   Prefix,
   PrefixResolvable
 > {
-  private _cache: Collection<number, string>;
-
   constructor(client: CustomClient) {
     super(client, Prefix);
   }

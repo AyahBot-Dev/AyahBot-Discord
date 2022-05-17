@@ -1,9 +1,9 @@
-import { handleE } from "../utils";
-import { colors } from "../embeds/infos";
+import { handleE } from "../utils.js";
+import { colors } from "../embeds/infos.js";
 
 import type { MessageEmbed } from "discord.js";
 
-import type { CustomClient } from "../classes/CustomClient";
+import type { CustomClient } from "../classes/CustomClient.js";
 
 export default async (client: CustomClient) => {
   try {

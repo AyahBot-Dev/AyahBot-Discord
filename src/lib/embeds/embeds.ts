@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 
-import { colors } from "./infos";
+import { colors } from "./infos.js";
 
 /* istanbul ignore next */
 export const create_embed = (

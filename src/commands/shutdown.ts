@@ -1,6 +1,7 @@
-import { embed_error, create_embed } from "../lib/embeds/embeds";
-import { handleE } from "../lib/utils";
-import { colors } from "../lib/embeds/infos";
+import { embed_error, create_embed } from "../lib/embeds/embeds.js";
+import { handleE } from "../lib/utils.js";
+import { colors } from "../lib/embeds/infos.js";
+import { db } from "../lib/initDB.js";
 
 import type {
   CacheType,
@@ -9,8 +10,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
-import { db } from "../lib/initDB";
+import type { CustomClient } from "../lib/classes/CustomClient.js";
 
 export default {
   name: "shutdown",

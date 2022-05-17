@@ -1,14 +1,14 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import DBHandler from "../lib/DBHandler";
+import DBHandler from "../lib/DBHandler.js";
 import {
   embed_error,
   create_embed,
   invalid_datatype,
   syntax_error,
-} from "../lib/embeds/embeds";
-import { colors } from "../lib/embeds/infos";
-import { handleE } from "../lib/utils";
+} from "../lib/embeds/embeds.js";
+import { colors } from "../lib/embeds/infos.js";
+import { handleE } from "../lib/utils.js";
 
 import type {
   CacheType,

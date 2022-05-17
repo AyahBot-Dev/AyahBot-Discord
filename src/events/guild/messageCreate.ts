@@ -1,15 +1,16 @@
 import { Collection } from "discord.js";
+
 import {
   embed_error,
   insufficient_perms,
   create_embed,
   coolDownsEmbed,
-} from "../../lib/embeds/embeds";
-import { colors } from "../../lib/embeds/infos";
-import { handleE } from "../../lib/utils";
+} from "../../lib/embeds/embeds.js";
+import { colors } from "../../lib/embeds/infos.js";
+import { handleE } from "../../lib/utils.js";
 
 import type { Message, PermissionResolvable, TextChannel } from "discord.js";
-import type { CustomClient } from "../../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient.js";
 
 export default async (client: CustomClient, message: Message) => {
   const prefix = message.guild

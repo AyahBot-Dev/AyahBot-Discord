@@ -1,23 +1,19 @@
-import {
-  GuildChannelResolvable,
-  MessageEmbed,
-  TextBasedChannel,
-} from "discord.js";
+import { MessageEmbed } from "discord.js";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 
-import { Ayah, translationsR } from "./classes/Ayah";
-import { embed_error } from "./embeds/embeds";
-import { colors } from "./embeds/infos";
-import loadCommands from "./handlers/commandsLoader";
-import loadEvents from "./handlers/eventsLoader";
-import loadJobs from "./handlers/jobsLoader";
-import loadPrefixes from "./handlers/prefixesLoader";
-import loadSlashes from "./handlers/slashesLoader";
+import { Ayah } from "./classes/Ayah.js";
+import { embed_error } from "./embeds/embeds.js";
+import { colors } from "./embeds/infos.js";
+import loadCommands from "./handlers/commandsLoader.js";
+import loadEvents from "./handlers/eventsLoader.js";
+import loadJobs from "./handlers/jobsLoader.js";
+import loadPrefixes from "./handlers/prefixesLoader.js";
+import loadSlashes from "./handlers/slashesLoader.js";
 
 import type { Guild, MessageEmbedOptions } from "discord.js";
 
-import type { CustomClient } from "./classes/CustomClient";
+import type { CustomClient } from "./classes/CustomClient.js";
 
 const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -149,42 +145,3 @@ export const init = async (client: CustomClient) => (
 export const initJPS = async (client: CustomClient) => (
   await loadJobs(client), await loadPrefixes(client), await loadSlashes(client)
 );
-
-// export const loadPrefixes = async (client: CustomClient) => {
-//   try {
-//     return await scheduledJobs.once("value").then(async (data) => {
-//       const prefixes = await data.val();
-
-//       for (const i in prefixes) {
-//         const guild = client.guilds.cache.has(i);
-//         if (!guild) {
-//           await scheduledJobs.child(i).remove();
-//           continue;
-//         }
-//         if (!prefixes[i].prefix) {
-//           continue;
-//         }
-//         client.prefixes.cache.set(i, prefixes[i].prefix);
-//       }
-//       return true;
-//     });
-//   } catch (e) {
-//     await handleE(e, "loadPrefixes()");
-//     return false;
-//   }
-// };
-// export const setPrefixes = async (guildId, prefix, cacheCollection) => {
-//   try {
-//     return await scheduledJobs
-//       .child(guildId)
-//       .update({ _id: guildId, prefix: prefix })
-//       .then(async () => {
-//         // set to cache
-//         await cacheCollection.set(guildId, prefix);
-//         return true;
-//       });
-//   } catch (e) {
-//     await handleE(e);
-//     return false;
-//   }
-// };

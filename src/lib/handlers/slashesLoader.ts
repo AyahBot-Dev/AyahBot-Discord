@@ -1,8 +1,8 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 
-import type { CustomClient } from "../classes/CustomClient";
-import { handleE } from "../utils";
+import type { CustomClient } from "../classes/CustomClient.js";
+import { handleE } from "../utils.js";
 
 const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
@@ -19,26 +19,11 @@ export default async (client: CustomClient) => {
 
     if (!client.application?.owner) await client.application?.fetch();
 
-    await client.guilds.cache.get("866562541424607253")?.commands.fetch();
+    await client.guilds.cache.get(process.env.SERVER_ID)?.commands.fetch();
 
     await rest.put(Routes.applicationCommands(client.user.id), {
       body: commands,
     });
-
-    /*["reload", "shutdown"].forEach(async (v) => {
-      const command = await client.guilds.cache
-        .get("866562541424607253")
-        ?.commands.cache.find((x) => x.name == v);
-
-      const permissions = [
-        {
-          id: "224617799434108928",
-          type: "USER",
-          permission: true,
-        },
-      ];
-      await command.permissions.set({ permissions } as never);
-    });*/
 
     const t2 = new Date().getTime();
     console.log(

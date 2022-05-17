@@ -1,10 +1,10 @@
-import loadJobs from "../../lib/handlers/jobsLoader";
-import loadPrefixes from "../../lib/handlers/prefixesLoader";
-import loadQuranTrs from "../../lib/handlers/quranTrsLoader";
-import loadSlashes from "../../lib/handlers/slashesLoader";
-import { handleE } from "../../lib/utils";
+import loadJobs from "../../lib/handlers/jobsLoader.js";
+import loadPrefixes from "../../lib/handlers/prefixesLoader.js";
+import loadQuranTrs from "../../lib/handlers/quranTrsLoader.js";
+import loadSlashes from "../../lib/handlers/slashesLoader.js";
+import { handleE } from "../../lib/utils.js";
 
-import type { CustomClient } from "../../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient.js";
 
 export default async (client: CustomClient) => {
   try {

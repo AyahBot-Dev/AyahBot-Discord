@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { invalid_datatype, embed_error } from "../lib/embeds/embeds";
-import { handleE } from "../lib/utils";
+import { invalid_datatype, embed_error } from "../lib/embeds/embeds.js";
+import { handleE } from "../lib/utils.js";
 
 import type {
   CacheType,
@@ -10,7 +10,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../lib/classes/CustomClient.js";
 
 export default {
   name: "help",

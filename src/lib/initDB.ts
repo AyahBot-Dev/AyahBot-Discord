@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
 
-import type { ServiceAccount } from "firebase-admin/lib/credential/index";
+import type { ServiceAccount } from "firebase-admin/lib/credential/index.js";
 
 admin.initializeApp({
   credential: admin.credential.cert({
