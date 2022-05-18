@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-npx tsc
+rm -rf build ||:
+yarn tsc
 cp package.json build
 cp .env build
 cp ecosystem.config.js build
 cd build
-npm install --omit=dev
+yarn install --production
+exit 0
