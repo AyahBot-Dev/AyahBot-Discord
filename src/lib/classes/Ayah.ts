@@ -545,7 +545,7 @@ export class Ayah {
   /* istanbul ignore next */
   private async fetchAyah(random = false): Promise<string | void | boolean> {
     const url = random
-      ? `https://api.quran.com/api/qdc/verses/random?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`
+      ? `https://api.qurancdn.com/api/qdc/verses/random?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`
       : `https://api.qurancdn.com/api/qdc/verses/by_key/${this.verse_key}?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`;
 
     return await axios

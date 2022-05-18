@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "bash build.sh",
+    "build:make": "make",
     "test": "jest",
     "teste": "jest --forceExit",
     "testd": "node -r dotenv/config node_modules/jest/bin/jest.js --detectOpenHandles",
