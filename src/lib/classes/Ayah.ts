@@ -444,10 +444,10 @@ export class Ayah {
 
   public static async fetch(
     /* istanbul ignore next */
-    verse_key: string = null,
+    verse_key: string,
     translation: string | number = 203
   ): Promise<Ayah | Ayah[]> {
-    if (!verse_key || verse_key.split("-").length == 1)
+    if (verse_key.split("-").length == 1)
       return await new Ayah(verse_key, translation).init();
     else {
       const [surah, verseRange] = verse_key.split(":");
