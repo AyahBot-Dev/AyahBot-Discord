@@ -8,11 +8,15 @@ export default async (client: CustomClient) => {
     const t1 = new Date().getTime();
     const events_files = await fs
       .readdir(`./src/events/${dir}`)
-      .then(async (files) => files.filter((file) => file.endsWith(".js")));
+      .then(async (files) =>
+        files.filter((file) =>
+          file.endsWith(process.env.NODE_ENV == "production" ? ".js" : ".ts")
+        )
+      );
 
     for (const file of events_files) {
+      const event = await import(`../../events/${dir}/${file}`);
       const event_name = file.split(".")[0];
-      const event = await import(`../../events/${dir}/${event_name}.js`);
       client.on(event_name, event.default.bind(null, client));
     }
 

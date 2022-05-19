@@ -9,7 +9,7 @@ export default async (client: CustomClient) => {
   const command_files = await fs
     .readdir("./src/commands")
     .then(async (file: string[]) =>
-      file.filter((file) => file.endsWith(".js"))
+      file.filter((file) => file.endsWith(process.env.NODE_ENV == "production" ? ".js" : ".ts"))
     );
 
   for (const file of command_files) {
