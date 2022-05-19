@@ -404,11 +404,13 @@ export class Ayah {
   private _translator: string;
 
   private _isRandom: boolean;
+  private _isForDaily: boolean;
 
   constructor(
     verse_key: string,
     translation_code: string | number,
-    random = false
+    random = false,
+    daily = false
   ) {
     this._verse_key = verse_key;
     this._translation =
@@ -416,6 +418,7 @@ export class Ayah {
         ? translations[translation_code]
         : translation_code;
     this._isRandom = random;
+    this._isForDaily = daily;
   }
 
   get code() {
@@ -466,9 +469,10 @@ export class Ayah {
   }
 
   public static async random(
-    translation: string | number = 203
+    translation: string | number = 203,
+    daily = false
   ): Promise<Ayah> {
-    return await new Ayah(undefined, translation, true).init();
+    return await new Ayah(undefined, translation, true, daily).init();
   }
 
   private async init(): Promise<Ayah> {
@@ -516,13 +520,15 @@ export class Ayah {
     return new Promise((resolve) => {
       if (this._code == 200) {
         resolve({
-          title: this._surah,
+          title: this._isForDaily ? "Ayah of the day" : this._surah,
           field: {
-            name: this._verse_key,
+            name: this._isForDaily ? this._surah : this._verse_key,
             value:
               this._verse_translated.length >= 980
                 ? this._verse_translated.substring(0, 980) +
                   `... ([Read more](https://quran.com/${this._verse_key}))`
+                : this._isForDaily
+                ? this._verse_translated + ` [${this._verse_key}]`
                 : this._verse_translated,
           },
           footer: {
@@ -535,7 +541,7 @@ export class Ayah {
           title: this._surah,
           description:
             this._code == 404
-              ? "The ayah (s) you requested doesn't exist"
+              ? "The ayah(s) you requested doesn't exist"
               : "SERVER_ERR",
         });
       }

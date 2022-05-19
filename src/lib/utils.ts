@@ -116,7 +116,7 @@ export const cronTZ = (
 export const task = async (quran: number, guild: Guild, channel: string) => {
   /* istanbul ignore next */
   try {
-    const ayah_embed = await convertToEmbed(await Ayah.random(quran));
+    const ayah_embed = await convertToEmbed(await Ayah.random(quran, true));
     const channelObj = await guild.channels.cache.get(channel);
     const hasPerms = await guild.me
       .permissionsIn(channelObj)

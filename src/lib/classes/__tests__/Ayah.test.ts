@@ -119,5 +119,22 @@ describe("Class: Ayah", () => {
         "https://api.quran.com/api/qdc/verses/random?translations=203&translation_fields=resource_name&fields=chapter_id"
       );
     });
+
+    it("is requesting for a random daily ayah everytime", async () => {
+      mockedGet.mockResolvedValue({
+        data: output65,
+        status: 200,
+      } as AxiosResponse);
+
+      const ayah = await (
+        await Ayah.random(undefined, true)
+      ).exportDataForEmbed();
+
+      expect(mockedGet).toBeCalledWith(
+        "https://api.quran.com/api/qdc/verses/random?translations=203&translation_fields=resource_name&fields=chapter_id"
+      );
+
+      expect(ayah.title).toEqual("Ayah of the day");
+    });
   });
 });

@@ -5,7 +5,7 @@
     "target": "ESNext",
     "lib": ["ESNext"],
     "sourceMap": false,
-    "types": ["node", "reflect-metadata"],
+    "types": ["node", "reflect-metadata", "jest"],
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "declaration": true,
     "preserveSymlinks": true,
@@ -25,5 +25,5 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*", "*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "build"]
 }
