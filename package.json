@@ -12,7 +12,7 @@
     "testd": "node -r dotenv/config node_modules/jest/bin/jest.js --detectOpenHandles",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "start:prod": "node -r dotenv/config index",
+    "start:prod": "node --experimental-specifier-resolution=node -r dotenv/config index",
     "dev": "tsm -r dotenv/config index.ts"
   },
   "repository": {
