@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "AyahBot",
       script: "./index.js",
-      node_args: "-r dotenv/config",
+      node_args: "--experimental-specifier-resolution=node -r dotenv/config",
     },
   ],
 };
