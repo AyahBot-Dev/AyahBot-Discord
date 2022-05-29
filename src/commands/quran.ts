@@ -82,8 +82,8 @@ export default {
           (await (client.quranTrs.cache.get(message.guildId) as number)) ||
           undefined;
 
-      const isSingle = /^\d{1,3}:\d{1,3}$/.test(verse_key);
-      const isMultiple = /^\d{1,3}:\d{1,3}-\d{1,3}$/.test(verse_key);
+      const isSingle = /^\d{1,}:\d{1,}$/.test(verse_key);
+      const isMultiple = /^\d{1,}:\d{1,}-\d{1,}$/.test(verse_key);
       const [surah, verse] = isMultiple
         ? verse_key.split(":").map((v, i) => (i == 0 ? Number(v) : v))
         : verse_key.split(":").map(Number);
@@ -92,12 +92,12 @@ export default {
         surah <= 114 &&
         surah >= 1 &&
         (isSingle
-          ? verse >= 1 && verse <= 285
+          ? verse >= 1 && verse <= 286
           : isMultiple
-          ? verseArr[0] >= 1 &&
-            verseArr[0] <= 284 &&
-            verseArr[1] >= 2 &&
-            verseArr[1] <= 285
+          ? verseArr[0] > 0 &&
+            verseArr[0] < 287 &&
+            verseArr[1] > 0 &&
+            verseArr[1] < 287
           : false);
       if (!isValid)
         return await message.reply({
