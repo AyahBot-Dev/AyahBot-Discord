@@ -92,7 +92,7 @@ export default {
         surah <= 114 &&
         surah >= 1 &&
         (isSingle
-          ? verse >= 1 && verse <= 286
+          ? verse > 0 && verse < 287
           : isMultiple
           ? verseArr[0] > 0 &&
             verseArr[0] < 287 &&
