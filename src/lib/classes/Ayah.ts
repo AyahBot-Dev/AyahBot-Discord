@@ -458,7 +458,7 @@ export class Ayah {
       const verseArray = Array.from(
         { length: end - start + 1 },
         (_, i) => `${surah}:${start + i}`
-      );
+      ).splice(0, 15);
       const ayahs = [];
       for (const v of verseArray) {
         const ayah = await new Ayah(v, translation).init();

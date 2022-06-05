@@ -92,12 +92,12 @@ export default {
         surah <= 114 &&
         surah >= 1 &&
         (isSingle
-          ? verse >= 1 && verse <= 285
+          ? verse > 0 && verse < 287
           : isMultiple
-          ? verseArr[0] >= 1 &&
-            verseArr[0] <= 284 &&
-            verseArr[1] >= 2 &&
-            verseArr[1] <= 285
+          ? verseArr[0] > 0 &&
+            verseArr[0] < 287 &&
+            verseArr[1] > 0 &&
+            verseArr[1] < 287
           : false);
       if (!isValid)
         return await message.reply({
