@@ -121,6 +121,15 @@ export const surahsList = [
   "Surah An-Nas (الناس - Mankind)",
 ];
 
+export const surah_ayah = [
+  7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128, 111,
+  110, 98, 135, 112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73, 54, 45,
+  83, 182, 88, 75, 85, 54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49, 62, 55,
+  78, 96, 29, 22, 24, 13, 14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28, 28, 20,
+  56, 40, 31, 50, 40, 46, 42, 29, 19, 36, 25, 22, 17, 19, 26, 30, 20, 15, 21,
+  11, 8, 8, 19, 5, 8, 8, 11, 11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 5, 4, 5, 6,
+];
+
 export const translations = {
   ghali: 17,
   pickthall: 19,
@@ -403,13 +412,11 @@ export class Ayah {
   private _surah: string;
   private _translator: string;
 
-  private _isRandom: boolean;
   private _isForDaily: boolean;
 
   constructor(
     verse_key: string,
     translation_code: string | number,
-    random = false,
     daily = false
   ) {
     this._verse_key = verse_key;
@@ -417,7 +424,6 @@ export class Ayah {
       typeof translation_code == "string"
         ? translations[translation_code]
         : translation_code;
-    this._isRandom = random;
     this._isForDaily = daily;
   }
 
@@ -472,11 +478,13 @@ export class Ayah {
     translation: string | number = 203,
     daily = false
   ): Promise<Ayah> {
-    return await new Ayah(undefined, translation, true, daily).init();
+    const surah = Math.floor(Math.random() * 114 + 1);
+    const ayah = Math.floor(Math.random() * surah_ayah[surah - 1] + 1);
+    return await new Ayah(`${surah}:${ayah}`, translation, daily).init();
   }
 
   private async init(): Promise<Ayah> {
-    await this.fetchAyah(this._isRandom);
+    await this.fetchAyah();
     return this;
   }
 
@@ -486,7 +494,7 @@ export class Ayah {
       if (code == 200) {
         this._surah = surahsList[data.chapter_id - 1];
         this._verse_translated = data.translations[0].text.replace(
-          /<sup.*>.*<\/sup>/,
+          /<[^<]+?>\d*/,
           ""
         );
         this._translator = data.translations[0].resource_name;
@@ -549,10 +557,8 @@ export class Ayah {
   }
 
   /* istanbul ignore next */
-  private async fetchAyah(random = false): Promise<string | void | boolean> {
-    const url = random
-      ? `https://api.qurancdn.com/api/qdc/verses/random?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`
-      : `https://api.qurancdn.com/api/qdc/verses/by_key/${this.verse_key}?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`;
+  private async fetchAyah(): Promise<string | void | boolean> {
+    const url = `https://api.qurancdn.com/api/qdc/verses/by_key/${this.verse_key}?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`;
 
     return await axios
       .get(url)
