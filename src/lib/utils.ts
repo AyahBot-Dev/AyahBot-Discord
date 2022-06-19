@@ -23,16 +23,6 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export const dateOptions = {
-  timeZone: "Asia/Dhaka",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-} as unknown;
-
 export const handleE = async (e: Error, procPath: string): Promise<boolean> => {
   console.error(e);
   const message = {
