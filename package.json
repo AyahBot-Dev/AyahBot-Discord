@@ -3,7 +3,7 @@
   "version": "2.0.2",
   "description": "A Daily Schedulable Quran Bot",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "bash build.sh",
     "build:make": "make",
