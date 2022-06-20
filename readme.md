@@ -51,7 +51,7 @@ As a discord bot, AyahBot also its own commands for making your tasks easier. Th
 
 As AyahBot is open-source, you can also deploy your own instance of AyahBot. It's pretty easy to deploy another instance of AyahBot. If you want to get started now, then check out our [wiki page]() now.
 
-*N.B.: You can start your own instance of AyahBot freely, but you are requested not to try to impersonate the AyahBot with your private instance without our prior permission.*
+*N.B.: You can start your own instance of AyahBot freely, but you are told not to try to impersonate the AyahBot.*
 
 ## Contributing
 

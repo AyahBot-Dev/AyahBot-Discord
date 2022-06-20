@@ -2,7 +2,7 @@ import { CachedManager } from "discord.js";
 
 import type { Snowflake } from "discord.js";
 
-import type { CustomClient } from "./CustomClient.js";
+import type { CustomClient } from "./CustomClient";
 
 export class Prefix extends String {
   constructor(prefix: string) {

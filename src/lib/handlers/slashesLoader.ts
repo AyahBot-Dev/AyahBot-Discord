@@ -1,8 +1,8 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 
-import type { CustomClient } from "../classes/CustomClient.js";
-import { handleE } from "../utils.js";
+import type { CustomClient } from "../classes/CustomClient";
+import { handleE } from "../utils";
 
 const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 

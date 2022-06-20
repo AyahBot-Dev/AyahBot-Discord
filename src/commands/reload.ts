@@ -2,9 +2,9 @@ import {
   invalid_datatype,
   embed_error,
   create_embed,
-} from "../lib/embeds/embeds.js";
-import { handleE, initJPS } from "../lib/utils.js";
-import { colors } from "../lib/embeds/infos.js";
+} from "../lib/embeds/embeds";
+import { handleE, initJPS } from "../lib/utils";
+import { colors } from "../lib/embeds/infos";
 
 import type {
   CacheType,
@@ -13,7 +13,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient.js";
+import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
   name: "reload",

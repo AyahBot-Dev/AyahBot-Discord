@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "ESNext",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "ES6"],
     "sourceMap": false,
     "types": ["node", "reflect-metadata", "jest"],
     "typeRoots": ["./node_modules/@types", "./src/types"],

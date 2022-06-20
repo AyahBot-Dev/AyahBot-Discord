@@ -1,6 +1,6 @@
-import axios from "../axiosInstance.js";
-import { handleE } from "../utils.js";
-import { colors } from "../embeds/infos.js";
+import axios from "../axiosInstance";
+import { handleE } from "../utils";
+import { colors } from "../embeds/infos";
 
 import type { DataForEmbed, QuranDataResp, Verse } from "../../types";
 

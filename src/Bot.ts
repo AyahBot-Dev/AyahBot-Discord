@@ -1,12 +1,12 @@
 import { inject, injectable } from "inversify";
 
-import { db } from "./lib/initDB.js";
-import loadCommands from "./lib/handlers/commandsLoader.js";
-import loadEvents from "./lib/handlers/eventsLoader.js";
-import loadHelps from "./lib/handlers/helpLoader.js";
-import { TYPES } from "./types.js";
+import { db } from "./lib/initDB";
+import loadCommands from "./lib/handlers/commandsLoader";
+import loadEvents from "./lib/handlers/eventsLoader";
+import loadHelps from "./lib/handlers/helpLoader";
+import { TYPES } from "./types";
 
-import type { CustomClient } from "./lib/classes/CustomClient.js";
+import type { CustomClient } from "./lib/classes/CustomClient";
 
 @injectable()
 export class Bot {

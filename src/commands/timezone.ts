@@ -6,10 +6,10 @@ import {
   invalid_datatype,
   embed_error,
   create_embed,
-} from "../lib/embeds/embeds.js";
-import { colors } from "../lib/embeds/infos.js";
-import { handleE } from "../lib/utils.js";
-import DBHandler from "../lib/DBHandler.js";
+} from "../lib/embeds/embeds";
+import { colors } from "../lib/embeds/infos";
+import { handleE } from "../lib/utils";
+import DBHandler from "../lib/DBHandler";
 
 import type {
   CacheType,
