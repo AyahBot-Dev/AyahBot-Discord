@@ -362,7 +362,7 @@ export const multipleEmbed404Last = new MessageEmbed({
 export const ayah404Embed = new MessageEmbed({
   color: 16757248,
   title: "Not found",
-  description: "The ayah (s) you requested doesn't exist",
+  description: "The ayah(s) you requested doesn't exist",
 });
 
 export const msg = {

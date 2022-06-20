@@ -1,4 +1,4 @@
-import { jest, describe, it, expect } from "@jest/globals";
+import { jest, describe, it, expect, beforeEach } from "@jest/globals";
 import { mocked } from "jest-mock";
 
 import {
@@ -26,7 +26,13 @@ jest.mock("../../lib/utils", () => {
 });
 
 describe("Command: random", () => {
+  const spy = jest.spyOn(Math, "floor");
   const mockedGet = mocked(axios.get);
+
+  beforeEach(() => {
+    jest.resetAllMocks();
+    jest.spyOn(Math, "floor");
+  });
 
   it("is sending a random verse everytime with translation params in slash", async () => {
     mockedGet.mockResolvedValue({
@@ -40,9 +46,7 @@ describe("Command: random", () => {
       clientCU
     );
 
-    expect(mockedGet).toBeCalledWith(
-      "https://api.quran.com/api/qdc/verses/random?translations=85&translation_fields=resource_name&fields=chapter_id"
-    );
+    expect(spy).toBeCalledTimes(2);
   });
 
   it("is sending a random verse everytime with translation params", async () => {
@@ -53,9 +57,7 @@ describe("Command: random", () => {
 
     await randomCmd.execute(msg, ["haleem"], clientCU);
 
-    expect(mockedGet).toBeCalledWith(
-      "https://api.quran.com/api/qdc/verses/random?translations=85&translation_fields=resource_name&fields=chapter_id"
-    );
+    expect(spy).toBeCalledTimes(2);
   });
 
   it("is sending a random verse everytime with no translation params if translation code is on cache", async () => {
@@ -67,9 +69,7 @@ describe("Command: random", () => {
 
     await randomCmd.execute(msg, [], clientCU);
 
-    expect(mockedGet).toBeCalledWith(
-      "https://api.quran.com/api/qdc/verses/random?translations=85&translation_fields=resource_name&fields=chapter_id"
-    );
+    expect(spy).toBeCalledTimes(2);
   });
 
   it("is sending a random verse everytime with no translation params if translation code not on cache", async () => {
@@ -81,9 +81,7 @@ describe("Command: random", () => {
 
     await randomCmd.execute(msg, [], clientCU);
 
-    expect(mockedGet).toBeCalledWith(
-      "https://api.quran.com/api/qdc/verses/random?translations=203&translation_fields=resource_name&fields=chapter_id"
-    );
+    expect(spy).toBeCalledTimes(2);
   });
 
   it("is returning translation code error on invalid translation code", async () => {

@@ -5,12 +5,12 @@ import {
   insufficient_perms,
   create_embed,
   coolDownsEmbed,
-} from "../../lib/embeds/embeds.js";
-import { colors } from "../../lib/embeds/infos.js";
-import { handleE } from "../../lib/utils.js";
+} from "../../lib/embeds/embeds";
+import { colors } from "../../lib/embeds/infos";
+import { handleE } from "../../lib/utils";
 
 import type { Message, PermissionResolvable, TextChannel } from "discord.js";
-import type { CustomClient } from "../../lib/classes/CustomClient.js";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default async (client: CustomClient, message: Message) => {
   const prefix = message.guild
@@ -19,7 +19,10 @@ export default async (client: CustomClient, message: Message) => {
   if (!message.content.startsWith(prefix as string) || message.author.bot)
     return;
 
-  const args = await message.content.slice(prefix.length).split(/ +/).filter(Boolean);
+  const args = await message.content
+    .slice(prefix.length)
+    .split(/ +/)
+    .filter(Boolean);
   const cmd = args.shift().toLowerCase();
 
   const command = await client.commands.get(cmd);

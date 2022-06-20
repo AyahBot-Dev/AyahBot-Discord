@@ -5,10 +5,10 @@ import {
   embed_error,
   create_embed,
   syntax_error,
-} from "../lib/embeds/embeds.js";
-import { handleE } from "../lib/utils.js";
-import DBHandler from "../lib/DBHandler.js";
-import { colors } from "../lib/embeds/infos.js";
+} from "../lib/embeds/embeds";
+import { handleE } from "../lib/utils";
+import DBHandler from "../lib/DBHandler";
+import { colors } from "../lib/embeds/infos";
 
 import type {
   CacheType,
@@ -17,7 +17,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient.js";
+import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
   name: "prefix",

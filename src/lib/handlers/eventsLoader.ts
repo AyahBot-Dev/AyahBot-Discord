@@ -1,6 +1,6 @@
 import * as fs from "fs/promises";
 
-import type { CustomClient } from "../classes/CustomClient.js";
+import type { CustomClient } from "../classes/CustomClient";
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
