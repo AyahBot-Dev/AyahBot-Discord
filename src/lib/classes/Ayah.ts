@@ -460,11 +460,20 @@ export class Ayah {
       return await new Ayah(verse_key, translation).init();
     else {
       const [surah, verseRange] = verse_key.split(":");
-      const [start, end] = verseRange.split("-").map((x) => parseInt(x));
+      // eslint-disable-next-line prefer-const
+      let [start, end] = verseRange.split("-").map((x) => parseInt(x));
+      if (end - start > 14) {
+        end = start + 14;
+      }
+      for (let i = start; i <= end; i++)
+        if (i > surah_ayah[(surah as unknown as number) - 1]) {
+          end = i - 1;
+          break;
+        }
       const verseArray = Array.from(
         { length: end - start + 1 },
         (_, i) => `${surah}:${start + i}`
-      ).splice(0, 15);
+      );
       const ayahs = [];
       for (const v of verseArray) {
         const ayah = await new Ayah(v, translation).init();
