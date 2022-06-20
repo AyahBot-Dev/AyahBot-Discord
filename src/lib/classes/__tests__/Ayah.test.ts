@@ -1,4 +1,4 @@
-import { describe, it, expect, jest } from "@jest/globals";
+import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 import { mocked } from "jest-mock";
 import axios from "../../axiosInstance";
 
@@ -107,6 +107,10 @@ describe("Class: Ayah", () => {
   });
 
   describe("Function: random()", () => {
+    const spy = jest.spyOn(Math, "floor");
+
+    beforeEach(jest.resetAllMocks as unknown as () => void);
+
     it("is requesting for a random ayah everytime", async () => {
       mockedGet.mockResolvedValue({
         data: output65,
@@ -115,9 +119,7 @@ describe("Class: Ayah", () => {
 
       await Ayah.random();
 
-      expect(mockedGet).toBeCalledWith(
-        "https://api.quran.com/api/qdc/verses/random?translations=203&translation_fields=resource_name&fields=chapter_id"
-      );
+      expect(spy).toBeCalledTimes(2);
     });
 
     it("is requesting for a random daily ayah everytime", async () => {
@@ -130,9 +132,7 @@ describe("Class: Ayah", () => {
         await Ayah.random(undefined, true)
       ).exportDataForEmbed();
 
-      expect(mockedGet).toBeCalledWith(
-        "https://api.quran.com/api/qdc/verses/random?translations=203&translation_fields=resource_name&fields=chapter_id"
-      );
+      expect(spy).toBeCalledTimes(2);
 
       expect(ayah.title).toEqual("Ayah of the day");
     });

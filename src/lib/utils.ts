@@ -69,7 +69,7 @@ export const convertToEmbed = async (
       if (data.fields.length < 1) {
         data.color = colors.warning;
         data.title = "Not found";
-        data.description = "The ayah (s) you requested doesn't exist";
+        data.description = "The ayah(s) you requested doesn't exist";
         data.footer = null;
       }
     } else {
