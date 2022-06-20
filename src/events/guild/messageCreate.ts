@@ -21,8 +21,9 @@ export default async (client: CustomClient, message: Message) => {
 
   const args = await message.content
     .slice(prefix.length)
+    .trim()
     .split(/ +/)
-    .filter(Boolean);
+
   const cmd = args.shift().toLowerCase();
 
   const command = await client.commands.get(cmd);
