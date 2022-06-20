@@ -19,7 +19,10 @@ export default async (client: CustomClient, message: Message) => {
   if (!message.content.startsWith(prefix as string) || message.author.bot)
     return;
 
-  const args = await message.content.slice(prefix.length).split(/ +/).filter(Boolean);
+  const args = await message.content
+    .slice(prefix.length)
+    .split(/ +/)
+    .filter(Boolean);
   const cmd = args.shift().toLowerCase();
 
   const command = await client.commands.get(cmd);

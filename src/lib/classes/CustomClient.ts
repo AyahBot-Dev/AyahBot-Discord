@@ -1,4 +1,9 @@
-import { Client, Collection, CommandInteraction, MessageEmbed } from "discord.js";
+import {
+  Client,
+  Collection,
+  CommandInteraction,
+  MessageEmbed,
+} from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 import { PrefixManager } from "./PrefixManager";
