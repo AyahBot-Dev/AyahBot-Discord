@@ -2,18 +2,18 @@ import { MessageEmbed } from "discord.js";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 
-import { Ayah } from "./classes/Ayah.js";
-import { embed_error } from "./embeds/embeds.js";
-import { colors } from "./embeds/infos.js";
-import loadCommands from "./handlers/commandsLoader.js";
-import loadEvents from "./handlers/eventsLoader.js";
-import loadJobs from "./handlers/jobsLoader.js";
-import loadPrefixes from "./handlers/prefixesLoader.js";
-import loadSlashes from "./handlers/slashesLoader.js";
+import { Ayah } from "./classes/Ayah";
+import { embed_error } from "./embeds/embeds";
+import { colors } from "./embeds/infos";
+import loadCommands from "./handlers/commandsLoader";
+import loadEvents from "./handlers/eventsLoader";
+import loadJobs from "./handlers/jobsLoader";
+import loadPrefixes from "./handlers/prefixesLoader";
+import loadSlashes from "./handlers/slashesLoader";
 
 import type { Guild, MessageEmbedOptions } from "discord.js";
 
-import type { CustomClient } from "./classes/CustomClient.js";
+import type { CustomClient } from "./classes/CustomClient";
 
 const transport = nodemailer.createTransport({
   service: "Gmail",

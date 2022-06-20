@@ -1,9 +1,9 @@
 import schedule from "node-schedule";
 
-import { cronTZ, handleE, task } from "../utils.js";
-import DBHandler from "../DBHandler.js";
+import { cronTZ, handleE, task } from "../utils";
+import DBHandler from "../DBHandler";
 
-import type { CustomClient } from "../classes/CustomClient.js";
+import type { CustomClient } from "../classes/CustomClient";
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {

@@ -1,7 +1,7 @@
-import DBHandler from "../DBHandler.js";
-import { handleE } from "../utils.js";
+import DBHandler from "../DBHandler";
+import { handleE } from "../utils";
 
-import type { CustomClient } from "../classes/CustomClient.js";
+import type { CustomClient } from "../classes/CustomClient";
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
