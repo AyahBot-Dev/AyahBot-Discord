@@ -7,7 +7,7 @@ import {
   afterEach,
   afterAll,
 } from "@jest/globals";
-import Mail from "nodemailer/lib/mailer/index.js";
+import Mail from "nodemailer/lib/mailer/index";
 import { mocked } from "jest-mock";
 
 import { handleE } from "../utils";

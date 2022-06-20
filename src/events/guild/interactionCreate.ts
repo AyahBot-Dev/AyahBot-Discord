@@ -5,9 +5,9 @@ import {
   insufficient_perms,
   create_embed,
   coolDownsEmbed,
-} from "../../lib/embeds/embeds.js";
-import { colors } from "../../lib/embeds/infos.js";
-import { handleE } from "../../lib/utils.js";
+} from "../../lib/embeds/embeds";
+import { colors } from "../../lib/embeds/infos";
+import { handleE } from "../../lib/utils";
 
 import type {
   Interaction,
@@ -15,7 +15,7 @@ import type {
   TextChannel,
 } from "discord.js";
 
-import type { CustomClient } from "../../lib/classes/CustomClient.js";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default async (client: CustomClient, interaction: Interaction) => {
   if (!interaction.isCommand()) return;

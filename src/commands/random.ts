@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { Ayah, translations } from "../lib/classes/Ayah.js";
-import { embed_error, invalid_datatype } from "../lib/embeds/embeds.js";
-import { convertToEmbed, handleE } from "../lib/utils.js";
+import { Ayah, translations } from "../lib/classes/Ayah";
+import { embed_error, invalid_datatype } from "../lib/embeds/embeds";
+import { convertToEmbed, handleE } from "../lib/utils";
 
 import type {
   CacheType,
@@ -11,7 +11,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient.js";
+import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
   name: "random",

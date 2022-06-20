@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import { Ayah, translations } from "../lib/classes/Ayah.js";
+import { Ayah, translations } from "../lib/classes/Ayah";
 import {
   syntax_error,
   invalid_datatype,
   embed_error,
-} from "../lib/embeds/embeds.js";
-import { handleE, convertToEmbed } from "../lib/utils.js";
+} from "../lib/embeds/embeds";
+import { handleE, convertToEmbed } from "../lib/utils";
 
 import type {
   CacheType,
@@ -15,7 +15,7 @@ import type {
   Message,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient.js";
+import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
   name: "quran",
