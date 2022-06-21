@@ -103,12 +103,26 @@ export default {
         return await message.reply({
           embeds: [await invalid_datatype(verse_key, "a valid verse key")],
         });
+      let d = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (isMultiple && (message as any).options)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (message as any).deferReply() && d++;
 
-      return await message.reply({
-        embeds: [
-          await convertToEmbed(await Ayah.fetch(verse_key, translation)),
-        ],
-      });
+      if (!d)
+        return await message.reply({
+          embeds: [
+            await convertToEmbed(await Ayah.fetch(verse_key, translation)),
+          ],
+        });
+      else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return await (message as any).editReply({
+          embeds: [
+            await convertToEmbed(await Ayah.fetch(verse_key, translation)),
+          ],
+        });
+      }
     } catch (e) {
       await handleE(e, "quran.ts > execute()");
       return await message.reply({ embeds: [embed_error] });
