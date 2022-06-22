@@ -45,7 +45,7 @@ In Shaa Allah, AyahBot will help you greatly in your trying to understanding al-
 
 ## Commands
 
-As a discord bot, AyahBot also its own commands for making your tasks easier. They are for various purposes, from scheduling to even printing any ayah from quran. You can learn more about these commands in our [wiki]() page. They are clearly given there with proper instructions of how to use them.
+As a discord bot, AyahBot also its own commands for making your tasks easier. They are for various purposes, from scheduling to even printing any ayah from quran. You can learn more about these commands in our [wiki](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Commands) page. They are clearly given there with proper instructions of how to use them.
 
 ## Deploying
 
