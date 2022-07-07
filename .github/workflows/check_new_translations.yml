@@ -13,3 +13,17 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           yarn tsm -r dotenv/config tools/check_new_translations.ts
+        env:
+          SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
+          RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          AUTH_URI: ${{ secrets.AUTH_URI }}
+          TOKEN_URI: ${{ secrets.TOKEN_URI }}
+          AUTH_CERT: ${{ secrets.AUTH_CERT }}
+          CLIENT_CERT: ${{ secrets.CLIENT_CERT }}
