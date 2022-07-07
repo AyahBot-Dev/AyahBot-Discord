@@ -1,0 +1,15 @@
+on: push
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Test using Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "17.3"
+    - name: Check for translations update
+      run: |
+        yarn install --frozen-lockfile
+        yarn tsm -r dotenv/config tools/check_new_translations.ts
