@@ -465,20 +465,24 @@ export class Ayah {
       if (end - start > 14) {
         end = start + 14;
       }
-      for (let i = start; i <= end; i++)
+      start = start + Number(start < 1);
+      for (let i = start; i <= end; i++) {
         if (i > surah_ayah[(surah as unknown as number) - 1]) {
           end = i - 1;
           break;
         }
+      }
       const verseArray = Array.from(
         { length: end - start + 1 },
         (_, i) => `${surah}:${start + i}`
       );
       const ayahs = [];
       for (const v of verseArray) {
+        console.log(v);
         const ayah = await new Ayah(v, translation).init();
         ayahs.push(ayah);
       }
+      console.log(ayahs);
       return ayahs;
     }
   }

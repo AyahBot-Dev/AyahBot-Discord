@@ -15,7 +15,7 @@ import type { Guild, MessageEmbedOptions } from "discord.js";
 
 import type { CustomClient } from "./classes/CustomClient";
 
-const transport = nodemailer.createTransport({
+export const transport = nodemailer.createTransport({
   service: "Gmail",
   auth: {
     user: process.env.SENDER_MAIL,
