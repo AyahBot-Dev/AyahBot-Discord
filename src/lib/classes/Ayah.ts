@@ -221,18 +221,18 @@ export const translations = {
   mujibur: 163,
   maarif_ul_quran: 167,
   abridged_exp_quran: 171,
-  tr_mukhtasar: 172,
-  fr_mukhtasar: 173,
-  id_mukhtasar: 174,
-  bs_mukhtasar: 175,
-  it_mukhtasar: 176,
-  vn_mukhtasar: 177,
-  ru_mukhtasar: 178,
-  tl_mukhtasar: 179,
-  bn_mukhtasar: 180,
-  pr_mukhtasar: 181,
-  cn_mukhtasar: 182,
-  jp_mukhtasar: 183,
+  tr_mokhtasar: 172,
+  fr_mokhtasar: 173,
+  id_mokhtasar: 174,
+  bs_mokhtasar: 175,
+  it_mokhtasar: 176,
+  vn_mokhtasar: 177,
+  ru_mokhtasar: 178,
+  tl_mokhtasar: 179,
+  bn_mokhtasar: 180,
+  pr_mokhtasar: 181,
+  cn_mokhtasar: 182,
+  jp_mokhtasar: 183,
   noor: 199,
   hilali: 203,
   en_ruwwad: 206,
@@ -265,6 +265,18 @@ export const translations = {
   ramdane: 236,
   theophanov: 237,
   amroti: 238,
+  kannada: 771,
+  rwanda: 774,
+  sp_mokhtasar: 776,
+  rashidmaash: 779,
+  roman_islamic_league: 782,
+  badkhashani: 785,
+  as_mokhtasar: 790,
+  ml_mokhtasar: 791,
+  km_mokhtasar: 792,
+  sulimankanti: 795,
+  mamadyjani: 796,
+  silika: 798,
 };
 
 export const translationsR = {
@@ -358,18 +370,18 @@ export const translationsR = {
   "163": "mujibur",
   "167": "maarif_ul_quran",
   "171": "abridged_exp_quran",
-  "172": "tr_mukhtasar",
-  "173": "fr_mukhtasar",
-  "174": "id_mukhtasar",
-  "175": "bs_mukhtasar",
-  "176": "it_mukhtasar",
-  "177": "vn_mukhtasar",
-  "178": "ru_mukhtasar",
-  "179": "tl_mukhtasar",
-  "180": "bn_mukhtasar",
-  "181": "pr_mukhtasar",
-  "182": "cn_mukhtasar",
-  "183": "jp_mukhtasar",
+  "172": "tr_mokhtasar",
+  "173": "fr_mokhtasar",
+  "174": "id_mokhtasar",
+  "175": "bs_mokhtasar",
+  "176": "it_mokhtasar",
+  "177": "vn_mokhtasar",
+  "178": "ru_mokhtasar",
+  "179": "tl_mokhtasar",
+  "180": "bn_mokhtasar",
+  "181": "pr_mokhtasar",
+  "182": "cn_mokhtasar",
+  "183": "jp_mokhtasar",
   "199": "noor",
   "203": "hilali",
   "206": "en_ruwwad",
@@ -402,6 +414,18 @@ export const translationsR = {
   "236": "ramdane",
   "237": "theophanov",
   "238": "amroti",
+  "771": "kannada",
+  "774": "rwanda",
+  "776": "sp_mokhtasar",
+  "779": "rashidmaash",
+  "782": "roman_islamic_league",
+  "785": "badkhashani",
+  "790": "as_mokhtasar",
+  "791": "ml_mokhtasar",
+  "792": "km_mokhtasar",
+  "795": "sulimankanti",
+  "796": "mamadyjani",
+  "798": "silika",
 };
 
 export class Ayah {
@@ -478,11 +502,9 @@ export class Ayah {
       );
       const ayahs = [];
       for (const v of verseArray) {
-        console.log(v);
         const ayah = await new Ayah(v, translation).init();
         ayahs.push(ayah);
       }
-      console.log(ayahs);
       return ayahs;
     }
   }
@@ -506,10 +528,9 @@ export class Ayah {
       this._code = code;
       if (code == 200) {
         this._surah = surahsList[data.chapter_id - 1];
-        this._verse_translated = data.translations[0].text.replaceAll(
-          /<+?[^<]+?>\d*/g,
-          ""
-        );
+        this._verse_translated = data.translations[0].text
+          .replaceAll(/<+?[^<]+?>\d*/g, "")
+          .trim();
         this._translator = data.translations[0].resource_name;
         this._verse_key = data.verse_key;
       } else {
