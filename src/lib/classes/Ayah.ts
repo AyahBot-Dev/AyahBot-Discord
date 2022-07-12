@@ -528,9 +528,9 @@ export class Ayah {
       this._code = code;
       if (code == 200) {
         this._surah = surahsList[data.chapter_id - 1];
-        this._verse_translated = data.translations[0].text
-          .replaceAll(/<+?[^<]+?>\d*/g, "")
-          .trim();
+        this._verse_translated = data.translations[0].text.replaceAll(
+        /<+?[^<]+?>\d*/g, 
+        "")
         this._translator = data.translations[0].resource_name;
         this._verse_key = data.verse_key;
       } else {
