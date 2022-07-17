@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 
-TEMP_REPO_DIR="wiki_action_$GITHUB_REPOSITORY$GITHUB_SHA"
-TEMP_WIKI_DIR="temp_wiki_$GITHUB_SHA"
+TEMP_REPO_DIR="wiki_action_repo"
+TEMP_WIKI_DIR="temp_wiki"
 
 echo "Cloning repo https://github.com/$GITHUB_REPOSITORY"
 git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY" "$TEMP_REPO_DIR"
