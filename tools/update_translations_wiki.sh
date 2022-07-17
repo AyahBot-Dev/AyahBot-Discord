@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-CURR_PATH=${basename "$PWD"}
+CURR_PATH=`basename "$PWD"`
 
 TEMP_WIKI_DIR="temp_wiki_$GITHUB_SHA"
 WIKI_DIR='wiki'
