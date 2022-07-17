@@ -6,13 +6,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - name: Test using Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "18.1"
       - name: Update Translations wiki
         run: |
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/AyahBot-Dev/AyahBot-Discord/dev/tools/update_translations_wiki.sh)"
+          sh tools/update_translations_wiki.sh
         env:
           SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
           RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}

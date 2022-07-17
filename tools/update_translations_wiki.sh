@@ -1,16 +1,11 @@
 #!/bin/sh
 set -eu
 
-TEMP_REPO_DIR="wiki_action_repo"
+REPO_DIR=${PWD}
+
 TEMP_WIKI_DIR="temp_wiki"
 
-echo "Cloning repo https://github.com/$GITHUB_REPOSITORY"
-git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY" "$TEMP_REPO_DIR"
-
 echo "Creating updated translations file"
-cd $TEMP_REPO_DIR
-git checkout dev
-ls tools
 yarn install --frozen-lockfile
 yarn tsm -r dotenv/config ./tools/update_translations_wiki.ts
 echo "Done creating translations markdown file"
