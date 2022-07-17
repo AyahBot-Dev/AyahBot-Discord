@@ -11,10 +11,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "18.1"
-      - name: Create updated Translations wiki
+      - name: Update Translations wiki
         run: |
-          yarn install --frozen-lockfile
-          yarn tsm -r dotenv/config tools/update_translations_wiki.ts
+          sh tools/update_translations_wiki.sh
         env:
           SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
           RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}
@@ -29,7 +28,4 @@ jobs:
           TOKEN_URI: ${{ secrets.TOKEN_URI }}
           AUTH_CERT: ${{ secrets.AUTH_CERT }}
           CLIENT_CERT: ${{ secrets.CLIENT_CERT }}
-      - name: Update Translations wiki
-        run: sh tools/update_translations_wiki.sh
-        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

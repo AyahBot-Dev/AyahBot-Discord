@@ -24,12 +24,12 @@ translationsdTC.forEach(
 languages.sort((a, b) => a.localeCompare(b));
 
 languages.forEach((v) => {
-  string += `**${v[0].toUpperCase() + v.slice(1)}**\n\n`;
+  string += `## ${v[0].toUpperCase() + v.slice(1)}**\n\n`;
   translationsdTC
     .filter((a) => a.language_name == v)
     .forEach((v) => {
       if (!v) return;
-      string += `• \`${translationsR[v.id + ""]}\` - Translation by: ${
+      string += `- \`${translationsR[v.id + ""]}\` - Translation by: ${
         v.name
       }\n`;
     });
@@ -37,5 +37,5 @@ languages.forEach((v) => {
 });
 
 string += `\nAuto generated on: ${new Date().toString()}`;
-await writeFile("./wiki/Translations.md", string);
+await writeFile("./Translations.md", string);
 process.exit();

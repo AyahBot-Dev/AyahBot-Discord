@@ -1,23 +1,26 @@
 #!/bin/sh
 set -eu
 
-TEMP_WIKI_DIR="temp_wiki_$GITHUB_SHA"
-WIKI_DIR='wiki'
+REPO_PATH=${PWD}
+
+yarn install --frozen-lockfile
+yarn tsm -r dotenv/config tools/update_translations_wiki.ts
+echo "Done creating translations markdown file"
 
 #Clone wiki repo
-echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
-git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "$TEMP_WIKI_DIR"
-
+echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git in parent folder"
+cd ../
+git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "wiki"
 #Get commit details
 author=`git log -1 --format="%an"`
 email=`git log -1 --format="%ae"`
 message=`git log -1 --format="%s"`
 
 echo "Copying edited wiki"
-cp -R "$WIKI_DIR/"* "$TEMP_WIKI_DIR/"
+cp "$REPO_PATH/Translations.md" "wiki/"
 
 echo "Checking if wiki has changes"
-cd "$TEMP_WIKI_DIR"
+cd "wiki"
 git config --local user.email "$email"
 git config --local user.name "$author" 
 git add .
