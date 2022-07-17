@@ -24,7 +24,7 @@ translationsdTC.forEach(
 languages.sort((a, b) => a.localeCompare(b));
 
 languages.forEach((v) => {
-  string += `## ${v[0].toUpperCase() + v.slice(1)}**\n\n`;
+  string += `## ${v[0].toUpperCase() + v.slice(1)}\n\n`;
   translationsdTC
     .filter((a) => a.language_name == v)
     .forEach((v) => {
