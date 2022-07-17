@@ -30,7 +30,6 @@ jobs:
           AUTH_CERT: ${{ secrets.AUTH_CERT }}
           CLIENT_CERT: ${{ secrets.CLIENT_CERT }}
       - name: Update Translations wiki
-        uses: OrlovM/Wiki-Action@v1
-        with:
-          path: "wiki"
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: sh tools/update_translations_wiki.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
