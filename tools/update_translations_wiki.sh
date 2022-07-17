@@ -21,7 +21,7 @@ cd ../
 git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "$TEMP_WIKI_DIR"
 
 echo "Copying edited translations file"
-cp "$TEMP_REPO_DIR/Translations.md" "$TEMP_WIKI_DIR/"
+cp "$REPO_DIR/Translations.md" "$TEMP_WIKI_DIR/"
 
 echo "Checking if wiki has changes"
 cd "$TEMP_WIKI_DIR"
