@@ -15,15 +15,15 @@ yarn install --frozen-lockfile
 yarn tsm -r dotenv/config ./tools/update_translations_wiki.ts
 echo "Done creating translations markdown file"
 
+echo "Getting Commit Details"
+author=`git log -1 --format="%an"`
+email=`git log -1 --format="%ae"`
+message=`git log -1 --format="%s"`
+
 #Clone wiki repo
 echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git in parent folder"
 cd ../
 git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "$TEMP_WIKI_DIR"
-#Get commit details
-cd ../$TEMP_REPO_DIR
-author=`git log -1 --format="%an"`
-email=`git log -1 --format="%ae"`
-message=`git log -1 --format="%s"`
 
 echo "Copying edited translations file"
 cp "$TEMP_REPO_DIR/Translations.md" "$TEMP_WIKI_DIR/"
