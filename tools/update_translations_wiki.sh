@@ -20,6 +20,7 @@ echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git in parent
 cd ../
 git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "$TEMP_WIKI_DIR"
 #Get commit details
+cd ../$TEMP_REPO_DIR
 author=`git log -1 --format="%an"`
 email=`git log -1 --format="%ae"`
 message=`git log -1 --format="%s"`
