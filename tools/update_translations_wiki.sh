@@ -10,6 +10,7 @@ git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY" "$TEMP
 echo "Creating updated translations file"
 cd $TEMP_REPO_DIR
 git checkout dev
+ls tools
 yarn install --frozen-lockfile
 yarn tsm -r dotenv/config $TEMP_REPO_DIR/tools/update_translations_wiki.ts
 echo "Done creating translations markdown file"
