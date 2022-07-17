@@ -1,6 +1,8 @@
+name: Update Translations Wiki
+
 on: push
 jobs:
-  check:
+  update-translations-wiki:
     runs-on: ubuntu-latest
 
     steps:
