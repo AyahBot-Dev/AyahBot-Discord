@@ -12,7 +12,7 @@ cd $TEMP_REPO_DIR
 git checkout dev
 ls tools
 yarn install --frozen-lockfile
-yarn tsm -r dotenv/config tools/update_translations_wiki.ts
+yarn tsm -r dotenv/config ./tools/update_translations_wiki.ts
 echo "Done creating translations markdown file"
 
 #Clone wiki repo
