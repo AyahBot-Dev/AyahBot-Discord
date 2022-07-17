@@ -14,7 +14,7 @@ email=`git log -1 --format="%ae"`
 message=`git log -1 --format="%s"`
 
 echo "Copying edited wiki"
-cp -R "$WIKI_DIR/" "$TEMP_WIKI_DIR/"
+cp -R "$WIKI_DIR/"* "$TEMP_WIKI_DIR/"
 
 echo "Checking if wiki has changes"
 cd "$TEMP_WIKI_DIR"
