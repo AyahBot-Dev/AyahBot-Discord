@@ -14,10 +14,10 @@ email=`git log -1 --format="%ae"`
 message=`git log -1 --format="%s"`
 
 echo "Copying edited wiki"
-cp -R "$TEMP_WIKI_DIR/.git" "$WIKI_DIR/"
+cp -R "$WIKI_DIR/*" "$TEMP_WIKI_DIR/"
 
 echo "Checking if wiki has changes"
-cd "$WIKI_DIR"
+cd "$TEMP_WIKI_DIR"
 git config --local user.email "$email"
 git config --local user.name "$author" 
 git add .
