@@ -1,20 +1,21 @@
-name: Tests CI
+name: Update Translations Wiki
 
-on: [push, pull_request]
-
+on:
+  schedule:
+    - cron: "0 0 * * 5"
 jobs:
-  test:
+  update-translations-wiki:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Test using Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "18.1"
-      - name: Testing 🧪
+      - name: Update Translations wiki
         run: |
-          yarn install --frozen-lockfile
-          yarn run teste
+          sh tools/update_translations_wiki.sh
         env:
           SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
           RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}
@@ -29,9 +30,4 @@ jobs:
           TOKEN_URI: ${{ secrets.TOKEN_URI }}
           AUTH_CERT: ${{ secrets.AUTH_CERT }}
           CLIENT_CERT: ${{ secrets.CLIENT_CERT }}
-
-      - name: Upload to Codecov
-        run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

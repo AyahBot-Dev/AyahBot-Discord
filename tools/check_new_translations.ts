@@ -23,6 +23,7 @@ const translationsArr = Object.values(translations);
 const url = "https://api.quran.com/api/v4/resources/translations";
 
 const translationsdTC = (await axios.get(url)).data?.translations as Array<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Record<string, any>
 >;
 
