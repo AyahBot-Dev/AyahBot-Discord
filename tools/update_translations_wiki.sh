@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# Partial source: https://github.com/OrlovM/Wiki-Action/blob/master/update-wiki.sh
+
 set -eu
 
 REPO_DIR=${PWD}

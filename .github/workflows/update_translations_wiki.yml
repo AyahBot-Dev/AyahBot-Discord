@@ -1,6 +1,8 @@
 name: Update Translations Wiki
 
-on: push
+on:
+  schedule:
+    - cron: "0 0 * * 5"
 jobs:
   update-translations-wiki:
     runs-on: ubuntu-latest
