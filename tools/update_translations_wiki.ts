@@ -14,7 +14,13 @@ const languages: string[] = [];
 
 let string = "";
 
-translationsdTC = translationsdTC.filter((a) => translationsR[a.id + ""]);
+translationsdTC = translationsdTC
+  .filter((a) => translationsR[a.id + ""])
+  .map((a) => {
+    a.language_name =
+      a.language_name[0].toUpperCase() + a.language_name.slice(1);
+    return a;
+  });
 
 translationsdTC.forEach(
   (v) =>
@@ -24,7 +30,7 @@ translationsdTC.forEach(
 languages.sort((a, b) => a.localeCompare(b));
 
 languages.forEach((v) => {
-  string += `## ${v[0].toUpperCase() + v.slice(1)}\n\n`;
+  string += `## ${v}\n\n`;
   translationsdTC
     .filter((a) => a.language_name == v)
     .forEach((v) => {
