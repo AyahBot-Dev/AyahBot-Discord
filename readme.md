@@ -56,3 +56,5 @@ As AyahBot is open-source, you can also deploy your own instance of AyahBot. It'
 ## Contributing
 
 Mostly, development of AyahBot requires help of many others and that's why the bot is open-source. If you want to help in the development and gain some thawab, you can regularly check the [issues](https://github.com/AyahBot-Dev/AyahBot-Discord/issues) page and help solve the issues.
+
+*If you have any major suggestions or major issues that needs discussion with us, you can contact us at `AyahBot Dev#9646` (Discord)*
