@@ -49,7 +49,7 @@ export default {
           embeds: [
             await invalid_datatype(
               translation as string,
-              "a valid translation code"
+              "a valid translation code listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Translations)"
             ),
           ],
         });
