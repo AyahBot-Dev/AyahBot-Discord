@@ -15,7 +15,7 @@ export default async (client: CustomClient) => {
         "Invite me",
         "https://discord.com/oauth2/authorize?client_id=864837051144863754&permissions=34359830592&scope=bot%20applications.commands",
       ],
-      ["Support server", "https://discord.gg/TMv5dAE5cx"],
+      ["Support server", "https://discord.gg/5EvTMeQQgA"],
       ["Github", "https://www.github.com/AyahBot-Dev/AyahBot-Discord"],
     ];
 
