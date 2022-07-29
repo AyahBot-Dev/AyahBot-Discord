@@ -77,7 +77,10 @@ export default {
       if (!translation || !translations[translation])
         return await message.reply({
           embeds: [
-            await invalid_datatype(translation, "a valid translation code"),
+            await invalid_datatype(
+              translation,
+              "a valid translation code listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Translations)"
+            ),
           ],
         });
 

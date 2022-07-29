@@ -153,7 +153,12 @@ describe("Command: quran", () => {
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await invalid_datatype("blah", "a valid translation code")],
+      embeds: [
+        await invalid_datatype(
+          "blah",
+          "a valid translation code listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Translations)"
+        ),
+      ],
     });
   });
 

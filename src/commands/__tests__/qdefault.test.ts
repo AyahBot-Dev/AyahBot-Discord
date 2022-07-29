@@ -94,7 +94,12 @@ describe("Command: qdefault", () => {
   it("is returning datatype embed on invalid translation id", async () => {
     await qdefaultCmd.execute(msg, ["blah"], clientCU);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await invalid_datatype("blah", "a valid translation code")],
+      embeds: [
+        await invalid_datatype(
+          "blah",
+          "a valid translation code listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Translations)"
+        ),
+      ],
     });
   });
 
