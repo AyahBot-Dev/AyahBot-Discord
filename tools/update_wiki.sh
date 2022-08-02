@@ -8,10 +8,11 @@ REPO_DIR=${PWD}
 
 TEMP_WIKI_DIR="temp_wiki"
 
-echo "Creating updated translations file"
+echo "Creating updated translations and timezones file"
 yarn install --frozen-lockfile
 yarn tsm -r dotenv/config ./tools/update_translations_wiki.ts
-echo "Done creating translations markdown file"
+yarn tsm -r dotenv/config ./tools/update_timezones_wiki.ts
+echo "Done creating translations and timezones markdown file"
 
 echo "Getting Commit Details"
 author=`git log -1 --format="%an"`
@@ -23,8 +24,9 @@ echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git in parent
 cd ../
 git clone "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.wiki.git" "$TEMP_WIKI_DIR"
 
-echo "Copying edited translations file"
+echo "Copying edited translations and timezones file"
 cp "$REPO_DIR/Translations.md" "$TEMP_WIKI_DIR/"
+cp "$REPO_DIR/Timezones.md" "$TEMP_WIKI_DIR/"
 
 echo "Checking if wiki has changes"
 cd "$TEMP_WIKI_DIR"

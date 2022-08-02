@@ -27,7 +27,7 @@ export const data65 = {
   surah: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   verse_translated: "  And We saved Mûsâ (Moses) and all those with him.",
   translation: 203,
-  translator: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+  translator: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   verse_key: "26:65",
 };
 export const outputInvalid = {
@@ -242,7 +242,7 @@ export const singleEmbedShort = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
 export const singleEmbedLong = new MessageEmbed({
@@ -256,7 +256,7 @@ export const singleEmbedLong = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
 export const singleEmbedHaleem = new MessageEmbed({
@@ -269,7 +269,7 @@ export const singleEmbedHaleem = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Abdul Haleem",
+    text: "Translation by: Abdul Haleem | Meccan",
   },
 });
 export const multipleEmbedShort = new MessageEmbed({
@@ -286,7 +286,7 @@ export const multipleEmbedShort = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
 export const multipleEmbedHaleem = new MessageEmbed({
@@ -303,7 +303,7 @@ export const multipleEmbedHaleem = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Abdul Haleem",
+    text: "Translation by: Abdul Haleem | Meccan",
   },
 });
 export const multipleEmbedLong = new MessageEmbed({
@@ -322,7 +322,7 @@ export const multipleEmbedLong = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
 export const multipleEmbed404First = new MessageEmbed({
@@ -335,7 +335,7 @@ export const multipleEmbed404First = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
 
@@ -355,7 +355,7 @@ export const multipleEmbed404Last = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
 

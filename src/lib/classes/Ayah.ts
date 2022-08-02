@@ -2,123 +2,136 @@ import axios from "../axiosInstance";
 import { handleE } from "../utils";
 import { colors } from "../embeds/infos";
 
-import type { DataForEmbed, QuranDataResp, Verse } from "../../types";
+import type {
+  DataForEmbed,
+  QuranDataRespAr,
+  QuranDataRespEn,
+  Verse,
+  VerseAr,
+} from "../../types";
 
 export const surahsList = [
-  "Surah Al-Fatihah (الفاتحة - The Opener)",
-  "Surah Al-Baqarah (البقرة - The Cow)",
-  "Surah Ali 'Imran (آل عمران - Family of Imran)",
-  "Surah An-Nisa (النساء - The Women)",
-  "Surah Al-Ma'idah (المائدة - The Table Spread)",
-  "Surah Al-An'am (الأنعام - The Cattle)",
-  "Surah Al-A'raf (الأعراف - The Heights)",
-  "Surah Al-Anfal (الأنفال - The Spoils of War)",
-  "Surah At-Tawbah (التوبة - The Repentance)",
-  "Surah Yunus (يونس - Jonah)",
-  "Surah Hud (هود - Hud)",
-  "Surah Yusuf (يوسف - Joseph)",
-  "Surah Ar-Ra'd (الرعد - The Thunder)",
-  "Surah Ibrahim (ابراهيم - Abraham)",
-  "Surah Al-Hijr (الحجر - The Rocky Tract)",
-  "Surah An-Nahl (النحل - The Bee)",
-  "Surah Al-Isra (الإسراء - The Night Journey)",
-  "Surah Al-Kahf (الكهف - The Cave)",
-  "Surah Maryam (مريم - Mary)",
-  "Surah Taha (طه - Ta-Ha)",
-  "Surah Al-Anbya (الأنبياء - The Prophets)",
-  "Surah Al-Hajj (الحج - The Pilgrimage)",
-  "Surah Al-Mu'minun (المؤمنون - The Believers)",
-  "Surah An-Nur (النور - The Light)",
-  "Surah Al-Furqan (الفرقان - The Criterion)",
-  "Surah Ash-Shu'ara (الشعراء - The Poets)",
-  "Surah An-Naml (النمل - The Ant)",
-  "Surah Al-Qasas (القصص - The Stories)",
-  "Surah Al-'Ankabut (العنكبوت - The Spider)",
-  "Surah Ar-Rum (الروم - The Romans)",
-  "Surah Luqman (لقمان - Luqman)",
-  "Surah As-Sajdah (السجدة - The Prostration)",
-  "Surah Al-Ahzab (الأحزاب - The Combined Forces)",
-  "Surah Saba (سبإ - Sheba)",
-  "Surah Fatir (فاطر - Originator)",
-  "Surah Ya-Sin (يس - Ya Sin)",
-  "Surah As-Saffat (الصافات - Those who set the Ranks)",
-  'Surah Sad (ص - The Letter "Saad")',
-  "Surah Az-Zumar (الزمر - The Troops)",
-  "Surah Ghafir (غافر - The Forgiver)",
-  "Surah Fussilat (فصلت - Explained in Detail)",
-  "Surah Ash-Shuraa (الشورى - The Consultation)",
-  "Surah Az-Zukhruf (الزخرف - The Ornaments of Gold)",
-  "Surah Ad-Dukhan (الدخان - The Smoke)",
-  "Surah Al-Jathiyah (الجاثية - The Crouching)",
-  "Surah Al-Ahqaf (الأحقاف - The Wind-Curved Sandhills)",
-  "Surah Muhammad (محمد - Muhammad)",
-  "Surah Al-Fath (الفتح - The Victory)",
-  "Surah Al-Hujurat (الحجرات - The Rooms)",
-  'Surah Qaf (ق - The Letter "Qaf")',
-  "Surah Adh-Dhariyat (الذاريات - The Winnowing Winds)",
-  "Surah At-Tur (الطور - The Mount)",
-  "Surah An-Najm (النجم - The Star)",
-  "Surah Al-Qamar (القمر - The Moon)",
-  "Surah Ar-Rahman (الرحمن - The Beneficent)",
-  "Surah Al-Waqi'ah (الواقعة - The Inevitable)",
-  "Surah Al-Hadid (الحديد - The Iron)",
-  "Surah Al-Mujadila (المجادلة - The Pleading Woman)",
-  "Surah Al-Hashr (الحشر - The Exile)",
-  "Surah Al-Mumtahanah (الممتحنة - She that is to be examined)",
-  "Surah As-Saf (الصف - The Ranks)",
-  "Surah Al-Jumu'ah (الجمعة - The Congregation, Friday)",
-  "Surah Al-Munafiqun (المنافقون - The Hypocrites)",
-  "Surah At-Taghabun (التغابن - The Mutual Disillusion)",
-  "Surah At-Talaq (الطلاق - The Divorce)",
-  "Surah At-Tahrim (التحريم - The Prohibition)",
-  "Surah Al-Mulk (الملك - The Sovereignty)",
-  "Surah Al-Qalam (القلم - The Pen)",
-  "Surah Al-Haqqah (الحاقة - The Reality)",
-  "Surah Al-Ma'arij (المعارج - The Ascending Stairways)",
-  "Surah Nuh (نوح - Noah)",
-  "Surah Al-Jinn (الجن - The Jinn)",
-  "Surah Al-Muzzammil (المزمل - The Enshrouded One)",
-  "Surah Al-Muddaththir (المدثر - The Cloaked One)",
-  "Surah Al-Qiyamah (القيامة - The Resurrection)",
-  "Surah Al-Insan (الانسان - The Man)",
-  "Surah Al-Mursalat (المرسلات - The Emissaries)",
-  "Surah An-Naba (النبإ - The Tidings)",
-  "Surah An-Nazi'at (النازعات - Those who drag forth)",
-  "Surah 'Abasa (عبس - He Frowned)",
-  "Surah At-Takwir (التكوير - The Overthrowing)",
-  "Surah Al-Infitar (الإنفطار - The Cleaving)",
-  "Surah Al-Mutaffifin (المطففين - The Defrauding)",
-  "Surah Al-Inshiqaq (الإنشقاق - The Sundering)",
-  "Surah Al-Buruj (البروج - The Mansions of the Stars)",
-  "Surah At-Tariq (الطارق - The Nightcommer)",
-  "Surah Al-A'la (الأعلى - The Most High)",
-  "Surah Al-Ghashiyah (الغاشية - The Overwhelming)",
-  "Surah Al-Fajr (الفجر - The Dawn)",
-  "Surah Al-Balad (البلد - The City)",
-  "Surah Ash-Shams (الشمس - The Sun)",
-  "Surah Al-Layl (الليل - The Night)",
-  "Surah Ad-Duhaa (الضحى - The Morning Hours)",
-  "Surah Ash-Sharh (الشرح - The Relief)",
-  "Surah At-Tin (التين - The Fig)",
-  "Surah Al-'Alaq (العلق - The Clot)",
-  "Surah Al-Qadr (القدر - The Power)",
-  "Surah Al-Bayyinah (البينة - The Clear Proof)",
-  "Surah Az-Zalzalah (الزلزلة - The Earthquake)",
-  "Surah Al-'Adiyat (العاديات - The Courser)",
-  "Surah Al-Qari'ah (القارعة - The Calamity)",
-  "Surah At-Takathur (التكاثر - The Rivalry in world increase)",
-  "Surah Al-'Asr (العصر - The Declining Day)",
-  "Surah Al-Humazah (الهمزة - The Traducer)",
-  "Surah Al-Fil (الفيل - The Elephant)",
-  "Surah Quraysh (قريش - Quraysh)",
-  "Surah Al-Ma'un (الماعون - The Small kindnesses)",
-  "Surah Al-Kawthar (الكوثر - The Abundance)",
-  "Surah Al-Kafirun (الكافرون - The Disbelievers)",
-  "Surah An-Nasr (النصر - The Divine Support)",
-  "Surah Al-Masad (المسد - The Palm Fiber)",
-  "Surah Al-Ikhlas (الإخلاص - The Sincerity)",
-  "Surah Al-Falaq (الفلق - The Daybreak)",
-  "Surah An-Nas (الناس - Mankind)",
+  [1, "Al-Fatihah", "الفاتحة", 7, "The Opener", "Meccan"],
+  [2, "Al-Baqarah", "البقرة", 286, "The Cow", "Medinan"],
+  [3, "Ali 'Imran", "آل عمران", 200, "Family of Imran", "Medinan"],
+  [4, "An-Nisa", "النساء", 176, "The Women", "Medinan"],
+  [5, "Al-Ma'idah", "المائدة", 120, "The Table Spread", "Medinan"],
+  [6, "Al-An'am", "الأنعام", 165, "The Cattle", "Meccan"],
+  [7, "Al-A'raf", "الأعراف", 206, "The Heights", "Meccan"],
+  [8, "Al-Anfal", "الأنفال", 75, "The Spoils of War", "Medinan"],
+  [9, "At-Tawbah", "التوبة", 129, "The Repentance", "Medinan"],
+  [10, "Yunus", "يونس", 109, "Jonah", "Meccan"],
+  [11, "Hud", "هود", 123, "Hud", "Meccan"],
+  [12, "Yusuf", "يوسف", 111, "Joseph", "Meccan"],
+  [13, "Ar-Ra'd", "الرعد", 43, "The Thunder", "Medinan"],
+  [14, "Ibrahim", "ابراهيم", 52, "Abraham", "Meccan"],
+  [15, "Al-Hijr", "الحجر", 99, "The Rocky Tract", "Meccan"],
+  [16, "An-Nahl", "النحل", 128, "The Bee", "Meccan"],
+  [17, "Al-Isra", "الإسراء", 111, "The Night Journey", "Meccan"],
+  [18, "Al-Kahf", "الكهف", 110, "The Cave", "Meccan"],
+  [19, "Maryam", "مريم", 98, "Mary", "Meccan"],
+  [20, "Taha", "طه", 135, "Ta-Ha", "Meccan"],
+  [21, "Al-Anbya", "الأنبياء", 112, "The Prophets", "Meccan"],
+  [22, "Al-Hajj", "الحج", 78, "The Pilgrimage", "Medinan"],
+  [23, "Al-Mu'minun", "المؤمنون", 118, "The Believers", "Meccan"],
+  [24, "An-Nur", "النور", 64, "The Light", "Medinan"],
+  [25, "Al-Furqan", "الفرقان", 77, "The Criterion", "Meccan"],
+  [26, "Ash-Shu'ara", "الشعراء", 227, "The Poets", "Meccan"],
+  [27, "An-Naml", "النمل", 93, "The Ant", "Meccan"],
+  [28, "Al-Qasas", "القصص", 88, "The Stories", "Meccan"],
+  [29, "Al-'Ankabut", "العنكبوت", 69, "The Spider", "Meccan"],
+  [30, "Ar-Rum", "الروم", 60, "The Romans", "Meccan"],
+  [31, "Luqman", "لقمان", 34, "Luqman", "Meccan"],
+  [32, "As-Sajdah", "السجدة", 30, "The Prostration", "Meccan"],
+  [33, "Al-Ahzab", "الأحزاب", 73, "The Combined Forces", "Medinan"],
+  [34, "Saba", "سبإ", 54, "Sheba", "Meccan"],
+  [35, "Fatir", "فاطر", 45, "Originator", "Meccan"],
+  [36, "Ya-Sin", "يس", 83, "Ya Sin", "Meccan"],
+  [37, "As-Saffat", "الصافات", 182, "Those who set the Ranks", "Meccan"],
+  [38, "Sad", "ص", 88, 'The Letter "Saad"', "Meccan"],
+  [39, "Az-Zumar", "الزمر", 75, "The Troops", "Meccan"],
+  [40, "Ghafir", "غافر", 85, "The Forgiver", "Meccan"],
+  [41, "Fussilat", "فصلت", 54, "Explained in Detail", "Meccan"],
+  [42, "Ash-Shuraa", "الشورى", 53, "The Consultation", "Meccan"],
+  [43, "Az-Zukhruf", "الزخرف", 89, "The Ornaments of Gold", "Meccan"],
+  [44, "Ad-Dukhan", "الدخان", 59, "The Smoke", "Meccan"],
+  [45, "Al-Jathiyah", "الجاثية", 37, "The Crouching", "Meccan"],
+  [46, "Al-Ahqaf", "الأحقاف", 35, "The Wind-Curved Sandhills", "Meccan"],
+  [47, "Muhammad", "محمد", 38, "Muhammad", "Medinan"],
+  [48, "Al-Fath", "الفتح", 29, "The Victory", "Medinan"],
+  [49, "Al-Hujurat", "الحجرات", 18, "The Rooms", "Medinan"],
+  [50, "Qaf", "ق", 45, 'The Letter "Qaf"', "Meccan"],
+  [51, "Adh-Dhariyat", "الذاريات", 60, "The Winnowing Winds", "Meccan"],
+  [52, "At-Tur", "الطور", 49, "The Mount", "Meccan"],
+  [53, "An-Najm", "النجم", 62, "The Star", "Meccan"],
+  [54, "Al-Qamar", "القمر", 55, "The Moon", "Meccan"],
+  [55, "Ar-Rahman", "الرحمن", 78, "The Beneficent", "Medinan"],
+  [56, "Al-Waqi'ah", "الواقعة", 96, "The Inevitable", "Meccan"],
+  [57, "Al-Hadid", "الحديد", 29, "The Iron", "Medinan"],
+  [58, "Al-Mujadila", "المجادلة", 22, "The Pleading Woman", "Medinan"],
+  [59, "Al-Hashr", "الحشر", 24, "The Exile", "Medinan"],
+  [
+    60,
+    "Al-Mumtahanah",
+    "الممتحنة",
+    13,
+    "She that is to be examined",
+    "Medinan",
+  ],
+  [61, "As-Saf", "الصف", 14, "The Ranks", "Medinan"],
+  [62, "Al-Jumu'ah", "الجمعة", 11, "The Congregation, Friday", "Medinan"],
+  [63, "Al-Munafiqun", "المنافقون", 11, "The Hypocrites", "Medinan"],
+  [64, "At-Taghabun", "التغابن", 18, "The Mutual Disillusion", "Medinan"],
+  [65, "At-Talaq", "الطلاق", 12, "The Divorce", "Medinan"],
+  [66, "At-Tahrim", "التحريم", 12, "The Prohibition", "Medinan"],
+  [67, "Al-Mulk", "الملك", 30, "The Sovereignty", "Meccan"],
+  [68, "Al-Qalam", "القلم", 52, "The Pen", "Meccan"],
+  [69, "Al-Haqqah", "الحاقة", 52, "The Reality", "Meccan"],
+  [70, "Al-Ma'arij", "المعارج", 44, "The Ascending Stairways", "Meccan"],
+  [71, "Nuh", "نوح", 28, "Noah", "Meccan"],
+  [72, "Al-Jinn", "الجن", 28, "The Jinn", "Meccan"],
+  [73, "Al-Muzzammil", "المزمل", 20, "The Enshrouded One", "Meccan"],
+  [74, "Al-Muddaththir", "المدثر", 56, "The Cloaked One", "Meccan"],
+  [75, "Al-Qiyamah", "القيامة", 40, "The Resurrection", "Meccan"],
+  [76, "Al-Insan", "الانسان", 31, "The Man", "Medinan"],
+  [77, "Al-Mursalat", "المرسلات", 50, "The Emissaries", "Meccan"],
+  [78, "An-Naba", "النبإ", 40, "The Tidings", "Meccan"],
+  [79, "An-Nazi'at", "النازعات", 46, "Those who drag forth", "Meccan"],
+  [80, "'Abasa", "عبس", 42, "He Frowned", "Meccan"],
+  [81, "At-Takwir", "التكوير", 29, "The Overthrowing", "Meccan"],
+  [82, "Al-Infitar", "الإنفطار", 19, "The Cleaving", "Meccan"],
+  [83, "Al-Mutaffifin", "المطففين", 36, "The Defrauding", "Meccan"],
+  [84, "Al-Inshiqaq", "الإنشقاق", 25, "The Sundering", "Meccan"],
+  [85, "Al-Buruj", "البروج", 22, "The Mansions of the Stars", "Meccan"],
+  [86, "At-Tariq", "الطارق", 17, "The Nightcommer", "Meccan"],
+  [87, "Al-A'la", "الأعلى", 19, "The Most High", "Meccan"],
+  [88, "Al-Ghashiyah", "الغاشية", 26, "The Overwhelming", "Meccan"],
+  [89, "Al-Fajr", "الفجر", 30, "The Dawn", "Meccan"],
+  [90, "Al-Balad", "البلد", 20, "The City", "Meccan"],
+  [91, "Ash-Shams", "الشمس", 15, "The Sun", "Meccan"],
+  [92, "Al-Layl", "الليل", 21, "The Night", "Meccan"],
+  [93, "Ad-Duhaa", "الضحى", 11, "The Morning Hours", "Meccan"],
+  [94, "Ash-Sharh", "الشرح", 8, "The Relief", "Meccan"],
+  [95, "At-Tin", "التين", 8, "The Fig", "Meccan"],
+  [96, "Al-'Alaq", "العلق", 19, "The Clot", "Meccan"],
+  [97, "Al-Qadr", "القدر", 5, "The Power", "Meccan"],
+  [98, "Al-Bayyinah", "البينة", 8, "The Clear Proof", "Medinan"],
+  [99, "Az-Zalzalah", "الزلزلة", 8, "The Earthquake", "Medinan"],
+  [100, "Al-'Adiyat", "العاديات", 11, "The Courser", "Meccan"],
+  [101, "Al-Qari'ah", "القارعة", 11, "The Calamity", "Meccan"],
+  [102, "At-Takathur", "التكاثر", 8, "The Rivalry in world increase", "Meccan"],
+  [103, "Al-'Asr", "العصر", 3, "The Declining Day", "Meccan"],
+  [104, "Al-Humazah", "الهمزة", 9, "The Traducer", "Meccan"],
+  [105, "Al-Fil", "الفيل", 5, "The Elephant", "Meccan"],
+  [106, "Quraysh", "قريش", 4, "Quraysh", "Meccan"],
+  [107, "Al-Ma'un", "الماعون", 7, "The Small kindnesses", "Meccan"],
+  [108, "Al-Kawthar", "الكوثر", 3, "The Abundance", "Meccan"],
+  [109, "Al-Kafirun", "الكافرون", 6, "The Disbelievers", "Meccan"],
+  [110, "An-Nasr", "النصر", 3, "The Divine Support", "Medinan"],
+  [111, "Al-Masad", "المسد", 5, "The Palm Fiber", "Meccan"],
+  [112, "Al-Ikhlas", "الإخلاص", 4, "The Sincerity", "Meccan"],
+  [113, "Al-Falaq", "الفلق", 5, "The Daybreak", "Meccan"],
+  [114, "An-Nas", "الناس", 6, "Mankind", "Meccan"],
 ];
 
 export const surah_ayah = [
@@ -428,6 +441,14 @@ export const translationsR = {
   "798": "silika",
 };
 
+export const arabicTrans = [
+  "indopak",
+  "uthmani",
+  "uthmani_simple",
+  "imlaei",
+  "imlaei_simple",
+];
+
 export class Ayah {
   private _code: number;
   private _verse_key: string;
@@ -435,28 +456,35 @@ export class Ayah {
   private _verse_translated: string;
   private _surah: string;
   private _translator: string;
+  private _lang: "en" | "ar";
 
   private _isForDaily: boolean;
 
   constructor(
     verse_key: string,
     translation_code: string | number,
-    daily = false
+    daily = false,
+    lang: "en" | "ar" = "en"
   ) {
     this._verse_key = verse_key;
+    this._lang = lang;
     this._translation =
-      typeof translation_code == "string"
-        ? translations[translation_code]
-        : translation_code;
+      lang == "en"
+        ? typeof translation_code == "string"
+          ? translations[translation_code]
+          : translation_code
+        : arabicTrans.includes(translation_code as string)
+        ? translation_code
+        : "uthmani";
     this._isForDaily = daily;
   }
 
   get code() {
     return this._code;
   }
-
+  /*istanbul ignore next */
   get verse_key() {
-    return this._verse_key;
+    return this._verse_key; /*istanbul ignore next */
   }
 
   get translation() {
@@ -466,22 +494,27 @@ export class Ayah {
   get verse_translated() {
     return this._verse_translated;
   }
-
+  /*istanbul ignore next */
   get surah() {
-    return this._surah;
+    return this._surah; /*istanbul ignore next */
   }
 
   get translator() {
     return this._translator;
   }
 
+  get lang() {
+    return this._lang;
+  }
+
   public static async fetch(
     /* istanbul ignore next */
     verse_key: string,
-    translation: string | number = 203
+    translation: string | number = 203,
+    lang: "en" | "ar" = "en"
   ): Promise<Ayah | Ayah[]> {
     if (verse_key.split("-").length == 1)
-      return await new Ayah(verse_key, translation).init();
+      return await new Ayah(verse_key, translation, false, lang).init();
     else {
       const [surah, verseRange] = verse_key.split(":");
       // eslint-disable-next-line prefer-const
@@ -489,7 +522,7 @@ export class Ayah {
       if (end - start > 14) {
         end = start + 14;
       }
-      start = start + Number(start < 1);
+      start = start < 1 ? 1 : start;
       for (let i = start; i <= end; i++) {
         if (i > surah_ayah[(surah as unknown as number) - 1]) {
           end = i - 1;
@@ -502,7 +535,7 @@ export class Ayah {
       );
       const ayahs = [];
       for (const v of verseArray) {
-        const ayah = await new Ayah(v, translation).init();
+        const ayah = await new Ayah(v, translation, false, lang).init();
         ayahs.push(ayah);
       }
       return ayahs;
@@ -511,28 +544,55 @@ export class Ayah {
 
   public static async random(
     translation: string | number = 203,
-    daily = false
+    daily = false,
+    lang: "en" | "ar" = "en"
   ): Promise<Ayah> {
     const surah = Math.floor(Math.random() * 114 + 1);
     const ayah = Math.floor(Math.random() * surah_ayah[surah - 1] + 1);
-    return await new Ayah(`${surah}:${ayah}`, translation, daily).init();
+    return await new Ayah(`${surah}:${ayah}`, translation, daily, lang).init();
   }
 
   private async init(): Promise<Ayah> {
-    await this.fetchAyah();
+    this._lang == "en" ? await this.fetchAyahEn() : await this.fetchAyahAr();
     return this;
   }
 
-  private async assignData(data: Verse, code: number): Promise<boolean> {
+  private async assignDataEn(data: Verse, code: number): Promise<boolean> {
     return new Promise((resolve) => {
       this._code = code;
       if (code == 200) {
-        this._surah = surahsList[data.chapter_id - 1];
+        this._surah = `Surah ${surahsList[data.chapter_id - 1][1]} (${
+          surahsList[data.chapter_id - 1][2]
+        } - ${surahsList[data.chapter_id - 1][4]})`;
         this._verse_translated = data.translations[0].text.replaceAll(
           /<+?[^<]+?>\d*/g,
           ""
         );
-        this._translator = data.translations[0].resource_name;
+        this._translator = `${data.translations[0].resource_name} | ${
+          surahsList[data.chapter_id - 1][5]
+        }`;
+        this._verse_key = data.verse_key;
+      } else {
+        this._surah = code == 404 ? "Not found" : "Internal Error";
+        this._verse_translated = "";
+        this._translator = "";
+        this._translation = NaN;
+        this._verse_key = "";
+      }
+
+      resolve(true);
+    });
+  }
+
+  private async assignDataAr(data: VerseAr, code: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      this._code = code;
+      if (code == 200) {
+        this._surah = `سورة ${
+          surahsList[Number(this._verse_key.split(":")[0]) - 1]
+        }`;
+        this._verse_translated = data[`text_${this._translation}`];
+        this._translator = "";
         this._verse_key = data.verse_key;
       } else {
         this._surah = code == 404 ? "Not found" : "Internal Error";
@@ -563,19 +623,27 @@ export class Ayah {
     return new Promise((resolve) => {
       if (this._code == 200) {
         resolve({
-          title: this._isForDaily ? "Ayah of the day" : this._surah,
+          title: this._isForDaily
+            ? this._lang == "en"
+              ? "Ayah of the day"
+              : "آية اليوم"
+            : this._surah,
           field: {
             name: this._isForDaily ? this._surah : this._verse_key,
             value:
               this._verse_translated.length >= 980
                 ? this._verse_translated.substring(0, 980) +
-                  `... ([Read more](https://quran.com/${this._verse_key}))`
+                  `... ([${
+                    this._lang == "en" ? "Read more" : "اقرأ أكثر"
+                  }](https://quran.com/${this._verse_key}))`
                 : this._isForDaily
                 ? this._verse_translated + ` [${this._verse_key}]`
                 : this._verse_translated,
           },
           footer: {
-            text: `Translation by: ${this._translator}`,
+            text: this._translator
+              ? `Translation by: ${this._translator}`
+              : undefined,
           },
         });
       } else {
@@ -592,19 +660,36 @@ export class Ayah {
   }
 
   /* istanbul ignore next */
-  private async fetchAyah(): Promise<string | void | boolean> {
+  private async fetchAyahEn(): Promise<string | void | boolean> {
     const url = `https://api.qurancdn.com/api/qdc/verses/by_key/${this.verse_key}?translations=${this.translation}&translation_fields=resource_name&fields=chapter_id`;
 
     return await axios
       .get(url)
       .then(async (resp) => [await resp.data, await resp.status])
-      .then(async (data: [QuranDataResp, number]) => {
-        await this.assignData(data[0].verse, data[1]);
+      .then(async (data: [QuranDataRespEn, number]) => {
+        await this.assignDataEn(data[0].verse, data[1]);
         return true;
       })
       .catch(async (e) => {
-        await this.assignData(undefined, 500);
-        await handleE(e, "fetchAyah()");
+        await this.assignDataEn(undefined, 500);
+        await handleE(e, "fetchAyahEn()");
+        return;
+      });
+  }
+
+  private async fetchAyahAr(): Promise<string | void | boolean> {
+    const url = `https://api.qurancdn.com/api/qdc/quran/verses/${this._translation}?verse_key=${this._verse_key}`;
+
+    return await axios
+      .get(url)
+      .then(async (resp) => [await resp.data, await resp.status])
+      .then(async (data: [QuranDataRespAr, number]) => {
+        await this.assignDataAr(data[0].verses[0], data[1]);
+        return true;
+      })
+      .catch(async (e) => {
+        await this.assignDataAr(undefined, 500);
+        await handleE(e, "fetchAyahAr()");
         return;
       });
   }
