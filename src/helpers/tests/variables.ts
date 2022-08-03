@@ -1,10 +1,19 @@
-import { GuildBasedChannel, MessageEmbed } from "discord.js";
+import {
+  GuildBasedChannel,
+  EmbedBuilder,
+  PermissionFlagsBits,
+  ChannelType,
+  PermissionResolvable,
+} from "discord.js";
 import { jest } from "@jest/globals";
 
 import type { Message, Guild, TextChannel } from "discord.js";
 
 import type { DataSnapshot } from "@firebase/database-types";
 import type { Job } from "node-schedule";
+
+export const replacerBigInt = (_, v) =>
+  typeof v === "bigint" ? v.toString() : v;
 
 export const dataInvalid = {
   code: 404,
@@ -27,7 +36,7 @@ export const data65 = {
   surah: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   verse_translated: "  And We saved Mûsâ (Moses) and all those with him.",
   translation: 203,
-  translator: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+  translator: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   verse_key: "26:65",
 };
 export const outputInvalid = {
@@ -232,7 +241,7 @@ export const output286 = {
     ],
   },
 };
-export const singleEmbedShort = new MessageEmbed({
+export const singleEmbedShort = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   fields: [
@@ -242,10 +251,10 @@ export const singleEmbedShort = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
-export const singleEmbedLong = new MessageEmbed({
+export const singleEmbedLong = new EmbedBuilder({
   color: 1143554,
   title: "Surah Al-Baqarah (البقرة - The Cow)",
   fields: [
@@ -256,10 +265,10 @@ export const singleEmbedLong = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
-export const singleEmbedHaleem = new MessageEmbed({
+export const singleEmbedHaleem = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   fields: [
@@ -269,10 +278,10 @@ export const singleEmbedHaleem = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Abdul Haleem",
+    text: "Translation by: Abdul Haleem | Meccan",
   },
 });
-export const multipleEmbedShort = new MessageEmbed({
+export const multipleEmbedShort = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   fields: [
@@ -286,10 +295,10 @@ export const multipleEmbedShort = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
-export const multipleEmbedHaleem = new MessageEmbed({
+export const multipleEmbedHaleem = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
   fields: [
@@ -303,10 +312,10 @@ export const multipleEmbedHaleem = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Abdul Haleem",
+    text: "Translation by: Abdul Haleem | Meccan",
   },
 });
-export const multipleEmbedLong = new MessageEmbed({
+export const multipleEmbedLong = new EmbedBuilder({
   color: 1143554,
   title: "Surah Al-Baqarah (البقرة - The Cow)",
   fields: [
@@ -322,10 +331,10 @@ export const multipleEmbedLong = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
-export const multipleEmbed404First = new MessageEmbed({
+export const multipleEmbed404First = new EmbedBuilder({
   color: 1143554,
   title: "Surah Al-Fatihah (الفاتحة - The Opener)",
   fields: [
@@ -335,11 +344,11 @@ export const multipleEmbed404First = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
 
-export const multipleEmbed404Last = new MessageEmbed({
+export const multipleEmbed404Last = new EmbedBuilder({
   color: 1143554,
   title: "Surah Al-Baqarah (البقرة - The Cow)",
   fields: [
@@ -355,14 +364,16 @@ export const multipleEmbed404Last = new MessageEmbed({
     },
   ],
   footer: {
-    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
   },
 });
 
-export const ayah404Embed = new MessageEmbed({
+export const ayah404Embed = new EmbedBuilder({
   color: 16757248,
   title: "Not found",
   description: "The ayah(s) you requested doesn't exist",
+  fields: [],
+  footer: undefined,
 });
 
 export const msg = {
@@ -378,24 +389,35 @@ export const msg = {
         get: (s: string): GuildBasedChannel =>
           s == "12345678901"
             ? ({
-                permissions: ["VIEW_CHANNEL", "EMBED_LINKS", "SEND_MESSAGES"],
+                permissions: [
+                  PermissionFlagsBits.SendMessages,
+                  PermissionFlagsBits.ViewChannel,
+                  PermissionFlagsBits.EmbedLinks,
+                ],
               } as unknown as GuildBasedChannel)
             : s == "123456789012"
             ? ({
-                permissions: ["VIEW_CHANNEL", "EMBED_LINKS", "SEND_MESSAGES"],
-                type: "GUILD_TEXT",
+                permissions: [
+                  PermissionFlagsBits.SendMessages,
+                  PermissionFlagsBits.ViewChannel,
+                  PermissionFlagsBits.EmbedLinks,
+                ],
+                type: ChannelType.GuildText,
               } as unknown as GuildBasedChannel)
             : ({
                 permissions: [],
               } as unknown as GuildBasedChannel),
       },
     },
-    me: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      permissionsIn: (channel: any) => ({
-        has: (a: string[]) =>
-          JSON.stringify(channel.permissions) === JSON.stringify(a),
-      }),
+    members: {
+      me: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        permissionsIn: (channel: any) => ({
+          has: (a: PermissionResolvable) =>
+            JSON.stringify(channel.permissions, replacerBigInt) ==
+            JSON.stringify(a, replacerBigInt),
+        }),
+      },
     },
   },
   reply: jest.fn().mockResolvedValue({ delete: jest.fn() } as never),
@@ -551,11 +573,11 @@ export const guildDataRaw = {
 };
 
 export const channel = {
-  type: "GUILD_TEXT",
+  type: ChannelType.GuildText,
   send: jest.fn(),
 } as unknown as TextChannel;
 
-export const tzChngedEmbed = new MessageEmbed({
+export const tzChngedEmbed = new EmbedBuilder({
   color: 1143554,
   title: "Timezone settings: ",
   description: "Timezone changes saved",

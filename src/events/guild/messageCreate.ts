@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { ChannelType, Collection } from "discord.js";
 
 import {
   embed_error,
@@ -9,7 +9,7 @@ import {
 import { colors } from "../../lib/embeds/infos";
 import { handleE } from "../../lib/utils";
 
-import type { Message, PermissionResolvable, TextChannel } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default async (client: CustomClient, message: Message) => {
@@ -19,10 +19,7 @@ export default async (client: CustomClient, message: Message) => {
   if (!message.content.startsWith(prefix as string) || message.author.bot)
     return;
 
-  const args = await message.content
-    .slice(prefix.length)
-    .trim()
-    .split(/ +/)
+  const args = await message.content.slice(prefix.length).trim().split(/ +/);
 
   const cmd = args.shift().toLowerCase();
 
@@ -51,7 +48,7 @@ export default async (client: CustomClient, message: Message) => {
         () => timestamps.delete(parseInt(message.author.id)),
         cooldownAmount
       );
-      if (command.guildOnly && message.channel.type === "DM")
+      if (command.guildOnly && message.channel.type === ChannelType.DM)
         return await message.reply({
           embeds: [
             await create_embed(
@@ -76,14 +73,11 @@ export default async (client: CustomClient, message: Message) => {
         const authorPerms = (message.channel as TextChannel).permissionsFor(
           message.author
         );
-        if (
-          !authorPerms ||
-          !authorPerms.has(
-            command.permissions as unknown as PermissionResolvable
-          )
-        )
+        if (!authorPerms || !authorPerms.has(command.permissions))
           return await message.reply({
-            embeds: [await insufficient_perms(cmd, command.permissions)],
+            embeds: [
+              await insufficient_perms(cmd, command.permissions as string[]),
+            ],
           });
       }
       return await command.execute(message, args, client);

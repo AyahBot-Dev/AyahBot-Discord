@@ -2,7 +2,8 @@ import {
   Client,
   Collection,
   CommandInteraction,
-  MessageEmbed,
+  EmbedBuilder,
+  PermissionResolvable,
 } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
@@ -24,7 +25,7 @@ export interface Command {
   ownerOnly: boolean;
   guildOnly: boolean;
   cooldown: number;
-  permissions: string[];
+  permissions: PermissionResolvable;
   slash: SlashCommandBuilder;
   execute: (
     a: Message | CommandInteraction,
@@ -36,7 +37,7 @@ export interface Command {
 export class CustomClient extends Client {
   public commands: Collection<string, Command>;
   public cooldowns: Collection<string, Collection<number, number>>;
-  public helpCommands: Collection<string, MessageEmbed>;
+  public helpCommands: Collection<string, EmbedBuilder>;
   public prefixes: PrefixManager;
   public quranTrs: QuranTrsManager;
 

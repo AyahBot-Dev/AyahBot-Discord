@@ -28,7 +28,7 @@ export default {
 
   guildOnly: true,
   cooldown: 5,
-  permissions: ["ADMINISTRATOR"],
+  permissions: ["Administrator"],
 
   slash: new SlashCommandBuilder()
     .setName("qdefault")

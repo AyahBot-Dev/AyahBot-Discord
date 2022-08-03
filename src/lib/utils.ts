@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 
@@ -11,7 +11,7 @@ import loadJobs from "./handlers/jobsLoader";
 import loadPrefixes from "./handlers/prefixesLoader";
 import loadSlashes from "./handlers/slashesLoader";
 
-import type { Guild, MessageEmbedOptions } from "discord.js";
+import type { Guild, EmbedData } from "discord.js";
 
 import type { CustomClient } from "./classes/CustomClient";
 
@@ -45,9 +45,9 @@ export const handleE = async (e: Error, procPath: string): Promise<boolean> => {
 
 export const convertToEmbed = async (
   obj: Ayah | Ayah[]
-): Promise<MessageEmbed> => {
+): Promise<EmbedBuilder> => {
   try {
-    const data: MessageEmbedOptions = {
+    const data: EmbedData = {
       color: colors.success,
       fields: [],
     };
@@ -70,7 +70,7 @@ export const convertToEmbed = async (
         data.color = colors.warning;
         data.title = "Not found";
         data.description = "The ayah(s) you requested doesn't exist";
-        data.footer = null;
+        data.footer = undefined;
       }
     } else {
       const objData = await obj.exportDataForEmbed();
@@ -85,7 +85,7 @@ export const convertToEmbed = async (
       data.title = objData.title;
       data.footer = objData.footer;
     }
-    return new MessageEmbed(data);
+    return new EmbedBuilder(data);
   } catch (e) /* istanbul ignore next */ {
     await handleE(e, "convertToEmbed()");
     return embed_error;
@@ -108,11 +108,15 @@ export const task = async (quran: number, guild: Guild, channel: string) => {
   try {
     const ayah_embed = await convertToEmbed(await Ayah.random(quran, true));
     const channelObj = await guild.channels.cache.get(channel);
-    const hasPerms = await guild.me
+    const hasPerms = await guild.members.me
       .permissionsIn(channelObj)
-      .has(["VIEW_CHANNEL", "EMBED_LINKS", "SEND_MESSAGES"]);
+      .has([
+        PermissionFlagsBits.SendMessages,
+        PermissionFlagsBits.ViewChannel,
+        PermissionFlagsBits.EmbedLinks,
+      ]);
 
-    if (!channelObj || !(channelObj.type == "GUILD_TEXT") || !hasPerms) {
+    if (!channelObj || channelObj.type != ChannelType.GuildText || !hasPerms) {
       return;
     }
     return await channelObj.send({ embeds: [ayah_embed] });

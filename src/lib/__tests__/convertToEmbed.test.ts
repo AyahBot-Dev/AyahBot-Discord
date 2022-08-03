@@ -107,7 +107,7 @@ describe("Function: convertToEmbed()", () => {
         data: output286,
         status: 200,
       } as AxiosResponse)
-      .mockResolvedValueOnce({
+      .mockResolvedValue({
         data: outputInvalid,
         status: 404,
       } as AxiosResponse);
@@ -117,15 +117,10 @@ describe("Function: convertToEmbed()", () => {
   });
 
   it("is returning a correct embed if some first ayah doesn't exist on requested ayahs", async () => {
-    mockedGet
-      .mockResolvedValueOnce({
-        data: outputInvalid,
-        status: 404,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output1,
-        status: 200,
-      } as AxiosResponse);
+    mockedGet.mockResolvedValue({
+      data: output1,
+      status: 200,
+    } as AxiosResponse);
 
     const embed = await convertToEmbed(await Ayah.fetch("1:0-1"));
     expect(embed).toEqual(multipleEmbed404First);
@@ -160,10 +155,10 @@ describe("Function: convertToEmbed()", () => {
 
   it("is returning server error embed on internal problems", async () => {
     mockedGet
-      .mockResolvedValueOnce({ data: output286, status: 200 } as AxiosResponse)
+      .mockResolvedValueOnce({ data: output285, status: 200 } as AxiosResponse)
       .mockRejectedValueOnce("");
 
-    const embed = await convertToEmbed(await Ayah.fetch("2:286-287"));
+    const embed = await convertToEmbed(await Ayah.fetch("2:285-286"));
     expect(embed).toEqual(embed_error);
   });
 

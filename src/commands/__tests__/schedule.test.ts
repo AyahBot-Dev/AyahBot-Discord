@@ -44,7 +44,7 @@ jest.mock("../../lib/utils", () => {
 describe("Command: schedule", () => {
   const mockedJobs = mocked(scheduledJobs);
 
-  it("is successfully scheduling daily ayah", async () => {
+  it("is successfully scheduling daily ayah in slashes", async () => {
     const data = await guildDataSnap(true, true, true);
 
     mockedJobs.once.mockResolvedValue(data);

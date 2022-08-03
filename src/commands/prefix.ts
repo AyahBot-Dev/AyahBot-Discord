@@ -28,7 +28,7 @@ export default {
 
   guildOnly: true,
   cooldown: 3,
-  permissions: ["ADMINISTRATOR"],
+  permissions: ["Administrator"],
 
   slash: new SlashCommandBuilder()
     .setName("prefix")

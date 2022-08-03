@@ -1,4 +1,4 @@
-name: Update Translations Wiki
+name: Update Wiki
 
 on:
   schedule:
@@ -13,9 +13,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "18.1"
-      - name: Update Translations wiki
+      - name: Update wiki
         run: |
-          sh tools/update_translations_wiki.sh
+          sh tools/update_wiki.sh
         env:
           SENDER_MAIL: ${{ secrets.SENDER_MAIL }}
           RECEIVER_MAIL: ${{ secrets.RECEIVER_MAIL }}
