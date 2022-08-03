@@ -10,11 +10,13 @@ import {
 import { colors } from "../lib/embeds/infos";
 import { handleE } from "../lib/utils";
 
-import type {
+import {
   CacheType,
+  ChannelType,
   CommandInteraction,
   CommandInteractionOption,
   Message,
+  PermissionFlagsBits,
 } from "discord.js";
 
 export default {
@@ -26,7 +28,7 @@ export default {
 
   guildOnly: true,
   cooldown: 5,
-  permissions: ["ADMINISTRATOR"],
+  permissions: ["Administrator"],
 
   slash: new SlashCommandBuilder()
     .setName("schedule")
@@ -35,7 +37,7 @@ export default {
       option
         .setName("channel")
         .setDescription("Select the channel you're wanting me to schedule at")
-        .addChannelTypes(0)
+        .addChannelTypes(ChannelType.GuildText)
         .setRequired(true)
     )
     .addStringOption((option) =>
@@ -91,9 +93,13 @@ export default {
 
       // check perms
       const channel = await message.guild.channels.cache.get(channelId);
-      const hasPerms = await message.guild.me
+      const hasPerms = await message.guild.members.me
         .permissionsIn(channel)
-        .has(["VIEW_CHANNEL", "EMBED_LINKS", "SEND_MESSAGES"]);
+        .has([
+          PermissionFlagsBits.SendMessages,
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.EmbedLinks,
+        ]);
 
       if (!hasPerms)
         return await message.reply({
@@ -106,7 +112,7 @@ export default {
           ],
         });
 
-      if (!(channel.type == "GUILD_TEXT"))
+      if (channel.type != ChannelType.GuildText)
         return await message.reply({
           embeds: [
             await create_embed(

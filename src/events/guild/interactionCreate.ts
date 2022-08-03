@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { Collection, InteractionType } from "discord.js";
 
 import {
   embed_error,
@@ -9,16 +9,12 @@ import {
 import { colors } from "../../lib/embeds/infos";
 import { handleE } from "../../lib/utils";
 
-import type {
-  Interaction,
-  PermissionResolvable,
-  TextChannel,
-} from "discord.js";
+import type { Interaction, TextChannel } from "discord.js";
 
 import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default async (client: CustomClient, interaction: Interaction) => {
-  if (!interaction.isCommand()) return;
+  if (!(interaction.type === InteractionType.ApplicationCommand)) return;
 
   const args = interaction.options.data;
   const command = await client.commands.get(interaction.commandName);
@@ -73,17 +69,12 @@ export default async (client: CustomClient, interaction: Interaction) => {
         const authorPerms = (interaction.channel as TextChannel).permissionsFor(
           interaction.user
         );
-        if (
-          !authorPerms ||
-          !authorPerms.has(
-            command.permissions as unknown as PermissionResolvable
-          )
-        )
+        if (!authorPerms || !authorPerms.has(command.permissions))
           return await interaction.reply({
             embeds: [
               await insufficient_perms(
                 interaction.commandName,
-                command.permissions
+                command.permissions as string[]
               ),
             ],
           });

@@ -1,7 +1,7 @@
 import { handleE } from "../utils";
 import { colors } from "../embeds/infos";
 
-import type { MessageEmbed } from "discord.js";
+import type { EmbedBuilder } from "discord.js";
 
 import type { CustomClient } from "../classes/CustomClient";
 
@@ -38,7 +38,7 @@ export default async (client: CustomClient) => {
         footer: {
           text: "Don't forget to add the bot prefix. The prefix is usually '!ayah ' (without apostrophees) if you have not changed it from settings.",
         },
-      } as MessageEmbed;
+      } as EmbedBuilder;
       commands.forEach((x) =>
         embed.fields.push({
           inline: true,
@@ -71,7 +71,7 @@ export default async (client: CustomClient) => {
 
     links.forEach((v) => (embed.fields[1].value += `• [${v[0]}](${v[1]})\n`));
 
-    client.helpCommands.set("main", embed as MessageEmbed);
+    client.helpCommands.set("main", embed as EmbedBuilder);
 
     const t2 = new Date().getTime();
 

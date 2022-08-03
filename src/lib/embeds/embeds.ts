@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 
 import { colors } from "./infos";
 
@@ -6,12 +6,12 @@ import { colors } from "./infos";
 export const create_embed = (
   title: string,
   description: string,
-  color = null
+  color: number = undefined
 ) => {
   // Overall: return a resolved promise containing embed
   return new Promise((resolve) => {
     resolve(
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle(title)
         .setDescription(description)
         .setColor(color)
@@ -20,7 +20,7 @@ export const create_embed = (
 };
 
 /* istanbul ignore next */
-export const embed_error = new MessageEmbed({
+export const embed_error = new EmbedBuilder({
   color: colors.error,
   title: "An error occured",
   description:
@@ -31,7 +31,7 @@ export const embed_error = new MessageEmbed({
 export const syntax_error = (...args: string[]) => {
   return new Promise((resolve) => {
     resolve(
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle("Invalid Arguments")
         .setDescription(
           `You've written invaild argument(s). \nMaintain this argument type and order for this command: \`\`\`\n${args.join(
@@ -47,7 +47,7 @@ export const syntax_error = (...args: string[]) => {
 export const invalid_datatype = (data: string, schema: string) => {
   return new Promise((resolve) => {
     resolve(
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle("Invalid datatype for argument")
         .setDescription(
           `The argument \`${data}\` you gave me is not valid. \nThe argument should be ${schema}.`
@@ -61,7 +61,7 @@ export const invalid_datatype = (data: string, schema: string) => {
 export const insufficient_perms = (cmd: string, perms: string[]) => {
   return new Promise((resolve) => {
     resolve(
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle("Insufficient permissions to run this command")
         .setDescription(
           `To run \`${cmd}\` command, you need to have the following permission(s):\n${perms.join(
@@ -74,7 +74,7 @@ export const insufficient_perms = (cmd: string, perms: string[]) => {
 };
 
 /* istanbul ignore next */
-export const coolDownsEmbed = new MessageEmbed()
+export const coolDownsEmbed = new EmbedBuilder()
   .setTitle("Cooldown alert!")
   .setDescription(
     "You need to wait for sometimes before using this command again"
