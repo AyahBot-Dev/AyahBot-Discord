@@ -1,7 +1,7 @@
 import { handleE } from "../utils";
 import { colors } from "../embeds/infos";
 
-import type { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, EmbedData } from "discord.js";
 
 import type { CustomClient } from "../classes/CustomClient";
 
@@ -38,7 +38,7 @@ export default async (client: CustomClient) => {
         footer: {
           text: "Don't forget to add the bot prefix. The prefix is usually '!ayah ' (without apostrophees) if you have not changed it from settings.",
         },
-      } as EmbedBuilder;
+      } as EmbedData;
       commands.forEach((x) =>
         embed.fields.push({
           inline: true,
@@ -46,7 +46,7 @@ export default async (client: CustomClient) => {
           value: `${x.description}\n\n**Usage:**\n\`${x.name} ${x.usage}\``,
         })
       );
-      client.helpCommands.set(v, embed);
+      client.helpCommands.set(v, new EmbedBuilder(embed));
     });
 
     const embed = {
@@ -67,11 +67,11 @@ export default async (client: CustomClient) => {
       footer: {
         text: "Don't forget to add the bot prefix. The prefix is usually '!ayah ' (Without apostrophees) if you have not changed it from settings.",
       },
-    };
+    } as EmbedData;
 
     links.forEach((v) => (embed.fields[1].value += `• [${v[0]}](${v[1]})\n`));
 
-    client.helpCommands.set("main", embed as EmbedBuilder);
+    client.helpCommands.set("main", new EmbedBuilder(embed));
 
     const t2 = new Date().getTime();
 
