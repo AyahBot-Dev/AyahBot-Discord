@@ -1,8 +1,9 @@
 name: Update Wiki
 
 on:
-  schedule:
-    - cron: "0 0 * * 5"
+  push
+  # schedule:
+  #   - cron: "0 0 * * 5"
 jobs:
   update-translations-wiki:
     runs-on: ubuntu-latest
