@@ -59,7 +59,12 @@ export default {
       // let tzIsValid = await isValidTZ(args[0]);
       if (!moment.tz.zone(timezone))
         return await message.reply({
-          embeds: [await invalid_datatype(timezone, "a valid timezone")],
+          embeds: [
+            await invalid_datatype(
+              timezone,
+              "a valid timezone listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Timezones)"
+            ),
+          ],
         });
 
       // Second: try to store the timezone value, show error if returned false
