@@ -1,10 +1,10 @@
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v9";
+import { Routes } from "discord-api-types/v10";
 
 import type { CustomClient } from "../classes/CustomClient";
 import { handleE } from "../utils";
 
-const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
+const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
