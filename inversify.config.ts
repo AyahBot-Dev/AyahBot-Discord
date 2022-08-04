@@ -16,6 +16,7 @@ container.bind<CustomClient>(TYPES.Client).toConstantValue(
       GatewayIntentBits.GuildMessageTyping,
       GatewayIntentBits.DirectMessages,
       GatewayIntentBits.DirectMessageTyping,
+      GatewayIntentBits.MessageContent,
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   })
