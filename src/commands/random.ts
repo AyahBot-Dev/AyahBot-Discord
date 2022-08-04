@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 
 import { Ayah, translations } from "../lib/classes/Ayah";
 import { embed_error, invalid_datatype } from "../lib/embeds/embeds";

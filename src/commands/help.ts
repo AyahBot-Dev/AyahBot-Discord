@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 
 import { invalid_datatype, embed_error } from "../lib/embeds/embeds";
 import { handleE } from "../lib/utils";

@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import {
+  ChannelType,
+  SlashCommandBuilder,
+  PermissionFlagsBits,
+} from "discord.js";
 
 import DBHandler from "../lib/DBHandler";
 import {
@@ -10,13 +14,11 @@ import {
 import { colors } from "../lib/embeds/infos";
 import { handleE } from "../lib/utils";
 
-import {
+import type {
   CacheType,
-  ChannelType,
   CommandInteraction,
   CommandInteractionOption,
   Message,
-  PermissionFlagsBits,
 } from "discord.js";
 
 export default {
