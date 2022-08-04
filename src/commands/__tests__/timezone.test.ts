@@ -95,7 +95,12 @@ describe("Command: timezone", () => {
   it("is returning datatype error if timezone is not valid", async () => {
     await timezoneCmd.execute(msg, ["blah"]);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await invalid_datatype("blah", "a valid timezone")],
+      embeds: [
+        await invalid_datatype(
+          "blah",
+          "a valid timezone listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Timezones)"
+        ),
+      ],
     });
   });
 
