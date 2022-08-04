@@ -37,7 +37,7 @@ export default {
       option
         .setName("translation")
         .setDescription(
-          "Enter a translation code (e.g. 'hilali') to be default for your server"
+          "Enter a translation code (e.g. 'hilali') from our translations wiki to be default for your server"
         )
         .setRequired(true)
     ),

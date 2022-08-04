@@ -130,7 +130,7 @@ describe("Command: quran", () => {
     expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedHaleem] });
   });
 
-  it("is returning syntax error on no params", async () => {
+  it("is returning syntax error on falsy verse_key", async () => {
     await quranCmd.execute(msg, [], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
