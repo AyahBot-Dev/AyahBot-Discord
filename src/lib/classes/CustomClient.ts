@@ -4,8 +4,8 @@ import {
   CommandInteraction,
   EmbedBuilder,
   PermissionResolvable,
+  SlashCommandBuilder,
 } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 
 import { PrefixManager } from "./PrefixManager";
 import { QuranTrsManager } from "./QuranTrsManager";
