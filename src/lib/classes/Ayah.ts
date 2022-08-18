@@ -4,6 +4,7 @@ import { colors } from "../embeds/infos";
 
 import type {
   DataForEmbed,
+  Lang,
   QuranDataRespAr,
   QuranDataRespEn,
   Verse,
@@ -441,22 +442,31 @@ export const translationsR = {
   "798": "silika",
 };
 
-export const arabicTrans = [
-  "indopak",
-  "uthmani",
-  "uthmani_simple",
-  "imlaei",
-  "imlaei_simple",
-];
+export const arabicDigits = {
+  0: "\u06f0",
+  1: "\u06f1",
+  2: "\u06f2",
+  3: "\u06f3",
+  4: "\u06f4",
+  5: "\u06f5",
+  6: "\u06f6",
+  7: "\u06f7",
+  8: "\u06f8",
+  9: "\u06f9",
+  ":": ":",
+};
 
 export class Ayah {
   private _code: number;
+
   private _verse_key: string;
+  private _verse_key_ar: string;
   private _translation: number;
+  private _verse: string;
   private _verse_translated: string;
   private _surah: string;
   private _translator: string;
-  private _lang: "en" | "ar";
+  private _lang: string;
 
   private _isForDaily: boolean;
 
@@ -464,19 +474,20 @@ export class Ayah {
     verse_key: string,
     translation_code: string | number,
     daily = false,
-    lang: "en" | "ar" = "en"
+    lang: Lang = "en"
   ) {
     this._verse_key = verse_key;
-    this._lang = lang;
     this._translation =
-      lang == "en"
-        ? typeof translation_code == "string"
-          ? translations[translation_code]
-          : translation_code
-        : arabicTrans.includes(translation_code as string)
+      lang != "ar"
         ? translation_code
-        : "uthmani";
+          ? typeof translation_code == "string"
+            ? translations[translation_code]
+            : translation_code
+          : 203
+        : undefined;
+    this._lang = lang;
     this._isForDaily = daily;
+    this._verse_key_ar = "";
   }
 
   get code() {
@@ -487,8 +498,16 @@ export class Ayah {
     return this._verse_key; /*istanbul ignore next */
   }
 
+  get verse_key_ar() {
+    return this._verse_key_ar; /*istanbul ignore next */
+  }
+
   get translation() {
     return this._translation;
+  }
+
+  get verse() {
+    return this._verse;
   }
 
   get verse_translated() {
@@ -510,8 +529,8 @@ export class Ayah {
   public static async fetch(
     /* istanbul ignore next */
     verse_key: string,
-    translation: string | number = 203,
-    lang: "en" | "ar" = "en"
+    translation: string | number = undefined,
+    lang: Lang = undefined
   ): Promise<Ayah | Ayah[]> {
     if (verse_key.split("-").length == 1)
       return await new Ayah(verse_key, translation, false, lang).init();
@@ -543,9 +562,9 @@ export class Ayah {
   }
 
   public static async random(
-    translation: string | number = 203,
+    translation: string | number = undefined,
     daily = false,
-    lang: "en" | "ar" = "en"
+    lang: Lang = undefined
   ): Promise<Ayah> {
     const surah = Math.floor(Math.random() * 114 + 1);
     const ayah = Math.floor(Math.random() * surah_ayah[surah - 1] + 1);
@@ -553,7 +572,8 @@ export class Ayah {
   }
 
   private async init(): Promise<Ayah> {
-    this._lang == "en" ? await this.fetchAyahEn() : await this.fetchAyahAr();
+    this._lang != "en" ? await this.fetchAyahAr() : await this.fetchAyahEn();
+    this._lang == "mixed" ? await this.fetchAyahEn() : null;
     return this;
   }
 
@@ -587,19 +607,21 @@ export class Ayah {
   private async assignDataAr(data: VerseAr, code: number): Promise<boolean> {
     return new Promise((resolve) => {
       this._code = code;
-      if (code == 200) {
+      if (code == 200 && data) {
         this._surah = `سورة ${
-          surahsList[Number(this._verse_key.split(":")[0]) - 1]
+          surahsList[Number(this._verse_key.split(":")[0]) - 1][2]
         }`;
-        this._verse_translated = data[`text_${this._translation}`];
-        this._translator = "";
-        this._verse_key = data.verse_key;
+        this._verse = data.text_uthmani;
+        this._translator = this._translation ? this._translator : "";
+        for (let i = 0; i < data.verse_key.length; i++)
+          this._verse_key_ar += arabicDigits[data.verse_key[i]];
       } else {
-        this._surah = code == 404 ? "Not found" : "Internal Error";
-        this._verse_translated = "";
+        this._surah = !data && code != 500 ? "Not found" : "Internal Error";
+        this._verse = "";
         this._translator = "";
-        this._translation = NaN;
+        this._lang = "";
         this._verse_key = "";
+        this._verse_key_ar = "";
       }
 
       resolve(true);
@@ -611,7 +633,10 @@ export class Ayah {
       resolve({
         code: this._code,
         verse_key: this._verse_key,
+        verse_key_ar: this._verse_key_ar,
         translation: this._translation,
+        lang: this._lang,
+        verse: this._verse,
         verse_translated: this._verse_translated,
         surah: this._surah,
         translator: this._translator,
@@ -624,22 +649,40 @@ export class Ayah {
       if (this._code == 200) {
         resolve({
           title: this._isForDaily
-            ? this._lang == "en"
+            ? this._translation
               ? "Ayah of the day"
               : "آية اليوم"
             : this._surah,
-          field: {
-            name: this._isForDaily ? this._surah : this._verse_key,
-            value:
-              this._verse_translated.length >= 980
-                ? this._verse_translated.substring(0, 980) +
-                  `... ([${
-                    this._lang == "en" ? "Read more" : "اقرأ أكثر"
-                  }](https://quran.com/${this._verse_key}))`
-                : this._isForDaily
-                ? this._verse_translated + ` [${this._verse_key}]`
-                : this._verse_translated,
-          },
+          fields: [
+            this._lang != "en"
+              ? {
+                  name: this._isForDaily ? this._surah : this._verse_key_ar,
+                  value:
+                    this._verse.length >= 980
+                      ? this._verse.substring(0, 980) +
+                        `  ... ([اقرأ أكثر](https://quran.com/${this._verse_key}))`
+                      : this._isForDaily
+                      ? this._verse + ` [${this._verse_key_ar}]`
+                      : this._verse,
+                }
+              : undefined,
+            this._lang != "ar"
+              ? {
+                  name: this._isForDaily
+                    ? this._lang == "mixed"
+                      ? "Translation:"
+                      : this._surah
+                    : this._verse_key,
+                  value:
+                    this._verse_translated.length >= 950
+                      ? this._verse_translated.substring(0, 950) +
+                        `... ([Read more](https://quran.com/${this._verse_key}?translations=${this._translation}))`
+                      : this._isForDaily
+                      ? this._verse_translated + ` [${this._verse_key}]`
+                      : this._verse_translated,
+                }
+              : undefined,
+          ],
           footer: {
             text: this._translator
               ? `Translation by: ${this._translator}`
@@ -678,7 +721,7 @@ export class Ayah {
   }
 
   private async fetchAyahAr(): Promise<string | void | boolean> {
-    const url = `https://api.qurancdn.com/api/qdc/quran/verses/${this._translation}?verse_key=${this._verse_key}`;
+    const url = `https://api.qurancdn.com/api/qdc/quran/verses/uthmani?verse_key=${this._verse_key}`;
 
     return await axios
       .get(url)

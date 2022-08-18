@@ -1,4 +1,4 @@
-import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import { ChannelType, EmbedBuilder } from "discord.js";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 
@@ -14,6 +14,7 @@ import loadSlashes from "./handlers/slashesLoader";
 import type { Guild, EmbedData } from "discord.js";
 
 import type { CustomClient } from "./classes/CustomClient";
+import { Lang } from "../types";
 
 export const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -52,6 +53,7 @@ export const convertToEmbed = async (
       fields: [],
     };
     if (Array.isArray(obj)) {
+      /*
       for (const v of obj) {
         const objData = await v.exportDataForEmbed();
         if (!objData.description) {
@@ -61,7 +63,7 @@ export const convertToEmbed = async (
         } else {
           continue;
         }
-        /* istanbul ignore next */
+        /* istanbul ignore next
         if (objData.color) data.color = objData.color;
         data.title = objData.title;
         data.footer = objData.footer;
@@ -71,11 +73,37 @@ export const convertToEmbed = async (
         data.title = "Not found";
         data.description = "The ayah(s) you requested doesn't exist";
         data.footer = undefined;
+      } 
+      */
+      for (const v of obj) {
+        const objData = await v.exportDataForEmbed();
+        if (!objData.description) {
+          for (const i of objData.fields) {
+            if (i) data.fields.push(i);
+          }
+        } else if (objData.description == "SERVER_ERR") {
+          return embed_error;
+        } else continue;
+
+        /* istanbul ignore next */
+        if (objData.color) data.color = objData.color;
+        data.title = objData.title;
+        data.footer = objData.footer;
+      }
+
+      // already did ayah existence checking in Ayah.fetch()
+      if (data.fields.length < 1) {
+        data.color = colors.warning;
+        data.title = "Not found";
+        data.description = "The ayah(s) you requested doesn't exist";
+        data.footer = undefined;
       }
     } else {
       const objData = await obj.exportDataForEmbed();
       if (!objData.description) {
-        data.fields[0] = objData.field;
+        for (const i of objData.fields) {
+          if (i) data.fields.push(i);
+        }
       } else if (objData.description == "SERVER_ERR") {
         return embed_error;
       } else {
@@ -103,22 +131,25 @@ export const cronTZ = (
   });
 
 /* istanbul ignore next */
-export const task = async (quran: number, guild: Guild, channel: string) => {
+export const task = async (
+  quran: number,
+  lang: Lang,
+  guild: Guild,
+  channel: string
+) => {
   /* istanbul ignore next */
   try {
-    const ayah_embed = await convertToEmbed(await Ayah.random(quran, true));
     const channelObj = await guild.channels.cache.get(channel);
     const hasPerms = await guild.members.me
       .permissionsIn(channelObj)
-      .has([
-        PermissionFlagsBits.SendMessages,
-        PermissionFlagsBits.ViewChannel,
-        PermissionFlagsBits.EmbedLinks,
-      ]);
+      .has(["SendMessages", "ViewChannel", "EmbedLinks"]);
 
     if (!channelObj || channelObj.type != ChannelType.GuildText || !hasPerms) {
       return;
     }
+    const ayah_embed = await convertToEmbed(
+      await Ayah.random(quran, true, lang)
+    );
     return await channelObj.send({ embeds: [ayah_embed] });
   } catch (e) {
     await handleE(e, "task()");

@@ -3,14 +3,10 @@ import { mocked } from "jest-mock";
 
 import settingsCmd from "../settings";
 import {
-  csGuildDExStr,
-  csqGuildDExStr,
   errMsg,
-  guildDataSnap,
-  guildDExStr,
+  guildDExStrFactory,
+  guildDFactory,
   msg,
-  qGuildDExStr,
-  tGuildDExStr,
 } from "../../helpers/tests/variables";
 import { create_embed, embed_error } from "../../lib/embeds/embeds";
 import { db, scheduledJobs } from "../../lib/initDB";
@@ -45,53 +41,62 @@ jest.mock("../../lib/utils", () => {
 describe("Command: settings", () => {
   const mockedJobs = mocked(scheduledJobs);
 
-  it("is returning a correct embed while quran, timezone, channel, time, prefix is set", async () => {
-    const data = await guildDataSnap(true, true, true, true);
+  it("is returning a correct embed while quran, lang, timezone, channel, time, prefix is set", async () => {
+    const data = guildDFactory(false, true, true, true, true, true);
+    const toCompare = guildDExStrFactory(true, true, true, true, true);
     mockedJobs.once.mockResolvedValue(data);
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await create_embed("Settings: ", guildDExStr, colors.info)],
+      embeds: [await create_embed("Settings: ", toCompare, colors.info)],
     });
   });
 
-  it("is returning a correct embed while only quran, timezone, channel, time is set", async () => {
-    const data = await guildDataSnap(true, true, true);
+  it("is returning a correct embed while only quran, lang, timezone, channel, time is set", async () => {
+    const data = guildDFactory(false, true, true, true, true);
+    const toCompare = guildDExStrFactory(true, true, true, true);
+
     mockedJobs.once.mockResolvedValue(data);
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await create_embed("Settings: ", csqGuildDExStr, colors.info)],
+      embeds: [await create_embed("Settings: ", toCompare, colors.info)],
     });
   });
 
   it("is returning a correct embed while only timezone, channel, time is set", async () => {
-    const data = await guildDataSnap(false, true, true);
+    const data = guildDFactory(false, false, true, true);
+    const toCompare = guildDExStrFactory(false, true, true);
+
     mockedJobs.once.mockResolvedValue(data);
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await create_embed("Settings: ", csGuildDExStr, colors.info)],
+      embeds: [await create_embed("Settings: ", toCompare, colors.info)],
     });
   });
 
   it("is returning a correct embed while only quran is set", async () => {
-    const data = await guildDataSnap(true, false, false);
+    const data = guildDFactory(false, true);
+    const toCompare = guildDExStrFactory(true);
+
     mockedJobs.once.mockResolvedValue(data);
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await create_embed("Settings: ", qGuildDExStr, colors.info)],
+      embeds: [await create_embed("Settings: ", toCompare, colors.info)],
     });
   });
 
   it("is returning a correct embed while only timezone is set", async () => {
-    const data = await guildDataSnap(false, false, true);
+    const data = guildDFactory(false, false, false, true);
+    const toCompare = guildDExStrFactory(false, false, true);
+
     mockedJobs.once.mockResolvedValue(data);
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({
-      embeds: [await create_embed("Settings: ", tGuildDExStr, colors.info)],
+      embeds: [await create_embed("Settings: ", toCompare, colors.info)],
     });
   });
 

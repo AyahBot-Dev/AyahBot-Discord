@@ -43,7 +43,7 @@ describe("Function: handleE()", () => {
 
   afterEach(() => (mMailer.mockRestore(), mConsole.mockRestore()));
 
-  afterAll(() => jest.restoreAllMocks());
+  afterAll(jest.restoreAllMocks as () => void);
 
   it("is consoling errors", async () => {
     mMailer.mockResolvedValue(true);

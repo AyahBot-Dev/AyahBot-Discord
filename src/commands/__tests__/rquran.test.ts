@@ -1,4 +1,11 @@
-import { jest, describe, it, expect, beforeEach } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterAll,
+} from "@jest/globals";
 import { mocked } from "jest-mock";
 
 import {
@@ -7,12 +14,15 @@ import {
   errMsg,
   output65Haleem,
   clientCU,
+  output65Arabic,
+  singleEmbedShortMixed,
+  singleEmbedShortMixedHaleem,
 } from "../../helpers/tests/variables";
 import { embed_error, invalid_datatype } from "../../lib/embeds/embeds";
 import { db } from "../../lib/initDB";
 import axios from "../../lib/axiosInstance";
 
-import randomCmd from "../random";
+import rquranCmd from "../rquran";
 
 import type { AxiosResponse } from "axios";
 import type { CacheType, CommandInteractionOption } from "discord.js";
@@ -25,64 +35,99 @@ jest.mock("../../lib/utils", () => {
   return { __esModule: true, ...utils, handleE: jest.fn() };
 });
 
-describe("Command: random", () => {
+describe("Command: rquran", () => {
   const mockedGet = mocked(axios.get);
   const spy = jest.spyOn(Math, "floor");
 
   beforeEach(jest.resetAllMocks as unknown as () => void);
 
-  it("is sending a random verse everytime with translation params in slash", async () => {
-    mockedGet.mockResolvedValue({
-      data: output65Haleem,
-      status: 200,
-    } as AxiosResponse);
+  afterAll(jest.resetAllMocks as unknown as () => void);
 
-    await randomCmd.execute(
+  it("is sending a random verse everytime with translation params in slash", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65Haleem,
+        status: 200,
+      } as AxiosResponse);
+
+    spy.mockReturnValueOnce(26);
+    spy.mockReturnValueOnce(65);
+
+    await rquranCmd.execute(
       msg,
       [{ value: "haleem" }] as unknown as CommandInteractionOption<CacheType>[],
       clientCU
     );
 
     expect(spy).toBeCalledTimes(2);
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
   });
 
   it("is sending a random verse everytime with translation params", async () => {
-    mockedGet.mockResolvedValue({
-      data: output65Haleem,
-      status: 200,
-    } as AxiosResponse);
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65Haleem,
+        status: 200,
+      } as AxiosResponse);
+    spy.mockReturnValueOnce(26);
+    spy.mockReturnValueOnce(65);
 
-    await randomCmd.execute(msg, ["haleem"], clientCU);
+    await rquranCmd.execute(msg, ["haleem"], clientCU);
 
     expect(spy).toBeCalledTimes(2);
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
   });
 
   it("is sending a random verse everytime with no translation params if translation code is on cache", async () => {
-    mockedGet.mockResolvedValue({
-      data: output65Haleem,
-      status: 200,
-    } as AxiosResponse);
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValue({
+        data: output65Haleem,
+        status: 200,
+      } as AxiosResponse);
     clientCU.quranTrs.cache.get.mockResolvedValue(85);
+    spy.mockReturnValueOnce(26);
+    spy.mockReturnValueOnce(65);
 
-    await randomCmd.execute(msg, [], clientCU);
+    await rquranCmd.execute(msg, [], clientCU);
 
     expect(spy).toBeCalledTimes(2);
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
   });
 
   it("is sending a random verse everytime with no translation params if translation code not on cache", async () => {
-    mockedGet.mockResolvedValue({
-      data: output65,
-      status: 200,
-    } as AxiosResponse);
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65,
+        status: 200,
+      } as AxiosResponse);
     clientCU.quranTrs.cache.get.mockResolvedValue(undefined);
+    spy.mockReturnValueOnce(26);
+    spy.mockReturnValueOnce(65);
 
-    await randomCmd.execute(msg, [], clientCU);
+    await rquranCmd.execute(msg, [], clientCU);
 
     expect(spy).toBeCalledTimes(2);
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixed] });
   });
 
   it("is returning translation code error on invalid translation code", async () => {
-    await randomCmd.execute(msg, ["blah"], clientCU);
+    await rquranCmd.execute(msg, ["blah"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
@@ -96,7 +141,7 @@ describe("Command: random", () => {
   });
 
   it("is handling errors", async () => {
-    await randomCmd.execute(errMsg, [], clientCU);
+    await rquranCmd.execute(errMsg, [], clientCU);
     expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 

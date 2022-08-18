@@ -6,16 +6,14 @@ import {
   clientCU,
   errMsg,
   msg,
-  multipleEmbedShortMixed,
-  multipleEmbedShortMixedHaleem,
+  output66Haleem,
+  multipleEmbedHaleem,
+  multipleEmbedShort,
   output65,
-  output65Arabic,
   output65Haleem,
   output66,
-  output66Arabic,
-  output66Haleem,
-  singleEmbedShortMixed,
-  singleEmbedShortMixedHaleem,
+  singleEmbedHaleem,
+  singleEmbedShort,
 } from "../../helpers/tests/variables";
 import {
   embed_error,
@@ -24,7 +22,7 @@ import {
 } from "../../lib/embeds/embeds";
 import { db } from "../../lib/initDB";
 
-import quranCmd from "../quran";
+import tquranCmd from "../tquran";
 
 import type { CacheType, CommandInteractionOption } from "discord.js";
 import type { AxiosResponse } from "axios";
@@ -38,21 +36,16 @@ jest.mock("../../lib/utils", () => {
   return { __esModule: true, ...utils, handleE: jest.fn() };
 });
 
-describe("Command: quran", () => {
+describe("Command: tquran", () => {
   const mockedGet = mocked(axios.get);
 
   it("is returning single ayah correctly if in slash command and verse_key and translation key both given", async () => {
-    mockedGet
-      .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output65Haleem,
-        status: 200,
-      } as AxiosResponse);
+    mockedGet.mockResolvedValue({
+      data: output65Haleem,
+      status: 200,
+    } as AxiosResponse);
 
-    await quranCmd.execute(
+    await tquranCmd.execute(
       msg,
       [
         { value: "26:65" },
@@ -62,56 +55,38 @@ describe("Command: quran", () => {
     );
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
 
   it("is returning a single ayah on requesting a single ayah with no translation params", async () => {
-    mockedGet
-      .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output65,
-        status: 200,
-      } as AxiosResponse);
+    mockedGet.mockResolvedValueOnce({
+      data: output65,
+      status: 200,
+    } as AxiosResponse);
 
-    await quranCmd.execute(msg, ["26:65"], clientCU);
+    await tquranCmd.execute(msg, ["26:65"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixed] });
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShort] });
   });
 
   it("is returning an ayah on requesting a single ayah with no translation params and translation code in cache", async () => {
-    mockedGet
-      .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output65Haleem,
-        status: 200,
-      } as AxiosResponse);
+    mockedGet.mockResolvedValue({
+      data: output65Haleem,
+      status: 200,
+    } as AxiosResponse);
     clientCU.quranTrs.cache.get.mockResolvedValue(85);
 
-    await quranCmd.execute(msg, ["26:65"], clientCU);
+    await tquranCmd.execute(msg, ["26:65"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
 
   it("is returning multiple ayahs on requesting multiple ayahs with no translation params and not in cache", async () => {
     mockedGet
       .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
         data: output65,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output66Arabic,
         status: 200,
       } as AxiosResponse)
       .mockResolvedValueOnce({
@@ -120,41 +95,28 @@ describe("Command: quran", () => {
       } as AxiosResponse);
     clientCU.quranTrs.cache.get.mockResolvedValue(undefined);
 
-    await quranCmd.execute(msg, ["26:65-66"], clientCU);
+    await tquranCmd.execute(msg, ["26:65-66"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedShortMixed] });
+    expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedShort] });
   });
 
   it("is returning a single ayah on requesting a single ayah with translation params", async () => {
-    mockedGet
-      .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output65Haleem,
-        status: 200,
-      } as AxiosResponse);
+    mockedGet.mockResolvedValue({
+      data: output65Haleem,
+      status: 200,
+    } as AxiosResponse);
 
-    await quranCmd.execute(msg, ["26:65", "haleem"], clientCU);
+    await tquranCmd.execute(msg, ["26:65", "haleem"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShortMixedHaleem] });
+    expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
 
   it("is returning multiple ayahs on requesting multiple ayahs with translation params", async () => {
     mockedGet
       .mockResolvedValueOnce({
-        data: output65Arabic,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
         data: output65Haleem,
-        status: 200,
-      } as AxiosResponse)
-      .mockResolvedValueOnce({
-        data: output66Arabic,
         status: 200,
       } as AxiosResponse)
       .mockResolvedValueOnce({
@@ -162,16 +124,14 @@ describe("Command: quran", () => {
         status: 200,
       } as AxiosResponse);
 
-    await quranCmd.execute(msg, ["26:65-66", "haleem"], clientCU);
+    await tquranCmd.execute(msg, ["26:65-66", "haleem"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
-    expect(msg.reply).toBeCalledWith({
-      embeds: [multipleEmbedShortMixedHaleem],
-    });
+    expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedHaleem] });
   });
 
   it("is returning syntax error on falsy verse_key", async () => {
-    await quranCmd.execute(msg, [], clientCU);
+    await tquranCmd.execute(msg, [], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
@@ -180,7 +140,7 @@ describe("Command: quran", () => {
   });
 
   it("is returning datatype error on invalid verse_key", async () => {
-    await quranCmd.execute(msg, ["26"], clientCU);
+    await tquranCmd.execute(msg, ["26"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
@@ -189,7 +149,7 @@ describe("Command: quran", () => {
   });
 
   it("is returning translation code error on invalid translation code", async () => {
-    await quranCmd.execute(msg, ["26:65", "blah"], clientCU);
+    await tquranCmd.execute(msg, ["26:65", "blah"], clientCU);
     expect(msg.channel.sendTyping).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
@@ -203,7 +163,7 @@ describe("Command: quran", () => {
   });
 
   it("is handling errors", async () => {
-    await quranCmd.execute(errMsg, [], clientCU);
+    await tquranCmd.execute(errMsg, [], clientCU);
     expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
