@@ -1,5 +1,5 @@
 import { jest, describe, it, expect } from "@jest/globals";
-import { CacheType, CommandInteractionOption } from "discord.js";
+import { CacheType, CommandInteractionOption, Guild } from "discord.js";
 import { mocked } from "jest-mock";
 
 import { clientCU, errMsg, msg } from "../../helpers/tests/variables";
@@ -49,7 +49,10 @@ describe("Command: qdefault", () => {
       [{ value: "haleem" }] as unknown as CommandInteractionOption<CacheType>[],
       clientCU
     );
-    expect(clientCU.quranTrs.cache.set).toBeCalledWith(msg.guild.id, 85);
+    expect(clientCU.quranTrs.cache.set).toBeCalledWith(
+      (msg.guild as Guild).id,
+      85
+    );
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
@@ -64,7 +67,10 @@ describe("Command: qdefault", () => {
   it("is returning success embed", async () => {
     mockedJobs.update.mockResolvedValue();
     await qdefaultCmd.execute(msg, ["haleem"], clientCU);
-    expect(clientCU.quranTrs.cache.set).toBeCalledWith(msg.guild.id, 85);
+    expect(clientCU.quranTrs.cache.set).toBeCalledWith(
+      (msg.guild as Guild).id,
+      85
+    );
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
@@ -79,7 +85,9 @@ describe("Command: qdefault", () => {
   it("is returning success embed if `remove` was called", async () => {
     mockedJobs.remove.mockResolvedValue();
     await qdefaultCmd.execute(msg, ["remove"], clientCU);
-    expect(clientCU.quranTrs.cache.delete).toBeCalledWith(msg.guild.id);
+    expect(clientCU.quranTrs.cache.delete).toBeCalledWith(
+      (msg.guild as Guild).id
+    );
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(

@@ -21,6 +21,18 @@ import {
   multipleEmbed404Last,
   output1,
   multipleEmbed404First,
+  output65Arabic,
+  singleEmbedArabic,
+  output66Arabic,
+  outputLong1Arabic,
+  outputLongArabic,
+  singleEmbedShortMixed,
+  multipleEmbedArabic,
+  multipleEmbedLongArabic,
+  singleEmbedLongMixed,
+  multipleEmbedShortMixed,
+  multipleEmbedLongMixed,
+  singleEmbedLongArabic,
 } from "../../helpers/tests/variables";
 import { db } from "../initDB";
 
@@ -38,7 +50,7 @@ describe("Function: convertToEmbed()", () => {
   const mockedGet = mocked(axios.get);
 
   it("is returning a correct embed on requesting with a single short ayah", async () => {
-    mockedGet.mockResolvedValue({
+    mockedGet.mockResolvedValueOnce({
       data: output65,
       status: 200,
     } as AxiosResponse);
@@ -48,7 +60,7 @@ describe("Function: convertToEmbed()", () => {
   });
 
   it("is returning a correct embed on requesting with a single short ayah with number translation code", async () => {
-    mockedGet.mockResolvedValue({
+    mockedGet.mockResolvedValueOnce({
       data: output65,
       status: 200,
     } as AxiosResponse);
@@ -58,7 +70,7 @@ describe("Function: convertToEmbed()", () => {
   });
 
   it("is returning a correct embed on requesting with a single long ayah", async () => {
-    mockedGet.mockResolvedValue({
+    mockedGet.mockResolvedValueOnce({
       data: outputLong,
       status: 200,
     } as AxiosResponse);
@@ -95,6 +107,163 @@ describe("Function: convertToEmbed()", () => {
 
     const embed = await convertToEmbed(await Ayah.fetch("2:282-283"));
     expect(embed).toEqual(multipleEmbedLong);
+  });
+
+  it("is returning a correct embed on requesting with a single short arabic ayah", async () => {
+    mockedGet.mockResolvedValueOnce({
+      data: output65Arabic,
+      status: 200,
+    } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("26:65", undefined, "ar")
+    );
+    expect(embed).toEqual(singleEmbedArabic);
+  });
+
+  it("is returning a correct embed on requesting with a single long arabic ayah", async () => {
+    mockedGet.mockResolvedValueOnce({
+      data: outputLongArabic,
+      status: 200,
+    } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("2:282", undefined, "ar")
+    );
+    expect(embed).toEqual(singleEmbedLongArabic);
+  });
+
+  it("is returning a correct embed on requesting a short arabic multi-ayah embed", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output66Arabic,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("26:65-66", undefined, "ar")
+    );
+    expect(embed).toEqual(multipleEmbedArabic);
+  });
+
+  it("is returning a correct embed on requesting a long arabic multi-ayah embed", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: outputLongArabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: outputLong1Arabic,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("2:282-283", undefined, "ar")
+    );
+    expect(embed).toEqual(multipleEmbedLongArabic);
+  });
+
+  it("is returning a correct embed on requesting with a single short mixed ayah", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("26:65", undefined, "mixed")
+    );
+    expect(embed).toEqual(singleEmbedShortMixed);
+  });
+
+  it("is returning a correct embed on requesting with a single short mixed ayah with number translation code", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(await Ayah.fetch("26:65", 203, "mixed"));
+    expect(embed).toEqual(singleEmbedShortMixed);
+  });
+
+  it("is returning a correct embed on requesting with a single long mixed ayah", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: outputLongArabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: outputLong,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("2:282", undefined, "mixed")
+    );
+    expect(embed).toEqual(singleEmbedLongMixed);
+  });
+
+  it("is returning a correct embed on requesting a short mixed multi-ayah embed", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: output65Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output65,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output66Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: output66,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("26:65-66", undefined, "mixed")
+    );
+    expect(embed).toEqual(multipleEmbedShortMixed);
+  });
+
+  it("is returning a correct embed on requesting a long mixed multi-ayah embed", async () => {
+    mockedGet
+      .mockResolvedValueOnce({
+        data: outputLongArabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: outputLong,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: outputLong1Arabic,
+        status: 200,
+      } as AxiosResponse)
+      .mockResolvedValueOnce({
+        data: outputLong1,
+        status: 200,
+      } as AxiosResponse);
+
+    const embed = await convertToEmbed(
+      await Ayah.fetch("2:282-283", undefined, "mixed")
+    );
+    expect(embed).toEqual(multipleEmbedLongMixed);
   });
 
   it("is returning a correct embed if some last ayah doesn't exist on requested ayahs", async () => {

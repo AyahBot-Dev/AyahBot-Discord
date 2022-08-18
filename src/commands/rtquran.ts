@@ -14,8 +14,8 @@ import type {
 import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
-  name: "random",
-  description: "Show a random ayah",
+  name: "rtquran",
+  description: "Show a random ayah (without arabic)",
   category: "Random-utils",
 
   usage: "<translation_key>",
@@ -23,8 +23,8 @@ export default {
   cooldown: 3,
 
   slash: new SlashCommandBuilder()
-    .setName("random")
-    .setDescription("Show a random ayah")
+    .setName("rtquran")
+    .setDescription("Show a random ayah (without arabic)")
     .addStringOption((option) =>
       option
         .setName("translation")
@@ -41,6 +41,7 @@ export default {
   ) {
     try {
       await message.channel.sendTyping();
+
       let translation: string | number;
 
       if (typeof args[0] == "string") translation = args[0];
@@ -57,15 +58,17 @@ export default {
         });
 
       if (!translation)
-        translation =
-          (await (client.quranTrs.cache.get(message.guildId) as number)) ||
-          undefined;
+        translation = (await client.quranTrs.cache.get(
+          message.guildId
+        )) as number;
 
       return await message.reply({
-        embeds: [await convertToEmbed(await Ayah.random(translation))],
+        embeds: [
+          await convertToEmbed(await Ayah.random(translation, false, "en")),
+        ],
       });
     } catch (e) {
-      await handleE(e, "random.ts > execute()");
+      await handleE(e, "rtquran.ts > execute()");
       return await message.reply({ embeds: [embed_error] });
     }
   },

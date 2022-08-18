@@ -5,7 +5,7 @@ import schedule from "node-schedule";
 import {
   errMsg,
   guildData,
-  guildDataSnap,
+  guildDFactory,
   job,
   msg,
   specSnap,
@@ -53,7 +53,7 @@ describe("Command: timezone", () => {
 
   it("is successfully saving timezone data in slash", async () => {
     // No need for testing these objects with every type as they are already tested later
-    const data = await guildDataSnap(false, false, false);
+    const data = await guildDFactory(true);
 
     mockedJobs.update.mockResolvedValue();
     mockedJobs.once.mockResolvedValue(data);
@@ -76,7 +76,10 @@ describe("Command: timezone", () => {
   });
 
   it("is successfully saving timezone data when time wasn't already set", async () => {
-    const data = await guildDataSnap(false, false, false);
+    schedule.scheduledJobs[guildData._id] =
+      undefined as unknown as schedule.Job;
+
+    const data = await guildDFactory(true);
 
     mockedJobs.update.mockResolvedValue();
     mockedJobs.once.mockResolvedValue(data);

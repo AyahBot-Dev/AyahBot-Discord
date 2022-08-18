@@ -1,8 +1,4 @@
-import {
-  ChannelType,
-  SlashCommandBuilder,
-  PermissionFlagsBits,
-} from "discord.js";
+import { ChannelType, SlashCommandBuilder } from "discord.js";
 
 import DBHandler from "../lib/DBHandler";
 import {
@@ -21,12 +17,14 @@ import type {
   Message,
 } from "discord.js";
 
+import type { Lang } from "../types";
+
 export default {
   name: "schedule",
   description: "Schedule daily ayahs",
   category: "Settings",
 
-  usage: "<channel's mention> <time (in 24 hours format)>",
+  usage: "<channel's mention> <time (in 24 hours format)> <ayah_type>",
 
   guildOnly: true,
   cooldown: 5,
@@ -49,6 +47,19 @@ export default {
           "Enter the time (in 24 hours format) when you want me to send ayahs daily"
         )
         .setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("ayah_type")
+        .setDescription(
+          "Select any of 'Translated', 'Arabic' and 'Both' to show them daily"
+        )
+        .setRequired(true)
+        .addChoices(
+          { name: "Translated", value: "translated" },
+          { name: "Arabic", value: "arabic" },
+          { name: "Both", value: "both" }
+        )
     ),
 
   async execute(
@@ -58,26 +69,50 @@ export default {
     try {
       await message.channel.sendTyping();
 
-      let channelIdU: string, time: string;
+      let channelIdU: string, time: string, ayah_type: string;
 
-      if (typeof args[0] == "string" && typeof args[1] == "string") {
+      if (
+        typeof args[0] == "string" &&
+        typeof args[1] == "string" &&
+        typeof args[2] == "string"
+      ) {
         channelIdU = args[0];
         time = args[1];
+        ayah_type = args[2].toLowerCase();
       }
 
-      if (typeof args[0] == "object" && typeof args[1] == "object") {
+      if (
+        typeof args[0] == "object" &&
+        typeof args[1] == "object" &&
+        typeof args[2] == "object"
+      ) {
         channelIdU = `<#${args[0].value}>`;
         time = args[1].value as string;
+        ayah_type = (args[2].value as string).toLowerCase();
       }
       // First: check if channelId and time are in correct format
       if (
         !/^<#(\d{10,})>$/.test(channelIdU) ||
         !/^\d{1,2}:\d{2}$/.test(time) ||
-        !(args.length === 2)
+        !(args.length === 3)
       )
         return await message.reply({
           embeds: [
-            await syntax_error("<channel's @>", "<time (in 24 hrs format)>"),
+            await syntax_error(
+              "<channel's @>",
+              "<time (in 24 hrs format)>",
+              "<ayah_type>"
+            ),
+          ],
+        });
+
+      if (!["translated", "arabic", "both"].includes(ayah_type))
+        return await message.reply({
+          embeds: [
+            await invalid_datatype(
+              ayah_type,
+              "any of 'translated', 'arabic' and 'both'"
+            ),
           ],
         });
 
@@ -97,11 +132,7 @@ export default {
       const channel = await message.guild.channels.cache.get(channelId);
       const hasPerms = await message.guild.members.me
         .permissionsIn(channel)
-        .has([
-          PermissionFlagsBits.SendMessages,
-          PermissionFlagsBits.ViewChannel,
-          PermissionFlagsBits.EmbedLinks,
-        ]);
+        .has(["SendMessages", "ViewChannel", "EmbedLinks"]);
 
       if (!hasPerms)
         return await message.reply({
@@ -141,7 +172,9 @@ export default {
           undefined,
           undefined,
           channelId,
-          `${mm} ${hh}`
+          `${mm} ${hh}`,
+          undefined,
+          { translated: "en", arabic: "ar", both: "mixed" }[ayah_type] as Lang
         )) !== false &&
         (await DBHandler.scheduler.init(
           message.guild,
@@ -166,7 +199,7 @@ export default {
         embeds: [
           await create_embed(
             "Schedules saved",
-            `In Shaa Allah, from now on, everyday ayahs will be sent in ${channelIdU} at ${time}`,
+            `In Shaa Allah, from now on, everyday ${ayah_type} ayahs will be sent in ${channelIdU} at ${time}`,
             colors.success
           ),
         ],

@@ -4,25 +4,18 @@ import schedule from "node-schedule";
 
 import { db, scheduledJobs } from "../initDB";
 import {
-  csGuildData,
-  csGuildDex,
-  csqGuildData,
-  csqGuildDex,
   guildData,
-  guildDataSnap,
-  guildDEx,
   guild,
-  nGuildDEx,
-  qGuildData,
-  qGuildDEx,
-  tGuildData,
-  tGuildDEx,
   specSnap,
   guildDataRaw,
   guildAllSnap,
   guildAllRaw,
+  guildDFactory,
+  guildDExFactory,
+  guildDRFactory,
 } from "../../helpers/tests/variables";
 import DBHandler from "../DBHandler";
+import { Lang } from "../../types";
 
 jest.mock("../initDB", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,61 +40,78 @@ jest.mock("../utils", () => {
 describe("Object: DBHandler", () => {
   const mockedJobs = mocked(scheduledJobs);
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(jest.clearAllMocks as () => void);
+
   describe("Object: settings", () => {
     describe("Function: fetch()", () => {
-      it("is returning settings properly while quran, timezone, channel, time, prefix is set", async () => {
-        const dataTI = await guildDataSnap(true, true, true, true);
+      it("is returning settings properly while quran, lang, timezone, channel, time, prefix is set", async () => {
+        const dataTI = await guildDFactory(false, true, true, true, true, true);
+        const toCompare = guildDExFactory(true, true, true, true, true);
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(guildDEx);
+        expect(data).toEqual(toCompare);
       });
 
-      it("is returning settings properly while only quran, timezone, channel, time is set", async () => {
-        const dataTI = await guildDataSnap(true, true, true);
+      it("is returning settings properly while only quran, lang, timezone, channel, time is set", async () => {
+        const dataTI = await guildDFactory(false, true, true, true, true);
+        const toCompare = guildDExFactory(true, true, true, true);
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(csqGuildDex);
+        expect(data).toEqual(toCompare);
       });
 
       it("is returning settings properly while only timezone, channel, time is set", async () => {
-        const dataTI = await guildDataSnap(false, true, true);
+        const dataTI = await guildDFactory(false, false, true, true);
+        const toCompare = guildDExFactory(false, true, true);
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(csGuildDex);
+        expect(data).toEqual(toCompare);
       });
 
       it("is returning settings properly while only quran is set", async () => {
-        const dataTI = await guildDataSnap(true, false, false);
+        const dataTI = await guildDFactory(false, true);
+        const toCompare = guildDExFactory(true);
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(qGuildDEx);
+        expect(data).toEqual(toCompare);
+      });
+
+      it("is returning settings properly while only lang is set", async () => {
+        const dataTI = await guildDFactory(false, false, false, false, true);
+        const toCompare = guildDExFactory(false, false, false, true);
+
+        mockedJobs.once.mockResolvedValue(dataTI);
+
+        const data = await DBHandler.settings.fetch(guild.id);
+        expect(data).toEqual(toCompare);
       });
 
       it("is returning settings properly while only timezone is set", async () => {
-        const dataTI = await guildDataSnap(false, false, true);
+        const dataTI = await guildDFactory(false, false, false, true);
+        const toCompare = guildDExFactory(false, false, true);
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(tGuildDEx);
+        expect(data).toEqual(toCompare);
       });
 
       it("is returning settings properly while nothing is set", async () => {
-        const dataTI = await guildDataSnap(false, false, false);
+        const dataTI = await guildDFactory();
+        const toCompare = guildDExFactory();
 
         mockedJobs.once.mockResolvedValue(dataTI);
 
         const data = await DBHandler.settings.fetch(guild.id);
-        expect(data).toEqual(nGuildDEx);
+        expect(data).toEqual(toCompare);
       });
 
       it("is handling errors", async () => {
@@ -114,34 +124,41 @@ describe("Object: DBHandler", () => {
     });
 
     describe("Function: store()", () => {
-      it("is storing data properly when quran, timezone, channel, time, prefix is set", async () => {
+      it("is storing data properly when quran, lang, timezone, channel, time, prefix is set", async () => {
         await DBHandler.settings.store(
           guildData._id,
           guildDataRaw.quran,
           guildDataRaw.timezone,
           guildDataRaw.channel,
           guildDataRaw.spec,
-          guildData.prefix
+          guildData.prefix,
+          guildData.lang as Lang
         );
 
         expect(mockedJobs.update).toBeCalledTimes(1);
         expect(mockedJobs.update).toBeCalledWith(guildData);
       });
 
-      it("is storing data properly when only quran, timezone, channel, time is set", async () => {
+      it("is storing data properly when only quran, lang, timezone, channel, time is set", async () => {
+        const toCompare = guildDRFactory(false, true, true, true, true);
+
         await DBHandler.settings.store(
           guildData._id,
           guildDataRaw.quran,
           guildDataRaw.timezone,
           guildDataRaw.channel,
-          guildDataRaw.spec
+          guildDataRaw.spec,
+          undefined,
+          guildDataRaw.lang as Lang
         );
 
         expect(mockedJobs.update).toBeCalledTimes(1);
-        expect(mockedJobs.update).toBeCalledWith(csqGuildData);
+        expect(mockedJobs.update).toBeCalledWith(toCompare);
       });
 
       it("is storing data properly when only timezone, channel, time is set", async () => {
+        const toCompare = guildDRFactory(false, false, true, true);
+
         await DBHandler.settings.store(
           guildData._id,
           undefined,
@@ -151,17 +168,38 @@ describe("Object: DBHandler", () => {
         );
 
         expect(mockedJobs.update).toBeCalledTimes(1);
-        expect(mockedJobs.update).toBeCalledWith(csGuildData);
+        expect(mockedJobs.update).toBeCalledWith(toCompare);
       });
 
       it("is storing data properly when only quran is set", async () => {
+        const toCompare = guildDRFactory(false, true);
+
         await DBHandler.settings.store(guildData._id, guildDataRaw.quran);
 
         expect(mockedJobs.update).toBeCalledTimes(1);
-        expect(mockedJobs.update).toBeCalledWith(qGuildData);
+        expect(mockedJobs.update).toBeCalledWith(toCompare);
+      });
+
+      it("is storing data properly when only lang is set", async () => {
+        const toCompare = guildDRFactory(false, false, false, false, true);
+
+        await DBHandler.settings.store(
+          guildData._id,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          guildDataRaw.lang as Lang
+        );
+
+        expect(mockedJobs.update).toBeCalledTimes(1);
+        expect(mockedJobs.update).toBeCalledWith(toCompare);
       });
 
       it("is storing data properly when only timezone is set", async () => {
+        const toCompare = guildDRFactory(false, false, false, true);
+
         await DBHandler.settings.store(
           guildData._id,
           undefined,
@@ -169,7 +207,7 @@ describe("Object: DBHandler", () => {
         );
 
         expect(mockedJobs.update).toBeCalledTimes(1);
-        expect(mockedJobs.update).toBeCalledWith(tGuildData);
+        expect(mockedJobs.update).toBeCalledWith(toCompare);
       });
 
       it("is handling errors", async () => {
@@ -185,7 +223,7 @@ describe("Object: DBHandler", () => {
   describe("Object: scheduler", () => {
     describe("Function: init()", () => {
       it("is successfully creating a schedule event", async () => {
-        const data = await guildDataSnap(true, true, true);
+        const data = await guildDFactory(false, true, true, true);
 
         mockedJobs.once.mockResolvedValue(data);
 
@@ -202,7 +240,7 @@ describe("Object: DBHandler", () => {
       });
 
       it("is successfully creating a schedule event even if custom quran translation wasn't set", async () => {
-        const data = await guildDataSnap(false, true, true);
+        const data = await guildDFactory(false, false, true, true);
 
         mockedJobs.once.mockResolvedValue(data);
 
@@ -219,7 +257,7 @@ describe("Object: DBHandler", () => {
       });
 
       it("is successfully cancelling and creating a new scheduled Job on recalling with a guild that was previously added", async () => {
-        const data = await guildDataSnap(true, true, true);
+        const data = await guildDFactory(false, true, true, true);
 
         mockedJobs.once.mockResolvedValue(data);
 
@@ -236,7 +274,7 @@ describe("Object: DBHandler", () => {
       });
 
       it("is returning timezone unconfigured error", async () => {
-        const data = await guildDataSnap(true, false, false);
+        const data = await guildDFactory(false, true, false, false);
 
         mockedJobs.once.mockResolvedValue(data);
 
@@ -278,7 +316,7 @@ describe("Object: DBHandler", () => {
       });
 
       it("is returning spec unconfigured error", async () => {
-        const data = await guildDataSnap(false, false, false);
+        const data = await guildDFactory(true);
 
         mockedJobs.once.mockResolvedValue(data);
 
@@ -381,6 +419,24 @@ describe("Object: DBHandler", () => {
         );
 
         expect(quranTrsIsRemoved).toBe(false);
+      });
+    });
+
+    describe("Function: removeLang()", () => {
+      it("is removing lang translation defaults successfully", async () => {
+        mockedJobs.remove.mockResolvedValue();
+
+        const langIsRemoved = await DBHandler.utils.removeLang(guildData._id);
+
+        expect(langIsRemoved).toBeUndefined();
+      });
+
+      it("is handling errors", async () => {
+        mockedJobs.remove.mockRejectedValue("");
+
+        const langIsRemoved = await DBHandler.utils.removeLang(guildData._id);
+
+        expect(langIsRemoved).toBe(false);
       });
     });
   });

@@ -27,7 +27,7 @@ export default async (client: CustomClient) => {
       schedule.scheduleJob(
         k,
         spec,
-        await task.bind(null, dG.quran || 203, guild, dG.channel)
+        await task.bind(null, dG.quran, dG.lang, guild, dG.channel)
       );
     }
 

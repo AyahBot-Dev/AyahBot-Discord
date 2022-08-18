@@ -18,8 +18,8 @@ import type {
 import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
-  name: "quran",
-  description: "Show an ayah from quran using verse key (with arabic)",
+  name: "tquran",
+  description: "Show an ayah from quran using verse key (without arabic)",
   category: "Quran",
 
   usage: "<verse_key> <translation_key>",
@@ -27,8 +27,8 @@ export default {
   cooldown: 2,
 
   slash: new SlashCommandBuilder()
-    .setName("quran")
-    .setDescription("Show an ayah from quran using verse key (with arabic)")
+    .setName("tquran")
+    .setDescription("Show an ayah from quran using verse key (without arabic)")
     .addStringOption((option) =>
       option
         .setName("verse_key")
@@ -113,7 +113,7 @@ export default {
         return await message.reply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "mixed")
+              await Ayah.fetch(verse_key, translation, "en")
             ),
           ],
         });
@@ -122,13 +122,13 @@ export default {
         return await (message as any).editReply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "mixed")
+              await Ayah.fetch(verse_key, translation, "en")
             ),
           ],
         });
       }
     } catch (e) {
-      await handleE(e, "quran.ts > execute()");
+      await handleE(e, "tquran.ts > execute()");
       return await message.reply({ embeds: [embed_error] });
     }
   },

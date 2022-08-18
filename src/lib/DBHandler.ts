@@ -5,6 +5,7 @@ import { cronTZ, handleE, task } from "./utils";
 import { translations, translationsR } from "./classes/Ayah";
 
 import type { Guild } from "discord.js";
+import { Lang } from "../types";
 
 export default {
   settings: {
@@ -13,7 +14,7 @@ export default {
         const data = await scheduledJobs.child(guildId).once("value");
         const dataVal = (await data.val()) || {};
         let time: string, channelStr: string;
-        const { quran, channel, prefix, spec, timezone } = dataVal;
+        const { quran, lang, channel, prefix, spec, timezone } = dataVal;
         if (channel && spec) {
           channelStr = `<#${channel}>`;
           const [mm, hh] = String(spec).split(" ");
@@ -25,6 +26,14 @@ export default {
 
         const dataObj = {
           "Quran Translation": translationsR[quran] || "hilali",
+          Showing:
+            lang == "en"
+              ? "Translation only"
+              : lang == "ar"
+              ? "Arabic only"
+              : lang
+              ? "Both translations and arabic"
+              : "Not set",
           Channel: channelStr,
           Time: time,
           Timezone: timezone || "Not set",
@@ -43,13 +52,15 @@ export default {
       timezone?: string,
       channel?: string,
       spec?: string,
-      prefix?: string
+      prefix?: string,
+      lang?: Lang
     ) => {
       try {
         // add to db
         const dTS = {
           _id: guildId,
           quran: translations[quran],
+          lang,
           channel,
           spec,
           timezone,
@@ -67,7 +78,7 @@ export default {
   scheduler: {
     init: async (guild: Guild, channel: string, spec: string) => {
       try {
-        const { quran, timezone } = await (
+        const { quran, lang, timezone } = await (
           await scheduledJobs.child(guild.id).once("value")
         ).val();
 
@@ -86,7 +97,7 @@ export default {
           guild.id,
           _spec,
           /* istanbul ignore next */
-          await task.bind(null, quran || 203, guild, channel)
+          await task.bind(null, quran, lang, guild, channel)
         );
         return true;
       } catch (e) {
@@ -125,6 +136,7 @@ export default {
         return;
       }
     },
+
     removeGuild: async (guildId: string) => {
       try {
         return await scheduledJobs.child(guildId).remove();
@@ -148,6 +160,15 @@ export default {
         return await scheduledJobs.child(`${guildId}/quran`).remove();
       } catch (e) {
         await handleE(e, "utils.removeQuranTrs()");
+        return false;
+      }
+    },
+
+    removeLang: async (guildId: string) => {
+      try {
+        return await scheduledJobs.child(`${guildId}/lang`).remove();
+      } catch (e) {
+        await handleE(e, "utils.removeLang()");
         return false;
       }
     },

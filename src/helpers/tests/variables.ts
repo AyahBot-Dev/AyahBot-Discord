@@ -1,7 +1,8 @@
+/* istanbul ignore next */
+
 import {
   GuildBasedChannel,
   EmbedBuilder,
-  PermissionFlagsBits,
   ChannelType,
   PermissionResolvable,
 } from "discord.js";
@@ -16,32 +17,60 @@ export const replacerBigInt = (_, v) =>
   typeof v === "bigint" ? v.toString() : v;
 
 export const dataInvalid = {
+  lang: "en",
   code: 404,
   surah: "Not found",
+  verse: undefined,
   verse_translated: "",
   translation: NaN,
   translator: "",
   verse_key: "",
+  verse_key_ar: "",
 };
 export const dataError = {
+  lang: "en",
   code: 500,
   surah: "Internal Error",
+  verse: undefined,
   verse_translated: "",
   translation: NaN,
   translator: "",
   verse_key: "",
+  verse_key_ar: "",
 };
 export const data65 = {
+  lang: "en",
   code: 200,
   surah: "Surah Ash-Shu'ara (الشعراء - The Poets)",
+  verse: undefined,
   verse_translated: "  And We saved Mûsâ (Moses) and all those with him.",
   translation: 203,
   translator: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   verse_key: "26:65",
+  verse_key_ar: "",
+};
+export const data65Arabic = {
+  lang: "ar",
+  code: 200,
+  surah: "سورة الشعراء",
+  translation: undefined,
+  translator: "",
+  verse: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+  verse_key: "26:65",
+  verse_translated: undefined,
+  verse_key_ar: "۲۶:۶۵",
 };
 export const outputInvalid = {
   status: 404,
   error: "Ayah not found",
+};
+export const outputInvalidArabic = {
+  verses: [],
+  meta: {
+    filters: {
+      verse_key: "23:234",
+    },
+  },
 };
 export const output1 = {
   verse: {
@@ -153,6 +182,34 @@ export const output66Haleem = {
     ],
   },
 };
+export const output65Arabic = {
+  verses: [
+    {
+      id: 2997,
+      verse_key: "26:65",
+      text_uthmani: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+  ],
+  meta: {
+    filters: {
+      verse_key: "26:65",
+    },
+  },
+};
+export const output66Arabic = {
+  verses: [
+    {
+      id: 2998,
+      verse_key: "26:66",
+      text_uthmani: "ثُمَّ أَغْرَقْنَا ٱلْـَٔاخَرِينَ",
+    },
+  ],
+  meta: {
+    filters: {
+      verse_key: "26:66",
+    },
+  },
+};
 export const outputLong = {
   verse: {
     id: 289,
@@ -175,6 +232,17 @@ export const outputLong = {
     ],
   },
 };
+export const outputLongArabic = {
+  verses: [
+    {
+      id: 289,
+      verse_key: "2:282",
+      text_uthmani:
+        "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰٓ أَجَلٍ مُّسَمًّى فَٱكْتُبُوهُ ۚ وَلْيَكْتُب بَّيْنَكُمْ كَاتِبٌۢ بِٱلْعَدْلِ ۚ وَلَا يَأْبَ كَاتِبٌ أَن يَكْتُبَ كَمَا عَلَّمَهُ ٱللَّهُ ۚ فَلْيَكْتُبْ وَلْيُمْلِلِ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ وَلَا يَبْخَسْ مِنْهُ شَيْـًٔا ۚ فَإِن كَانَ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ سَفِيهًا أَوْ ضَعِيفًا أَوْ لَا يَسْتَطِيعُ أَن يُمِلَّ هُوَ فَلْيُمْلِلْ وَلِيُّهُۥ بِٱلْعَدْلِ ۚ وَٱسْتَشْهِدُوا۟ شَهِيدَيْنِ مِن رِّجَالِكُمْ ۖ فَإِن لَّمْ يَكُونَا رَجُلَيْنِ فَرَجُلٌ وَٱمْرَأَتَانِ مِمَّن تَرْضَوْنَ مِنَ ٱلشُّهَدَآءِ أَن تَضِلَّ إِحْدَىٰهُمَا فَتُذَكِّرَ إِحْدَىٰهُمَا ٱلْأُخْرَىٰ ۚ وَلَا يَأْبَ ٱلشُّهَدَآءُ إِذَا مَا دُعُوا۟ ۚ وَلَا تَسْـَٔمُوٓا۟ أَن تَكْتُبُوهُ صَغِيرًا أَوْ كَبِيرًا إِلَىٰٓ أَجَلِهِۦ ۚ ذَٰلِكُمْ أَقْسَطُ عِندَ ٱللَّهِ وَأَقْوَمُ لِلشَّهَـٰدَةِ وَأَدْنَىٰٓ أَلَّا تَرْتَابُوٓا۟ ۖ إِلَّآ أَن تَكُونَ تِجَـٰرَةً حَاضِرَةً تُدِيرُونَهَا بَيْنَكُمْ فَلَيْسَ عَلَيْكُمْ جُنَاحٌ أَلَّا تَكْتُبُوهَا ۗ وَأَشْهِدُوٓا۟ إِذَا تَبَايَعْتُمْ ۚ وَلَا يُضَآرَّ كَاتِبٌ وَلَا شَهِيدٌ ۚ وَإِن تَفْعَلُوا۟ فَإِنَّهُۥ فُسُوقٌۢ بِكُمْ ۗ وَٱتَّقُوا۟ ٱللَّهَ ۖ وَيُعَلِّمُكُمُ ٱللَّهُ ۗ وَٱللَّهُ بِكُلِّ شَىْءٍ عَلِيمٌ",
+    },
+  ],
+  meta: { filters: { verse_key: "2:282" } },
+};
 export const outputLong1 = {
   verse: {
     id: 290,
@@ -195,6 +263,21 @@ export const outputLong1 = {
         resource_name: "Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan",
       },
     ],
+  },
+};
+export const outputLong1Arabic = {
+  verses: [
+    {
+      id: 290,
+      verse_key: "2:283",
+      text_uthmani:
+        "۞ وَإِن كُنتُمْ عَلَىٰ سَفَرٍ وَلَمْ تَجِدُوا۟ كَاتِبًا فَرِهَـٰنٌ مَّقْبُوضَةٌ ۖ فَإِنْ أَمِنَ بَعْضُكُم بَعْضًا فَلْيُؤَدِّ ٱلَّذِى ٱؤْتُمِنَ أَمَـٰنَتَهُۥ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ ۗ وَلَا تَكْتُمُوا۟ ٱلشَّهَـٰدَةَ ۚ وَمَن يَكْتُمْهَا فَإِنَّهُۥٓ ءَاثِمٌ قَلْبُهُۥ ۗ وَٱللَّهُ بِمَا تَعْمَلُونَ عَلِيمٌ",
+    },
+  ],
+  meta: {
+    filters: {
+      verse_key: "2:283",
+    },
   },
 };
 export const output285 = {
@@ -219,6 +302,17 @@ export const output285 = {
     ],
   },
 };
+export const output285Arabic = {
+  verses: [
+    {
+      id: 292,
+      verse_key: "2:285",
+      text_uthmani:
+        "ءَامَنَ ٱلرَّسُولُ بِمَآ أُنزِلَ إِلَيْهِ مِن رَّبِّهِۦ وَٱلْمُؤْمِنُونَ ۚ كُلٌّ ءَامَنَ بِٱللَّهِ وَمَلَـٰٓئِكَتِهِۦ وَكُتُبِهِۦ وَرُسُلِهِۦ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِۦ ۚ وَقَالُوا۟ سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ ٱلْمَصِيرُ",
+    },
+  ],
+  meta: { filters: { verse_key: "2:285" } },
+};
 export const output286 = {
   verse: {
     id: 293,
@@ -241,6 +335,21 @@ export const output286 = {
     ],
   },
 };
+export const output286Arabic = {
+  verses: [
+    {
+      id: 293,
+      verse_key: "2:286",
+      text_uthmani:
+        "لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا ٱكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَآ إِن نَّسِينَآ أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ إِصْرًا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦ ۖ وَٱعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَآ ۚ أَنتَ مَوْلَىٰنَا فَٱنصُرْنَا عَلَى ٱلْقَوْمِ ٱلْكَـٰفِرِينَ",
+    },
+  ],
+  meta: {
+    filters: {
+      verse_key: "2:286",
+    },
+  },
+};
 export const singleEmbedShort = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
@@ -254,6 +363,53 @@ export const singleEmbedShort = new EmbedBuilder({
     text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
+export const singleEmbedArabic = new EmbedBuilder({
+  color: 1143554,
+  title: "سورة الشعراء",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+  ],
+  footer: {
+    text: undefined,
+  },
+});
+export const singleEmbedShortMixed = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+    {
+      name: "26:65",
+      value: "  And We saved Mûsâ (Moses) and all those with him.",
+    },
+  ],
+  footer: {
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
+  },
+});
+export const singleEmbedShortMixedHaleem = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+    {
+      name: "26:65",
+      value: "We saved Moses and all his companions,",
+    },
+  ],
+  footer: {
+    text: "Translation by: Abdul Haleem | Meccan",
+  },
+});
 export const singleEmbedLong = new EmbedBuilder({
   color: 1143554,
   title: "Surah Al-Baqarah (البقرة - The Cow)",
@@ -261,7 +417,40 @@ export const singleEmbedLong = new EmbedBuilder({
     {
       name: "2:282",
       value:
-        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent doubts among yourselves, save wh... ([Read more](https://quran.com/2:282))",
+        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent do... ([Read more](https://quran.com/2:282?translations=203))",
+    },
+  ],
+  footer: {
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
+  },
+});
+export const singleEmbedLongArabic = new EmbedBuilder({
+  color: 1143554,
+  title: "سورة البقرة",
+  fields: [
+    {
+      name: "۲:۲۸۲",
+      value:
+        "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰٓ أَجَلٍ مُّسَمًّى فَٱكْتُبُوهُ ۚ وَلْيَكْتُب بَّيْنَكُمْ كَاتِبٌۢ بِٱلْعَدْلِ ۚ وَلَا يَأْبَ كَاتِبٌ أَن يَكْتُبَ كَمَا عَلَّمَهُ ٱللَّهُ ۚ فَلْيَكْتُبْ وَلْيُمْلِلِ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ وَلَا يَبْخَسْ مِنْهُ شَيْـًٔا ۚ فَإِن كَانَ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ سَفِيهًا أَوْ ضَعِيفًا أَوْ لَا يَسْتَطِيعُ أَن يُمِلَّ هُوَ فَلْيُمْلِلْ وَلِيُّهُۥ بِٱلْعَدْلِ ۚ وَٱسْتَشْهِدُوا۟ شَهِيدَيْنِ مِن رِّجَالِكُمْ ۖ فَإِن لَّمْ يَكُونَا رَجُلَيْنِ فَرَجُلٌ وَٱمْرَأَتَانِ مِمَّن تَرْضَوْنَ مِنَ ٱلشُّهَدَآءِ أَن تَضِلَّ إِحْدَىٰهُمَا فَتُذَكِّرَ إِحْدَىٰهُمَا ٱلْأُخْرَىٰ ۚ وَلَا يَأْبَ ٱلشُّهَدَآءُ إِذَا مَا دُعُوا۟ ۚ وَلَا تَسْـَٔمُوٓا۟ أَن تَكْتُبُوهُ صَغِيرًا أَوْ كَبِيرًا إِلَىٰٓ أَجَلِهِۦ ۚ ذَٰلِكُمْ أَقْسَطُ عِندَ ٱللَّهِ وَأَقْوَمُ لِلشَّهَـٰدَةِ وَأَدْنَىٰٓ أَلَّا تَرْتَابُوٓا۟ ۖ إِلَّآ أَن تَكُونَ تِجَـٰرَةً حَاضِرَةً تُدِيرُونَهَا بَيْنَكُمْ فَلَيْسَ عَلَيْكُمْ جُنَاح  ... ([اقرأ أكثر](https://quran.com/2:282))",
+    },
+  ],
+  footer: {
+    text: undefined,
+  },
+});
+export const singleEmbedLongMixed = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Al-Baqarah (البقرة - The Cow)",
+  fields: [
+    {
+      name: "۲:۲۸۲",
+      value:
+        "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰٓ أَجَلٍ مُّسَمًّى فَٱكْتُبُوهُ ۚ وَلْيَكْتُب بَّيْنَكُمْ كَاتِبٌۢ بِٱلْعَدْلِ ۚ وَلَا يَأْبَ كَاتِبٌ أَن يَكْتُبَ كَمَا عَلَّمَهُ ٱللَّهُ ۚ فَلْيَكْتُبْ وَلْيُمْلِلِ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ وَلَا يَبْخَسْ مِنْهُ شَيْـًٔا ۚ فَإِن كَانَ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ سَفِيهًا أَوْ ضَعِيفًا أَوْ لَا يَسْتَطِيعُ أَن يُمِلَّ هُوَ فَلْيُمْلِلْ وَلِيُّهُۥ بِٱلْعَدْلِ ۚ وَٱسْتَشْهِدُوا۟ شَهِيدَيْنِ مِن رِّجَالِكُمْ ۖ فَإِن لَّمْ يَكُونَا رَجُلَيْنِ فَرَجُلٌ وَٱمْرَأَتَانِ مِمَّن تَرْضَوْنَ مِنَ ٱلشُّهَدَآءِ أَن تَضِلَّ إِحْدَىٰهُمَا فَتُذَكِّرَ إِحْدَىٰهُمَا ٱلْأُخْرَىٰ ۚ وَلَا يَأْبَ ٱلشُّهَدَآءُ إِذَا مَا دُعُوا۟ ۚ وَلَا تَسْـَٔمُوٓا۟ أَن تَكْتُبُوهُ صَغِيرًا أَوْ كَبِيرًا إِلَىٰٓ أَجَلِهِۦ ۚ ذَٰلِكُمْ أَقْسَطُ عِندَ ٱللَّهِ وَأَقْوَمُ لِلشَّهَـٰدَةِ وَأَدْنَىٰٓ أَلَّا تَرْتَابُوٓا۟ ۖ إِلَّآ أَن تَكُونَ تِجَـٰرَةً حَاضِرَةً تُدِيرُونَهَا بَيْنَكُمْ فَلَيْسَ عَلَيْكُمْ جُنَاح  ... ([اقرأ أكثر](https://quran.com/2:282))",
+    },
+    {
+      name: "2:282",
+      value:
+        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent do... ([Read more](https://quran.com/2:282?translations=203))",
     },
   ],
   footer: {
@@ -298,6 +487,73 @@ export const multipleEmbedShort = new EmbedBuilder({
     text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
   },
 });
+export const multipleEmbedArabic = new EmbedBuilder({
+  color: 1143554,
+  title: "سورة الشعراء",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+    {
+      name: "۲۶:۶۶",
+      value: "ثُمَّ أَغْرَقْنَا ٱلْـَٔاخَرِينَ",
+    },
+  ],
+  footer: {
+    text: undefined,
+  },
+});
+export const multipleEmbedShortMixed = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+    {
+      name: "26:65",
+      value: "  And We saved Mûsâ (Moses) and all those with him.",
+    },
+    {
+      name: "۲۶:۶۶",
+      value: "ثُمَّ أَغْرَقْنَا ٱلْـَٔاخَرِينَ",
+    },
+    {
+      name: "26:66",
+      value: "    Then We drowned the others.",
+    },
+  ],
+  footer: {
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Meccan",
+  },
+});
+export const multipleEmbedShortMixedHaleem = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
+  fields: [
+    {
+      name: "۲۶:۶۵",
+      value: "وَأَنجَيْنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجْمَعِينَ",
+    },
+    {
+      name: "26:65",
+      value: "We saved Moses and all his companions,",
+    },
+    {
+      name: "۲۶:۶۶",
+      value: "ثُمَّ أَغْرَقْنَا ٱلْـَٔاخَرِينَ",
+    },
+    {
+      name: "26:66",
+      value: "and drowned the rest.",
+    },
+  ],
+  footer: {
+    text: "Translation by: Abdul Haleem | Meccan",
+  },
+});
 export const multipleEmbedHaleem = new EmbedBuilder({
   color: 1143554,
   title: "Surah Ash-Shu'ara (الشعراء - The Poets)",
@@ -322,7 +578,55 @@ export const multipleEmbedLong = new EmbedBuilder({
     {
       name: "2:282",
       value:
-        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent doubts among yourselves, save wh... ([Read more](https://quran.com/2:282))",
+        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent do... ([Read more](https://quran.com/2:282?translations=203))",
+    },
+    {
+      name: "2:283",
+      value:
+        " And if you are on a journey and cannot find a scribe, then let there be a pledge taken (mortgaging); then if one of you entrust the other, let the one who is entrusted discharge his trust (faithfully), and let him be afraid of Allâh, his Lord. And conceal not the evidence for he, who hides it, surely his heart is sinful. And Allâh is All-Knower of what you do.",
+    },
+  ],
+  footer: {
+    text: "Translation by: Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan | Medinan",
+  },
+});
+export const multipleEmbedLongArabic = new EmbedBuilder({
+  color: 1143554,
+  title: "سورة البقرة",
+  fields: [
+    {
+      name: "۲:۲۸۲",
+      value:
+        "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰٓ أَجَلٍ مُّسَمًّى فَٱكْتُبُوهُ ۚ وَلْيَكْتُب بَّيْنَكُمْ كَاتِبٌۢ بِٱلْعَدْلِ ۚ وَلَا يَأْبَ كَاتِبٌ أَن يَكْتُبَ كَمَا عَلَّمَهُ ٱللَّهُ ۚ فَلْيَكْتُبْ وَلْيُمْلِلِ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ وَلَا يَبْخَسْ مِنْهُ شَيْـًٔا ۚ فَإِن كَانَ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ سَفِيهًا أَوْ ضَعِيفًا أَوْ لَا يَسْتَطِيعُ أَن يُمِلَّ هُوَ فَلْيُمْلِلْ وَلِيُّهُۥ بِٱلْعَدْلِ ۚ وَٱسْتَشْهِدُوا۟ شَهِيدَيْنِ مِن رِّجَالِكُمْ ۖ فَإِن لَّمْ يَكُونَا رَجُلَيْنِ فَرَجُلٌ وَٱمْرَأَتَانِ مِمَّن تَرْضَوْنَ مِنَ ٱلشُّهَدَآءِ أَن تَضِلَّ إِحْدَىٰهُمَا فَتُذَكِّرَ إِحْدَىٰهُمَا ٱلْأُخْرَىٰ ۚ وَلَا يَأْبَ ٱلشُّهَدَآءُ إِذَا مَا دُعُوا۟ ۚ وَلَا تَسْـَٔمُوٓا۟ أَن تَكْتُبُوهُ صَغِيرًا أَوْ كَبِيرًا إِلَىٰٓ أَجَلِهِۦ ۚ ذَٰلِكُمْ أَقْسَطُ عِندَ ٱللَّهِ وَأَقْوَمُ لِلشَّهَـٰدَةِ وَأَدْنَىٰٓ أَلَّا تَرْتَابُوٓا۟ ۖ إِلَّآ أَن تَكُونَ تِجَـٰرَةً حَاضِرَةً تُدِيرُونَهَا بَيْنَكُمْ فَلَيْسَ عَلَيْكُمْ جُنَاح  ... ([اقرأ أكثر](https://quran.com/2:282))",
+    },
+    {
+      name: "۲:۲۸۳",
+      value:
+        "۞ وَإِن كُنتُمْ عَلَىٰ سَفَرٍ وَلَمْ تَجِدُوا۟ كَاتِبًا فَرِهَـٰنٌ مَّقْبُوضَةٌ ۖ فَإِنْ أَمِنَ بَعْضُكُم بَعْضًا فَلْيُؤَدِّ ٱلَّذِى ٱؤْتُمِنَ أَمَـٰنَتَهُۥ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ ۗ وَلَا تَكْتُمُوا۟ ٱلشَّهَـٰدَةَ ۚ وَمَن يَكْتُمْهَا فَإِنَّهُۥٓ ءَاثِمٌ قَلْبُهُۥ ۗ وَٱللَّهُ بِمَا تَعْمَلُونَ عَلِيمٌ",
+    },
+  ],
+  footer: {
+    text: undefined,
+  },
+});
+export const multipleEmbedLongMixed = new EmbedBuilder({
+  color: 1143554,
+  title: "Surah Al-Baqarah (البقرة - The Cow)",
+  fields: [
+    {
+      name: "۲:۲۸۲",
+      value:
+        "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰٓ أَجَلٍ مُّسَمًّى فَٱكْتُبُوهُ ۚ وَلْيَكْتُب بَّيْنَكُمْ كَاتِبٌۢ بِٱلْعَدْلِ ۚ وَلَا يَأْبَ كَاتِبٌ أَن يَكْتُبَ كَمَا عَلَّمَهُ ٱللَّهُ ۚ فَلْيَكْتُبْ وَلْيُمْلِلِ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ وَلَا يَبْخَسْ مِنْهُ شَيْـًٔا ۚ فَإِن كَانَ ٱلَّذِى عَلَيْهِ ٱلْحَقُّ سَفِيهًا أَوْ ضَعِيفًا أَوْ لَا يَسْتَطِيعُ أَن يُمِلَّ هُوَ فَلْيُمْلِلْ وَلِيُّهُۥ بِٱلْعَدْلِ ۚ وَٱسْتَشْهِدُوا۟ شَهِيدَيْنِ مِن رِّجَالِكُمْ ۖ فَإِن لَّمْ يَكُونَا رَجُلَيْنِ فَرَجُلٌ وَٱمْرَأَتَانِ مِمَّن تَرْضَوْنَ مِنَ ٱلشُّهَدَآءِ أَن تَضِلَّ إِحْدَىٰهُمَا فَتُذَكِّرَ إِحْدَىٰهُمَا ٱلْأُخْرَىٰ ۚ وَلَا يَأْبَ ٱلشُّهَدَآءُ إِذَا مَا دُعُوا۟ ۚ وَلَا تَسْـَٔمُوٓا۟ أَن تَكْتُبُوهُ صَغِيرًا أَوْ كَبِيرًا إِلَىٰٓ أَجَلِهِۦ ۚ ذَٰلِكُمْ أَقْسَطُ عِندَ ٱللَّهِ وَأَقْوَمُ لِلشَّهَـٰدَةِ وَأَدْنَىٰٓ أَلَّا تَرْتَابُوٓا۟ ۖ إِلَّآ أَن تَكُونَ تِجَـٰرَةً حَاضِرَةً تُدِيرُونَهَا بَيْنَكُمْ فَلَيْسَ عَلَيْكُمْ جُنَاح  ... ([اقرأ أكثر](https://quran.com/2:282))",
+    },
+    {
+      name: "2:282",
+      value:
+        "  O you who believe! When you contract a debt for a fixed period, write it down. Let a scribe write it down in justice between you. Let not the scribe refuse to write as Allâh has taught him, so let him write. Let him (the debtor) who incurs the liability dictate, and he must fear Allâh, his Lord, and diminish not anything of what he owes. But if the debtor is of poor understanding, or weak, or is unable to dictate for himself, then let his guardian dictate in justice. And get two witnesses out of your own men. And if there are not two men (available), then a man and two women, such as you agree for witnesses, so that if one of them (two women) errs, the other can remind her. And the witnesses should not refuse when they are called (for evidence). You should not become weary to write it (your contract), whether it be small or big, for its fixed term, that is more just with Allâh; more solid as evidence, and more convenient to prevent do... ([Read more](https://quran.com/2:282?translations=203))",
+    },
+    {
+      name: "۲:۲۸۳",
+      value:
+        "۞ وَإِن كُنتُمْ عَلَىٰ سَفَرٍ وَلَمْ تَجِدُوا۟ كَاتِبًا فَرِهَـٰنٌ مَّقْبُوضَةٌ ۖ فَإِنْ أَمِنَ بَعْضُكُم بَعْضًا فَلْيُؤَدِّ ٱلَّذِى ٱؤْتُمِنَ أَمَـٰنَتَهُۥ وَلْيَتَّقِ ٱللَّهَ رَبَّهُۥ ۗ وَلَا تَكْتُمُوا۟ ٱلشَّهَـٰدَةَ ۚ وَمَن يَكْتُمْهَا فَإِنَّهُۥٓ ءَاثِمٌ قَلْبُهُۥ ۗ وَٱللَّهُ بِمَا تَعْمَلُونَ عَلِيمٌ",
     },
     {
       name: "2:283",
@@ -389,19 +693,11 @@ export const msg = {
         get: (s: string): GuildBasedChannel =>
           s == "12345678901"
             ? ({
-                permissions: [
-                  PermissionFlagsBits.SendMessages,
-                  PermissionFlagsBits.ViewChannel,
-                  PermissionFlagsBits.EmbedLinks,
-                ],
+                permissions: ["SendMessages", "ViewChannel", "EmbedLinks"],
               } as unknown as GuildBasedChannel)
             : s == "123456789012"
             ? ({
-                permissions: [
-                  PermissionFlagsBits.SendMessages,
-                  PermissionFlagsBits.ViewChannel,
-                  PermissionFlagsBits.EmbedLinks,
-                ],
+                permissions: ["SendMessages", "ViewChannel", "EmbedLinks"],
                 type: ChannelType.GuildText,
               } as unknown as GuildBasedChannel)
             : ({
@@ -435,118 +731,82 @@ export const errMsg = {
 export const guildData = {
   _id: "1234567",
   quran: 85,
+  lang: "mixed",
   channel: "12345678901",
   spec: "00 00",
   timezone: "Asia/Dhaka",
   prefix: "!",
 };
 
-export const csqGuildData = {
-  _id: "1234567",
-  quran: 85,
-  channel: "12345678901",
-  spec: "00 00",
-  timezone: "Asia/Dhaka",
-};
-
-export const csGuildData = {
-  _id: "1234567",
-  channel: "12345678901",
-  spec: "00 00",
-  timezone: "Asia/Dhaka",
-};
-
-export const qtGuildData = {
-  _id: "1234567",
-  quran: 85,
-  timezone: "Asia/Dhaka",
-};
-
-export const qGuildData = {
-  _id: "1234567",
-  quran: 85,
-};
-
-export const tGuildData = {
-  _id: "1234567",
-  timezone: "Asia/Dhaka",
-};
-
-export const guildDataSnap = async (
-  q: boolean,
-  cs: boolean,
-  t: boolean,
+export const guildDFactory = (
+  empty = false,
+  q = false,
+  cs = false,
+  t = false,
+  ln = false,
   p = false
 ) =>
   ({
-    val: async () =>
-      cs && t && q && p
-        ? guildData
-        : cs && t && q
-        ? csqGuildData
-        : cs
-        ? csGuildData
-        : t
-        ? tGuildData
-        : q
-        ? qGuildData
-        : null,
+    val: async () => guildDRFactory(empty, q, cs, t, ln, p),
   } as unknown as DataSnapshot);
+
+export const guildDRFactory = (
+  empty = false,
+  q = false,
+  cs = false,
+  t = false,
+  ln = false,
+  p = false
+) =>
+  empty
+    ? undefined
+    : {
+        _id: "1234567",
+        quran: q ? 85 : undefined,
+        lang: ln ? "mixed" : undefined,
+        channel: cs ? "12345678901" : undefined,
+        spec: cs ? "00 00" : undefined,
+        timezone: t ? "Asia/Dhaka" : undefined,
+        prefix: p ? "!" : undefined,
+      };
+
+export const guildDExFactory = (
+  q = false,
+  cs = false,
+  t = false,
+  ln = false,
+  p = false
+) => ({
+  "Quran Translation": q ? "haleem" : "hilali",
+  Showing: ln ? "Both translations and arabic" : "Not set",
+  Channel: cs ? "<#12345678901>" : "Not set",
+  Time: cs ? "00:00" : "Not set",
+  Timezone: t ? "Asia/Dhaka" : "Not set",
+  Prefix: p ? "`!`" : "`!ayah `",
+});
+
+export const guildDExStrFactory = (
+  q = false,
+  cs = false,
+  t = false,
+  ln = false,
+  p = false
+) => {
+  const data = guildDExFactory(q, cs, t, ln, p);
+  let dTE = "";
+  for (const key in data) {
+    dTE += key + `: ${data[key]}\n`;
+  }
+  return dTE;
+};
 
 export const guildDEx = {
   "Quran Translation": "haleem",
+  "Arabic Script": "uthmani",
   Channel: "<#12345678901>",
   Time: "00:00",
   Timezone: "Asia/Dhaka",
   Prefix: "`!`",
-};
-
-export const csqGuildDex = {
-  "Quran Translation": "haleem",
-  Channel: "<#12345678901>",
-  Time: "00:00",
-  Timezone: "Asia/Dhaka",
-  Prefix: "`!ayah `",
-};
-
-export const csGuildDex = {
-  "Quran Translation": "hilali",
-  Channel: "<#12345678901>",
-  Time: "00:00",
-  Timezone: "Asia/Dhaka",
-  Prefix: "`!ayah `",
-};
-
-export const qtGuildDEx = {
-  "Quran Translation": "haleem",
-  Channel: "Not set",
-  Time: "Not set",
-  Timezone: "Asia/Dhaka",
-  Prefix: "`!ayah `",
-};
-
-export const qGuildDEx = {
-  "Quran Translation": "haleem",
-  Channel: "Not set",
-  Time: "Not set",
-  Timezone: "Not set",
-  Prefix: "`!ayah `",
-};
-
-export const tGuildDEx = {
-  "Quran Translation": "hilali",
-  Channel: "Not set",
-  Time: "Not set",
-  Timezone: "Asia/Dhaka",
-  Prefix: "`!ayah `",
-};
-
-export const nGuildDEx = {
-  "Quran Translation": "hilali",
-  Channel: "Not set",
-  Time: "Not set",
-  Timezone: "Not set",
-  Prefix: "`!ayah `",
 };
 
 export const guildId = "1234567";
@@ -566,6 +826,7 @@ export const specSnap = {
 
 export const guildDataRaw = {
   quran: "haleem",
+  lang: "mixed",
   channel: "12345678901",
   spec: "00 00",
   timezone: "Asia/Dhaka",
@@ -588,25 +849,7 @@ export const job = {
 } as unknown as Job;
 
 export const guildDExStr =
-  "Quran Translation: haleem\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\nPrefix: `!`\n";
-
-export const csqGuildDExStr =
-  "Quran Translation: haleem\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\nPrefix: `!ayah `\n";
-
-export const csGuildDExStr =
-  "Quran Translation: hilali\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\nPrefix: `!ayah `\n";
-
-export const qtGuildDExStr =
-  "Quran Translation: haleem\nChannel: Not set\nTime: Not set\nTimezone: Asia/Dhaka\nPrefix: `!ayah `\n";
-
-export const qGuildDExStr =
-  "Quran Translation: haleem\nChannel: Not set\nTime: Not set\nTimezone: Not set\nPrefix: `!ayah `\n";
-
-export const tGuildDExStr =
-  "Quran Translation: hilali\nChannel: Not set\nTime: Not set\nTimezone: Asia/Dhaka\nPrefix: `!ayah `\n";
-
-export const nGuildDExStr =
-  "Quran Translation: hilali\nChannel: Not set\nTime: Not set\nTimezone: Not set\nPrefix: `!ayah `\n";
+  "Quran Translation: haleem\nArabic Script: uthmani\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\nPrefix: `!`\n";
 
 export const clientCU = {
   prefixes: {
@@ -630,6 +873,7 @@ export const guildAllRaw = {
   "1234567": {
     _id: "1234567",
     quran: 85,
+    lang: "mixed",
     channel: "12345678901",
     spec: "00 00",
     timezone: "Asia/Dhaka",

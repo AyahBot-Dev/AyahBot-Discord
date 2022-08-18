@@ -1,7 +1,7 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import { mocked } from "jest-mock";
 
-import { errMsg, guildDataSnap, msg } from "../../helpers/tests/variables";
+import { errMsg, guildDFactory, msg } from "../../helpers/tests/variables";
 import {
   create_embed,
   embed_error,
@@ -45,7 +45,7 @@ describe("Command: schedule", () => {
   const mockedJobs = mocked(scheduledJobs);
 
   it("is successfully scheduling daily ayah in slashes", async () => {
-    const data = await guildDataSnap(true, true, true);
+    const data = await guildDFactory(false, true, true, true, true);
 
     mockedJobs.once.mockResolvedValue(data);
     mockedJobs.update.mockResolvedValue();
@@ -53,12 +53,13 @@ describe("Command: schedule", () => {
     await scheduleCmd.execute(msg, [
       { value: "123456789012" },
       { value: "00:00" },
+      { value: "translated" },
     ] as CommandInteractionOption<CacheType>[]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
           "Schedules saved",
-          "In Shaa Allah, from now on, everyday ayahs will be sent in <#123456789012> at 00:00",
+          "In Shaa Allah, from now on, everyday translated ayahs will be sent in <#123456789012> at 00:00",
           colors.success
         ),
       ],
@@ -66,34 +67,50 @@ describe("Command: schedule", () => {
   });
 
   it("is successfully scheduling daily ayah", async () => {
-    const data = await guildDataSnap(true, true, true);
+    const data = await guildDFactory(false, true, true, true, true);
 
     mockedJobs.once.mockResolvedValue(data);
     mockedJobs.update.mockResolvedValue();
 
-    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
           "Schedules saved",
-          "In Shaa Allah, from now on, everyday ayahs will be sent in <#123456789012> at 00:00",
+          "In Shaa Allah, from now on, everyday translated ayahs will be sent in <#123456789012> at 00:00",
           colors.success
         ),
       ],
     });
   });
 
-  it("is returning syntax error embed if channelId or time is not in correct format", async () => {
-    await scheduleCmd.execute(msg, ["<invalidId>", "00:00"]);
+  it("is returning datatype embed if ayah_type is not in correct format", async () => {
+    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00", "blah"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
-        await syntax_error("<channel's @>", "<time (in 24 hrs format)>"),
+        await invalid_datatype(
+          "blah",
+          "any of 'translated', 'arabic' and 'both'"
+        ),
+      ],
+    });
+  });
+
+  it("is returning syntax error embed if channelId or time is not in correct format", async () => {
+    await scheduleCmd.execute(msg, ["<invalidId>", "00:00", "translated"]);
+    expect(msg.reply).toBeCalledWith({
+      embeds: [
+        await syntax_error(
+          "<channel's @>",
+          "<time (in 24 hrs format)>",
+          "<ayah_type>"
+        ),
       ],
     });
   });
 
   it("is returning channel not found embed if channel doesn't exist", async () => {
-    await scheduleCmd.execute(msg, ["<#123456789021>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789021>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
@@ -106,7 +123,7 @@ describe("Command: schedule", () => {
   });
 
   it("is returning not enough perms for some channels", async () => {
-    await scheduleCmd.execute(msg, ["<#123456789010>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789010>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
@@ -119,7 +136,7 @@ describe("Command: schedule", () => {
   });
 
   it("is returning channel not a text channel", async () => {
-    await scheduleCmd.execute(msg, ["<#12345678901>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#12345678901>", "00:00", "translated"]);
 
     expect(msg.reply).toBeCalledWith({
       embeds: [
@@ -133,7 +150,7 @@ describe("Command: schedule", () => {
   });
 
   it("is returning invalid time error", async () => {
-    await scheduleCmd.execute(msg, ["<#123456789012>", "24:60"]);
+    await scheduleCmd.execute(msg, ["<#123456789012>", "24:60", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await invalid_datatype("24:60", "a valid time in 24 hrs format"),
@@ -144,19 +161,19 @@ describe("Command: schedule", () => {
   it("is returning error embed if storing gets failed", async () => {
     mockedJobs.update.mockRejectedValue("");
 
-    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [embed_error],
     });
   });
 
   it("is returning timezone unconfigured error", async () => {
-    const data = await guildDataSnap(true, false, false);
+    const data = await guildDFactory(false, true);
 
     mockedJobs.once.mockResolvedValue(data);
     mockedJobs.update.mockResolvedValue();
 
-    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [
         await create_embed(
@@ -171,7 +188,7 @@ describe("Command: schedule", () => {
   it("is returning error embed if there is any problem in DBHandler.scheduler.init() function", async () => {
     mockedJobs.once.mockRejectedValue("");
 
-    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00"]);
+    await scheduleCmd.execute(msg, ["<#123456789012>", "00:00", "translated"]);
     expect(msg.reply).toBeCalledWith({
       embeds: [embed_error],
     });
