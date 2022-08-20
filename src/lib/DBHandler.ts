@@ -148,7 +148,7 @@ export default {
 
     removePrefix: async (guildId: string) => {
       try {
-        return await scheduledJobs.child(`${guildId}/spec`).remove();
+        return await scheduledJobs.child(`${guildId}/prefix`).remove();
       } catch (e) {
         await handleE(e, "utils.removePrefix()");
         return false;
