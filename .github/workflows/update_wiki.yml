@@ -1,9 +1,9 @@
 name: Update Wiki
 
 on:
-  workflow_dispatch
   schedule:
     - cron: "0 0 * * 5"
+  workflow_dispatch
 jobs:
   update-wiki:
     runs-on: ubuntu-latest
