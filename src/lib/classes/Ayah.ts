@@ -460,6 +460,7 @@ export const arabicDigits = {
   ":": ":",
 };
 
+/* Class: Ayah */
 export class Ayah {
   private _code: number;
 
