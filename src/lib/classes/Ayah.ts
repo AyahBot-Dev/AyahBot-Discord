@@ -291,6 +291,8 @@ export const translations = {
   sulimankanti: 795,
   mamadyjani: 796,
   silika: 798,
+  ur_wahid_uddin: 819,
+  en_wahid_uddin: 823,
 };
 
 export const translationsR = {
@@ -440,6 +442,8 @@ export const translationsR = {
   "795": "sulimankanti",
   "796": "mamadyjani",
   "798": "silika",
+  "819": "ur_wahid_uddin",
+  "823": "en_wahid_uddin",
 };
 
 export const arabicDigits = {
