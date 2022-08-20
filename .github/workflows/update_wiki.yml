@@ -1,6 +1,9 @@
 name: Update Wiki
 
-on: workflow_dispatch
+on:
+  push:
+    paths:
+      - "src/lib/classes/Ayah.ts"
   schedule:
     - cron: "0 0 * * 5"
 jobs:
