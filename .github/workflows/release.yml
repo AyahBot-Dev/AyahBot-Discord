@@ -33,7 +33,7 @@ jobs:
       - name: Set tag variable
         id: tag_s
         run: echo ::set-output name=tag_name::$(echo `git log -1 --format="%s"` | cut -d'v' -f2)
-      - name: "Upload Release"
+      - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build.tgz,build_w_nm_linux.tgz"
