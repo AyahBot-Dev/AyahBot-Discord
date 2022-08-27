@@ -24,7 +24,7 @@ jobs:
           cp package.json build
           cp ecosystem.config.cjs build
           echo "Generating 'build.tgz' file..."
-          tar -czvf build.tgz build
+          cd build && tar -czvf build.tgz ./ && mv build.tgz ../ && cd ../
           echo "Generated 'build.tgz' file"
           cd build
           yarn install --production
@@ -34,9 +34,8 @@ jobs:
           cd $REPO_LOC
           echo "Cleaning up node_modules folder..."
           modclean -r && node-prune
-          cd ../
           echo "Generating 'build_w_nm_linux.tgz' file..."
-          tar -czvf build_w_nm_linux.tgz build
+          tar -czvf build_w_nm_linux.tgz ./ && mv build_w_nm_linux.tgz ../ && cd ../
           echo "Generated 'build_w_nm_linux.tgz' file"
       - name: Set tag variable
         id: tag_s
