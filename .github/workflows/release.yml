@@ -1,0 +1,40 @@
+name: Release new versions
+
+on: push
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[release]')"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate files with NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18.1"
+      - name: Generating files
+        run: |
+          yarn install
+          yarn tsc
+          cp package.json build
+          cp ecosystem.config.cjs build
+          tar -czvf build.tgz build
+          echo "Generated `build.tgz` file"
+          cd build
+          yarn install --production
+          REPO_LOC=$PWD
+          cd ~
+          sudo npm i -g node-prune modclean
+          cd $REPO_LOC
+          modclean && node-prune
+          cd ../
+          tar -czvf build_w_nm_linux.tgz build
+          echo "Generated `build_w_nm_linux.tgz` file"
+      - name: Set tag variable
+        id: tag_s
+        run: echo ::set-output name=tag_name::$(echo `git log -1 --format="%s"` | cut -d'v' -f2)
+      - name: "Upload Release"
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build.tgz,build_w_nm_linux.tgz"
+          tag: ${{ steps.tag_s.outputs.tag_name }}
