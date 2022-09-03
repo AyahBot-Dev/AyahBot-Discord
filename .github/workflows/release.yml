@@ -34,7 +34,10 @@ jobs:
           cd $REPO_LOC
           echo "Cleaning up node_modules folder..."
           modclean -r && node-prune
-          for i in `find -name '*.js'`; do echo $i; terser $i -o $i; done
+          set -e
+          EXIT_CODE=0
+          for i in `find -name '*.js'`; do echo $i; terser $i -o $i; done || EXIT_CODE=$?
+          echo "Exit code was $EXIT_CODE"
           echo "Generating 'build_w_nm_linux.tgz' file..."
           tar -czvf build_w_nm_linux.tgz ./ && mv build_w_nm_linux.tgz ../ && cd ../
           echo "Generated 'build_w_nm_linux.tgz' file"
