@@ -24,9 +24,8 @@ jobs:
           cp package.json build
           cp ecosystem.config.cjs build
           echo "Generating 'build.tgz' file..."
-          cd build && tar -czvf build.tgz ./ && mv build.tgz ../ && cd ../
+          cd build && tar -czvf build.tgz ./ && mv build.tgz ../
           echo "Generated 'build.tgz' file"
-          cd build
           yarn install --production
           REPO_LOC=$PWD
           cd ~
