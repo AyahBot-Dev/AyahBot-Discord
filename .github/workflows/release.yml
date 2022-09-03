@@ -24,7 +24,7 @@ jobs:
           cp package.json build
           cp ecosystem.config.cjs build
           echo "Generating 'build.tgz' file..."
-          cd build && tar -czvf build.tgz ./
+          cd build && touch build.tgz && tar --exclude=build.tgz -czvf build.tgz ./
           mv build.tgz ../
           echo "Generated 'build.tgz' file"
           yarn install --production
@@ -39,7 +39,7 @@ jobs:
           for i in `find -name '*.js'`; do echo $i; terser $i -o $i; done || EXIT_CODE=$?
           echo "Exit code was $EXIT_CODE"
           echo "Generating 'build_w_nm_linux.tgz' file..."
-          tar -czvf build_w_nm_linux.tgz ./
+          touch build_w_nm_linux.tgz && tar --exclude=build_w_nm_linux.tgz -czvf build_w_nm_linux.tgz ./
           mv build_w_nm_linux.tgz ../
           echo "Generated 'build_w_nm_linux.tgz' file"
           cd ../
