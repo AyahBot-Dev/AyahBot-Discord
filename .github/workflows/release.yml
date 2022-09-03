@@ -30,10 +30,11 @@ jobs:
           yarn install --production
           REPO_LOC=$PWD
           cd ~
-          sudo npm i -g node-prune modclean
+          sudo npm i -g node-prune modclean terser
           cd $REPO_LOC
           echo "Cleaning up node_modules folder..."
           modclean -r && node-prune
+          find -name '*.js' | while read a; do echo $a; terser $a -o $a; done
           echo "Generating 'build_w_nm_linux.tgz' file..."
           tar -czvf build_w_nm_linux.tgz ./ && mv build_w_nm_linux.tgz ../ && cd ../
           echo "Generated 'build_w_nm_linux.tgz' file"

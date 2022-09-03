@@ -1,5 +1,5 @@
 import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v10";
+import { Routes } from "discord.js";
 
 import type { CustomClient } from "../classes/CustomClient";
 import { handleE } from "../utils";
@@ -17,9 +17,13 @@ export default async (client: CustomClient) => {
 
     console.log("Started refreshing application (/) commands.");
 
-    if (!client.application?.owner) await client.application?.fetch();
-
-    await client.guilds.cache.get(process.env.SERVER_ID)?.commands.fetch();
+    if (process.env.SERVER_ID)
+      await rest.put(
+        Routes.applicationGuildCommands(client.user.id, process.env.SERVER_ID),
+        {
+          body: commands,
+        }
+      );
 
     await rest.put(Routes.applicationCommands(client.user.id), {
       body: commands,
