@@ -24,7 +24,8 @@ jobs:
           cp package.json build
           cp ecosystem.config.cjs build
           echo "Generating 'build.tgz' file..."
-          cd build && tar -czvf build.tgz ./ && mv build.tgz ../
+          cd build && tar -czvf build.tgz ./
+          mv build.tgz ../
           echo "Generated 'build.tgz' file"
           yarn install --production
           REPO_LOC=$PWD
@@ -38,8 +39,10 @@ jobs:
           for i in `find -name '*.js'`; do echo $i; terser $i -o $i; done || EXIT_CODE=$?
           echo "Exit code was $EXIT_CODE"
           echo "Generating 'build_w_nm_linux.tgz' file..."
-          tar -czvf build_w_nm_linux.tgz ./ && mv build_w_nm_linux.tgz ../ && cd ../
+          tar -czvf build_w_nm_linux.tgz ./
+          mv build_w_nm_linux.tgz ../
           echo "Generated 'build_w_nm_linux.tgz' file"
+          cd ../
       - name: Set tag variable
         id: tag_s
         run: echo ::set-output name=tag_name::$(echo `git log -1 --format="%s"` | cut -d'v' -f2)
