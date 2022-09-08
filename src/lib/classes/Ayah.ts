@@ -542,7 +542,7 @@ export class Ayah {
     else {
       const [surah, verseRange] = verse_key.split(":");
       // eslint-disable-next-line prefer-const
-      let [start, end] = verseRange.split("-").map((x) => parseInt(x));
+      let [start, end] = verseRange.split("-").map(Number);
       if (end - start > 14) {
         end = start + 14;
       }
@@ -611,8 +611,8 @@ export class Ayah {
 
   private async assignDataAr(data: VerseAr, code: number): Promise<boolean> {
     return new Promise((resolve) => {
-      this._code = code;
-      if (code == 200 && data) {
+      this._code = data ? 200 : code == 500 ? 500 : 404;
+      if (this._code == 200) {
         this._surah = `سورة ${
           surahsList[Number(this._verse_key.split(":")[0]) - 1][2]
         }`;

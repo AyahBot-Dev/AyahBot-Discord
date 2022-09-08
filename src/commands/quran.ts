@@ -113,8 +113,8 @@ export default {
         return await message.reply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "mixed")
-            ),
+              await Ayah.fetch(`${surah}:${verse}`, translation, "mixed")
+            ), // TODO: remake the verse verif part
           ],
         });
       else {
@@ -122,7 +122,7 @@ export default {
         return await (message as any).editReply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "mixed")
+              await Ayah.fetch(`${surah}:${verse}`, translation, "mixed")
             ),
           ],
         });
