@@ -83,14 +83,18 @@ export default {
       if (!d)
         return await message.reply({
           embeds: [
-            await convertToEmbed(await Ayah.fetch(verse_key, undefined, "ar")),
+            await convertToEmbed(
+              await Ayah.fetch(`${surah}:${verse}`, undefined, "ar")
+            ),
           ],
         });
       else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return await (message as any).editReply({
           embeds: [
-            await convertToEmbed(await Ayah.fetch(verse_key, undefined, "ar")),
+            await convertToEmbed(
+              await Ayah.fetch(`${surah}:${verse}`, undefined, "ar")
+            ),
           ],
         });
       }

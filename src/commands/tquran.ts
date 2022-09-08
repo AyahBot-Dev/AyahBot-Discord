@@ -113,7 +113,7 @@ export default {
         return await message.reply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "en")
+              await Ayah.fetch(`${surah}:${verse}`, translation, "en")
             ),
           ],
         });
@@ -122,7 +122,7 @@ export default {
         return await (message as any).editReply({
           embeds: [
             await convertToEmbed(
-              await Ayah.fetch(verse_key, translation, "en")
+              await Ayah.fetch(`${surah}:${verse}`, translation, "en")
             ),
           ],
         });
