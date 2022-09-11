@@ -1,3 +1,5 @@
+import { ActivityType } from "discord.js";
+
 import loadJobs from "../../lib/handlers/jobsLoader";
 import loadPrefixes from "../../lib/handlers/prefixesLoader";
 import loadQuranTrs from "../../lib/handlers/quranTrsLoader";
@@ -13,6 +15,10 @@ export default async (client: CustomClient) => {
     await loadPrefixes(client);
     await loadQuranTrs(client);
     await loadSlashes(client);
+
+    client.user.setActivity(
+      `/help | Assalamu'alaikum wa rahmatullahi wa barakatuh`
+    );
   } catch (e) {
     await handleE(e, "ready() event");
     return;
