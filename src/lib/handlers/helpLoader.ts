@@ -7,8 +7,7 @@ import type { CustomClient } from "../classes/CustomClient";
 
 export default async (client: CustomClient) => {
   try {
-    const t1 = new Date().getTime();
-
+    console.time("Time taken");
     const categories = [];
     const links = [
       [
@@ -73,9 +72,8 @@ export default async (client: CustomClient) => {
 
     client.helpCommands.set("main", new EmbedBuilder(embed));
 
-    const t2 = new Date().getTime();
-
-    console.log(`Successfully generated help commands in ${t2 - t1}ms.`);
+    console.log("Successfully generated help commands");
+    console.timeEnd("Time taken");
   } catch (e) {
     await handleE(e, "helpLoader.ts");
     console.error("Couldn't generate help commands!: \n", e);

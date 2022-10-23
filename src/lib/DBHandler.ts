@@ -5,7 +5,7 @@ import { cronTZ, handleE, task } from "./utils";
 import { translations, translationsR } from "./classes/Ayah";
 
 import type { Guild } from "discord.js";
-import { Lang } from "../types";
+import { DataDeletable, Lang } from "../types";
 
 export default {
   settings: {
@@ -46,6 +46,35 @@ export default {
       }
     },
 
+    fetchRaw: async (guildId: string) => {
+      try {
+        return await (await scheduledJobs.child(guildId).once("value")).val();
+      } catch (e) {
+        await handleE(e, "settings.fetchRaw()");
+        return;
+      }
+    },
+
+    fetchAll: async () => {
+      try {
+        return await (await scheduledJobs.once("value")).val();
+      } catch (e) {
+        await handleE(e, "settings.fetchAll()");
+        return;
+      }
+    },
+
+    remove: async (guildId: string, ...items: DataDeletable[]) => {
+      try {
+        const dTU = {};
+        for (let i = 0; i < items.length; i++) dTU[items[i]] = null;
+        return await scheduledJobs.child(guildId).update(dTU);
+      } catch (e) {
+        await handleE(e, `settings.remove(${items?.join(", ")})`);
+        return false;
+      }
+    },
+
     store: async (
       guildId: string,
       quran?: string,
@@ -70,6 +99,15 @@ export default {
         return await scheduledJobs.child(guildId).update(dTS);
       } catch (e) {
         await handleE(e, "settings.store()");
+        return false;
+      }
+    },
+
+    removeGuild: async (guildId: string) => {
+      try {
+        return await scheduledJobs.child(guildId).remove();
+      } catch (e) {
+        await handleE(e, "settings.removeGuild()");
         return false;
       }
     },
@@ -124,52 +162,6 @@ export default {
       } catch (e) {
         await handleE(e, "scheduler.updateTZ()");
         return;
-      }
-    },
-  },
-  utils: {
-    fetchAll: async () => {
-      try {
-        return await (await scheduledJobs.once("value")).val();
-      } catch (e) {
-        await handleE(e, "utils.fetchAll()");
-        return;
-      }
-    },
-
-    removeGuild: async (guildId: string) => {
-      try {
-        return await scheduledJobs.child(guildId).remove();
-      } catch (e) {
-        await handleE(e, "utils.removeGuild()");
-        return false;
-      }
-    },
-
-    removePrefix: async (guildId: string) => {
-      try {
-        return await scheduledJobs.child(`${guildId}/prefix`).remove();
-      } catch (e) {
-        await handleE(e, "utils.removePrefix()");
-        return false;
-      }
-    },
-
-    removeQuranTrs: async (guildId: string) => {
-      try {
-        return await scheduledJobs.child(`${guildId}/quran`).remove();
-      } catch (e) {
-        await handleE(e, "utils.removeQuranTrs()");
-        return false;
-      }
-    },
-
-    removeLang: async (guildId: string) => {
-      try {
-        return await scheduledJobs.child(`${guildId}/lang`).remove();
-      } catch (e) {
-        await handleE(e, "utils.removeLang()");
-        return false;
       }
     },
   },

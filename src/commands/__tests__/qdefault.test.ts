@@ -2,7 +2,7 @@ import { jest, describe, it, expect } from "@jest/globals";
 import { CacheType, CommandInteractionOption, Guild } from "discord.js";
 import { mocked } from "jest-mock";
 
-import { clientCU, errMsg, msg } from "../../helpers/tests/variables";
+import { clientCU, msg } from "../../helpers/tests/variables";
 import {
   create_embed,
   embed_error,
@@ -83,7 +83,7 @@ describe("Command: qdefault", () => {
   });
 
   it("is returning success embed if `remove` was called", async () => {
-    mockedJobs.remove.mockResolvedValue();
+    mockedJobs.update.mockResolvedValue();
     await qdefaultCmd.execute(msg, ["remove"], clientCU);
     expect(clientCU.quranTrs.cache.delete).toBeCalledWith(
       (msg.guild as Guild).id
@@ -112,7 +112,7 @@ describe("Command: qdefault", () => {
   });
 
   it("is returning error if quran translation could not be removed correctly", async () => {
-    mockedJobs.remove.mockRejectedValue("");
+    mockedJobs.update.mockRejectedValue("");
 
     await qdefaultCmd.execute(msg, ["remove"], clientCU);
     expect(msg.reply).toBeCalledWith({
@@ -127,11 +127,6 @@ describe("Command: qdefault", () => {
     expect(msg.reply).toBeCalledWith({
       embeds: [embed_error],
     });
-  });
-
-  it("is handling errors", async () => {
-    await qdefaultCmd.execute(errMsg, [], clientCU);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

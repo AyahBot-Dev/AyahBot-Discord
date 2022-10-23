@@ -1,7 +1,7 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import { mocked } from "jest-mock";
 
-import { clientCU, errMsg, msg } from "../../helpers/tests/variables";
+import { clientCU, msg } from "../../helpers/tests/variables";
 import {
   create_embed,
   embed_error,
@@ -83,7 +83,7 @@ describe("Command: prefix", () => {
   });
 
   it("is returning success embed if prefix is called as `remove`", async () => {
-    mockedJobs.remove.mockResolvedValue();
+    mockedJobs.update.mockResolvedValue();
     await prefixCmd.execute(msg, ["remove"], clientCU);
     expect(clientCU.prefixes.cache.delete).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
@@ -153,7 +153,7 @@ describe("Command: prefix", () => {
   });
 
   it("is returning error if prefix could not be removed correctly", async () => {
-    mockedJobs.remove.mockRejectedValue("");
+    mockedJobs.update.mockRejectedValue("");
 
     await prefixCmd.execute(msg, ["remove"], clientCU);
     expect(msg.reply).toBeCalledWith({
@@ -168,11 +168,6 @@ describe("Command: prefix", () => {
     expect(msg.reply).toBeCalledWith({
       embeds: [embed_error],
     });
-  });
-
-  it("is handling errors", async () => {
-    await prefixCmd.execute(errMsg, [], clientCU);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

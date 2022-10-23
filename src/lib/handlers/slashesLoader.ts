@@ -9,7 +9,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
   try {
-    const t1 = new Date().getTime();
+    console.time("Time taken");
     const commands = [];
     client.commands.forEach((command) =>
       command.slash ? commands.push(command.slash.toJSON()) : null
@@ -29,10 +29,8 @@ export default async (client: CustomClient) => {
       body: commands,
     });
 
-    const t2 = new Date().getTime();
-    console.log(
-      `Successfully reloaded application (/) commands in ${t2 - t1}ms.`
-    );
+    console.log("Successfully reloaded application (/) commands.");
+    console.timeEnd("Time taken");
     return;
   } catch (e) {
     await handleE(e, "slashesLoader.ts");

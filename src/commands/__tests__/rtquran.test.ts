@@ -11,13 +11,12 @@ import { mocked } from "jest-mock";
 import {
   output65,
   msg,
-  errMsg,
   output65Haleem,
   clientCU,
   singleEmbedHaleem,
   singleEmbedShort,
 } from "../../helpers/tests/variables";
-import { embed_error, invalid_datatype } from "../../lib/embeds/embeds";
+import { invalid_datatype } from "../../lib/embeds/embeds";
 import { db } from "../../lib/initDB";
 import axios from "../../lib/axiosInstance";
 
@@ -107,7 +106,7 @@ describe("Command: rtquran", () => {
 
   it("is returning translation code error on invalid translation code", async () => {
     await rtquranCmd.execute(msg, ["blah"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
       embeds: [
@@ -117,11 +116,6 @@ describe("Command: rtquran", () => {
         ),
       ],
     });
-  });
-
-  it("is handling errors", async () => {
-    await rtquranCmd.execute(errMsg, [], clientCU);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

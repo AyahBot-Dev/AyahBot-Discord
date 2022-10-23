@@ -1,5 +1,5 @@
 import axios from "../axiosInstance";
-import { handleE } from "../utils";
+import { errorCodes, handleE } from "../utils";
 import { colors } from "../embeds/infos";
 
 import type {
@@ -458,6 +458,16 @@ export const arabicDigits = {
   8: "\u06f8",
   9: "\u06f9",
   ":": ":",
+};
+
+export const sanitizeVerse = async (surah_ind: number, verse: string) => {
+  if (!surah_ayah[surah_ind]) return errorCodes.INVALID_SURAH;
+  const [start, end] = verse.split("-").map(Number);
+  if (!start || Number.isNaN(end)) return errorCodes.INVALID_VERSE;
+  if (start > surah_ayah[surah_ind] || end > surah_ayah[surah_ind])
+    return errorCodes.INVALID_VERSE;
+  if (start < 1 || end < 1 || end < start) return errorCodes.INVALID_VERSE;
+  return 0;
 };
 
 /* Class: Ayah */
