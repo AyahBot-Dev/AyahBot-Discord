@@ -6,8 +6,7 @@ import type { CustomClient } from "../classes/CustomClient";
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
   const load_dir = async (dir: string) => {
-    const t1 = new Date().getTime();
-
+    console.time("Time taken");
     /* istanbul ignore next */
     const events_files = await fs
       .readdir(`./src/events/${dir}`)
@@ -25,13 +24,8 @@ export default async (client: CustomClient) => {
       client.on(event_name, event.default.bind(null, client));
     }
 
-    const t2 = new Date().getTime();
-
-    console.log(
-      `Successfully loaded %d ${dir} events in %dms`,
-      events_files.length,
-      t2 - t1
-    );
+    console.log(`Successfully loaded %d ${dir} events.`, events_files.length);
+    console.timeEnd("Time taken");
   };
 
   for (const dir of ["client", "guild"]) {

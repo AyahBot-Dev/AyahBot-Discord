@@ -3,7 +3,6 @@ import { mocked } from "jest-mock";
 
 import settingsCmd from "../settings";
 import {
-  errMsg,
   guildDExStrFactory,
   guildDFactory,
   msg,
@@ -105,11 +104,6 @@ describe("Command: settings", () => {
 
     await settingsCmd.execute(msg);
     expect(msg.reply).toBeCalledWith({ embeds: [embed_error] });
-  });
-
-  it("is handling errors", async () => {
-    await settingsCmd.execute(errMsg);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

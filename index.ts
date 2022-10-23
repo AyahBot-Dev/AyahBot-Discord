@@ -1,9 +1,24 @@
-import container from "./inversify.config";
-import { TYPES } from "./src/types";
+import { GatewayIntentBits, Partials } from "discord.js";
 
-import type { Bot } from "./src/Bot";
+import { AyahBot } from "./src/Bot";
+import { CustomClient } from "./src/lib/classes/CustomClient";
 
-const bot = container.get<Bot>(TYPES.Bot);
+// const bot = container.get<Bot>(TYPES.Bot);
+
+const bot = new AyahBot(
+  new CustomClient({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMessageTyping,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.DirectMessageTyping,
+      GatewayIntentBits.MessageContent,
+    ],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+  }),
+  process.env.TOKEN
+);
 
 bot
   .listen()
@@ -13,3 +28,6 @@ bot
   .catch((error) => {
     console.log("Oh no! ", error);
   });
+
+process.once("SIGINT", () => bot.close("SIGINT"));
+process.once("SIGTERM", () => bot.close("SIGTERM"));

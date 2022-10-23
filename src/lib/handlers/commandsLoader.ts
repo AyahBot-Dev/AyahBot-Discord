@@ -5,7 +5,7 @@ import type { CustomClient } from "../classes/CustomClient";
 
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
-  const t1 = new Date().getTime();
+  console.time("Time taken");
   /* istanbul ignore next */
   const command_files = await fs /*istanbul ignore next */
     .readdir("./src/commands")
@@ -21,12 +21,7 @@ export default async (client: CustomClient) => {
       client.commands.set(command.default.name, command.default);
   }
 
-  const t2 = new Date().getTime();
-
-  console.log(
-    "Successfully loaded %d commands in %dms",
-    client.commands.size,
-    t2 - t1
-  );
+  console.log("Successfully loaded %d commands", client.commands.size);
+  console.timeEnd("Time taken");
   return;
 };

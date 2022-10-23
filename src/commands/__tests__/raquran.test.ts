@@ -10,11 +10,9 @@ import { mocked } from "jest-mock";
 
 import {
   msg,
-  errMsg,
   output65Arabic,
   singleEmbedArabic,
 } from "../../helpers/tests/variables";
-import { embed_error } from "../../lib/embeds/embeds";
 import { db } from "../../lib/initDB";
 import axios from "../../lib/axiosInstance";
 
@@ -66,11 +64,6 @@ describe("Command: raquran", () => {
 
     expect(spy).toBeCalledTimes(2);
     expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedArabic] });
-  });
-
-  it("is handling errors", async () => {
-    await raquranCmd.execute(errMsg);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

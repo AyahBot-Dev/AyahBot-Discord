@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { invalid_datatype, embed_error } from "../lib/embeds/embeds";
-import { handleE } from "../lib/utils";
+import { invalid_datatype } from "../lib/embeds/embeds";
 
 import type {
   CacheType,
@@ -34,45 +33,36 @@ export default {
     args: string[] | readonly CommandInteractionOption<CacheType>[],
     client: CustomClient
   ) {
-    try {
-      await message.channel.sendTyping();
+    let option: string;
 
-      let option: string;
+    if (typeof args[0] == "string") option = args[0];
+    if (typeof args[0] == "object") option = args[0].value as string;
 
-      if (typeof args[0] == "string") option = args[0];
-      if (typeof args[0] == "object") option = args[0].value as string;
+    // now begin all of'em
 
-      // now begin all of'em
-
-      if (
-        option &&
-        !client.helpCommands.has(
-          option[0].toUpperCase() + option.slice(1).toLowerCase()
-        )
+    if (
+      option &&
+      !client.helpCommands.has(
+        option[0].toUpperCase() + option.slice(1).toLowerCase()
       )
-        return await message.reply({
-          embeds: [
-            await invalid_datatype(option, "a valid category from the list"),
-          ],
-        });
-
-      if (option)
-        return await message.reply({
-          embeds: [
-            await client.helpCommands.get(
-              option[0].toUpperCase() + option.slice(1).toLowerCase()
-            ),
-          ],
-        });
-
+    )
       return await message.reply({
-        embeds: [await client.helpCommands.get("main")],
+        embeds: [
+          await invalid_datatype(option, "a valid category from the list"),
+        ],
       });
 
-      //
-    } catch (e) {
-      await handleE(e, "help.ts > execute()");
-      return await message.reply({ embeds: [embed_error] });
-    }
+    if (option)
+      return await message.reply({
+        embeds: [
+          await client.helpCommands.get(
+            option[0].toUpperCase() + option.slice(1).toLowerCase()
+          ),
+        ],
+      });
+
+    return await message.reply({
+      embeds: [await client.helpCommands.get("main")],
+    });
   },
 };

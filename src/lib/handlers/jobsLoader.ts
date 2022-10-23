@@ -1,3 +1,4 @@
+import { Api } from "@top-gg/sdk";
 import schedule from "node-schedule";
 
 import { cronTZ, handleE, task } from "../utils";
@@ -8,15 +9,32 @@ import type { CustomClient } from "../classes/CustomClient";
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
   try {
-    const t1 = new Date().getTime();
+    console.time("Time taken");
+
+    if (process.env.TOP_GG_TOKEN) {
+      schedule.scheduleJob("utils", "0 */6 * * *", async () => {
+        try {
+          let api = new Api(process.env.TOP_GG_TOKEN);
+          api.postStats({
+            serverCount: client.guilds.cache.size,
+            shardId: client.shard?.ids[0],
+            shardCount: client.options.shardCount || 1,
+          });
+          api = null;
+        } catch (e) {
+          await handleE(e, "api.postStats()");
+          return;
+        }
+      });
+    }
 
     // load jobs
-    const data = await DBHandler.utils.fetchAll();
+    const data = await DBHandler.settings.fetchAll();
     for (const k in data) {
       const dG = data[k];
       const guild = client.guilds.cache.get(k);
       if (!guild) {
-        await DBHandler.utils.removeGuild(k);
+        await DBHandler.settings.removeGuild(k);
         continue;
       }
 
@@ -31,13 +49,11 @@ export default async (client: CustomClient) => {
       );
     }
 
-    const t2 = new Date().getTime();
-
     console.log(
-      "Successfully loaded %d jobs in %dms",
-      Object.keys(schedule.scheduledJobs).length,
-      t2 - t1
+      "Successfully loaded %d jobs.",
+      Object.keys(schedule.scheduledJobs).length
     );
+    console.timeEnd("Time taken");
     return;
   } catch (e) {
     await handleE(e, "jobsLoader.ts");

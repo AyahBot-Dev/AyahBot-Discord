@@ -4,7 +4,6 @@ import { mocked } from "jest-mock";
 import axios from "../../lib/axiosInstance";
 import {
   clientCU,
-  errMsg,
   msg,
   output66Haleem,
   multipleEmbedHaleem,
@@ -15,11 +14,7 @@ import {
   singleEmbedHaleem,
   singleEmbedShort,
 } from "../../helpers/tests/variables";
-import {
-  embed_error,
-  invalid_datatype,
-  syntax_error,
-} from "../../lib/embeds/embeds";
+import { invalid_datatype, syntax_error } from "../../lib/embeds/embeds";
 import { db } from "../../lib/initDB";
 
 import tquranCmd from "../tquran";
@@ -53,7 +48,7 @@ describe("Command: tquran", () => {
       ] as unknown as CommandInteractionOption<CacheType>[],
       clientCU
     );
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
@@ -65,7 +60,7 @@ describe("Command: tquran", () => {
     } as AxiosResponse);
 
     await tquranCmd.execute(msg, ["26:65"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedShort] });
   });
@@ -78,7 +73,7 @@ describe("Command: tquran", () => {
     clientCU.quranTrs.cache.get.mockResolvedValue(85);
 
     await tquranCmd.execute(msg, ["26:65"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
@@ -96,7 +91,7 @@ describe("Command: tquran", () => {
     clientCU.quranTrs.cache.get.mockResolvedValue(undefined);
 
     await tquranCmd.execute(msg, ["26:65-66"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedShort] });
   });
@@ -108,7 +103,7 @@ describe("Command: tquran", () => {
     } as AxiosResponse);
 
     await tquranCmd.execute(msg, ["26:65", "haleem"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [singleEmbedHaleem] });
   });
@@ -125,14 +120,14 @@ describe("Command: tquran", () => {
       } as AxiosResponse);
 
     await tquranCmd.execute(msg, ["26:65-66", "haleem"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({ embeds: [multipleEmbedHaleem] });
   });
 
   it("is returning syntax error on falsy verse_key", async () => {
     await tquranCmd.execute(msg, [], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
       embeds: [await syntax_error("<verse_key (e.g. 3:157 or 3:100-105)>")],
@@ -141,7 +136,7 @@ describe("Command: tquran", () => {
 
   it("is returning datatype error on invalid verse_key", async () => {
     await tquranCmd.execute(msg, ["26"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
       embeds: [await invalid_datatype("26", "a valid verse key")],
@@ -150,7 +145,7 @@ describe("Command: tquran", () => {
 
   it("is returning translation code error on invalid translation code", async () => {
     await tquranCmd.execute(msg, ["26:65", "blah"], clientCU);
-    expect(msg.channel.sendTyping).toBeCalledTimes(1);
+
     expect(msg.reply).toBeCalledTimes(1);
     expect(msg.reply).toBeCalledWith({
       embeds: [
@@ -160,11 +155,6 @@ describe("Command: tquran", () => {
         ),
       ],
     });
-  });
-
-  it("is handling errors", async () => {
-    await tquranCmd.execute(errMsg, [], clientCU);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

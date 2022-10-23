@@ -1,7 +1,7 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import { mocked } from "jest-mock";
 
-import { errMsg, guildDFactory, msg } from "../../helpers/tests/variables";
+import { guildDFactory, msg } from "../../helpers/tests/variables";
 import {
   create_embed,
   embed_error,
@@ -192,11 +192,6 @@ describe("Command: schedule", () => {
     expect(msg.reply).toBeCalledWith({
       embeds: [embed_error],
     });
-  });
-
-  it("is handling errors", async () => {
-    await scheduleCmd.execute(errMsg, []);
-    expect(errMsg.reply).toBeCalledWith({ embeds: [embed_error] });
   });
 
   db.goOffline();

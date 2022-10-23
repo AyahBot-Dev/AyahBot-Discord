@@ -6,15 +6,14 @@ import type { CustomClient } from "../classes/CustomClient";
 /* istanbul ignore next */
 export default async (client: CustomClient) => {
   try {
-    const t1 = new Date().getTime();
-
+    console.time("Time taken");
     // load prefixes
-    const data = await DBHandler.utils.fetchAll();
+    const data = await DBHandler.settings.fetchAll();
     for (const k in data) {
       const guild = client.guilds.cache.has(k);
 
       if (!guild) {
-        await DBHandler.utils.removeGuild(k);
+        await DBHandler.settings.removeGuild(k);
         continue;
       }
 
@@ -22,13 +21,9 @@ export default async (client: CustomClient) => {
 
       client.prefixes.cache.set(k, data[k].prefix);
     }
-    const t2 = new Date().getTime();
 
-    console.log(
-      "Successfully loaded %d prefixes in %dms",
-      client.prefixes.cache.size,
-      t2 - t1
-    );
+    console.log("Successfully loaded %d prefixes", client.prefixes.cache.size);
+    console.timeEnd("Time taken");
     return;
   } catch (e) {
     await handleE(e, "prefixesLoader.ts");

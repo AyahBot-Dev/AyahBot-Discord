@@ -8,7 +8,6 @@ import {
   create_embed,
 } from "../lib/embeds/embeds";
 import { colors } from "../lib/embeds/infos";
-import { handleE } from "../lib/utils";
 import DBHandler from "../lib/DBHandler";
 
 import type {
@@ -43,54 +42,48 @@ export default {
     message: Message | CommandInteraction,
     args: string[] | readonly CommandInteractionOption<CacheType>[]
   ) {
-    try {
-      await message.channel.sendTyping();
-      // First: check if timezone valid
-      if (!args[0])
-        return await message.reply({
-          embeds: [await syntax_error("<timezone (e.g. Asia/Dhaka)>")],
-        });
+    // First: check if timezone valid
+    if (!args[0])
+      return await message.reply({
+        embeds: [await syntax_error("<timezone (e.g. Asia/Dhaka)>")],
+      });
 
-      let timezone: string;
+    let timezone: string;
 
-      if (typeof args[0] == "string") timezone = args[0];
-      if (typeof args[0] == "object") timezone = args[0].value as string;
+    if (typeof args[0] == "string") timezone = args[0];
+    if (typeof args[0] == "object") timezone = args[0].value as string;
 
-      // let tzIsValid = await isValidTZ(args[0]);
-      if (!moment.tz.zone(timezone))
-        return await message.reply({
-          embeds: [
-            await invalid_datatype(
-              timezone,
-              "a valid timezone listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Timezones)"
-            ),
-          ],
-        });
-
-      // Second: try to store the timezone value, show error if returned false
-      const res =
-        (await DBHandler.settings.store(
-          message.guild.id,
-          undefined,
-          timezone
-        )) !== false &&
-        (await DBHandler.scheduler.updateTZ(message.guild.id, timezone));
-
-      if (!res && res !== null)
-        return await message.reply({ embeds: [embed_error] });
-
+    // let tzIsValid = await isValidTZ(args[0]);
+    if (!moment.tz.zone(timezone))
       return await message.reply({
         embeds: [
-          await create_embed(
-            "Timezone settings: ",
-            "Timezone changes saved",
-            colors.success
+          await invalid_datatype(
+            timezone,
+            "a valid timezone listed [here](https://github.com/AyahBot-Dev/AyahBot-Discord/wiki/Timezones)"
           ),
         ],
       });
-    } catch (e) {
-      await handleE(e, "timezone.ts > execute()");
+
+    // Second: try to store the timezone value, show error if returned false
+    const res =
+      (await DBHandler.settings.store(
+        message.guild.id,
+        undefined,
+        timezone
+      )) !== false &&
+      (await DBHandler.scheduler.updateTZ(message.guild.id, timezone));
+
+    if (!res && res !== null)
       return await message.reply({ embeds: [embed_error] });
-    }
+
+    return await message.reply({
+      embeds: [
+        await create_embed(
+          "Timezone settings: ",
+          "Timezone changes saved",
+          colors.success
+        ),
+      ],
+    });
   },
 };
