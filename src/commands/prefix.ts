@@ -39,7 +39,7 @@ export default {
           `Enter a custom prefix (e.g. '!', not containing \`, ', " or spaces) for your server`
         )
         .setRequired(true)
-    ),
+    ).setDMPermission(false),
 
   async execute(
     message: Message | CommandInteraction,

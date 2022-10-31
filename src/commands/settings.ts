@@ -18,7 +18,7 @@ export default {
 
   slash: new SlashCommandBuilder()
     .setName("settings")
-    .setDescription("See current settings"),
+    .setDescription("See current settings").setDMPermission(false),
 
   async execute(message: Message | CommandInteraction) {
     // First: get the JSON object containing datas

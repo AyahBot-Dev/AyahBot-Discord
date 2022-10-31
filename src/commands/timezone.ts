@@ -36,7 +36,7 @@ export default {
         .setName("timezone")
         .setDescription("Enter a timezone (e.g. 'Asia/Dhaka')")
         .setRequired(true)
-    ),
+    ).setDMPermission(false),
 
   async execute(
     message: Message | CommandInteraction,

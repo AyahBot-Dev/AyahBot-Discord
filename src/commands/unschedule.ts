@@ -20,7 +20,7 @@ export default {
 
 	slash: new SlashCommandBuilder()
 		.setName("unschedule")
-		.setDescription("Unschedule your daily ayah reminder"),
+		.setDescription("Unschedule your daily ayah reminder").setDMPermission(false),
 
 	async execute(message: Message | CommandInteraction) {
 		const dTC = await DBHandler.settings.fetchRaw(message.guild.id);

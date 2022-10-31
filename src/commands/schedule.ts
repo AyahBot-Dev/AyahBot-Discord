@@ -59,7 +59,7 @@ export default {
           { name: "Arabic", value: "arabic" },
           { name: "Both", value: "both" }
         )
-    ),
+    ).setDMPermission(false),
 
   async execute(
     message: Message | CommandInteraction,
