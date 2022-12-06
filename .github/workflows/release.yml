@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Generate files with NodeJS
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: "18.1"
       - name: Generating files
@@ -45,10 +45,10 @@ jobs:
           cd ../
       - name: Set tag variable
         id: tag_s
-        run: echo ::set-output name=tag_name::$(echo `git log -1 --format="%s"` | cut -d'v' -f2)
+        run: echo "TAG_NAME=$(echo `git log -1 --format="%s"` | cut -d'v' -f2)" >> $GITHUB_OUTPUT
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build.tgz,build_w_nm_linux.tgz"
           bodyFile: "releaseBody.md"
-          tag: ${{ steps.tag_s.outputs.tag_name }}
+          tag: ${{ steps.tag_s.outputs.TAG_NAME }}
