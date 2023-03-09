@@ -6,10 +6,11 @@ import {
 	EmbedBuilder,
 	ChannelType,
 	PermissionResolvable,
+	CommandInteraction,
 } from "discord.js";
 import { jest } from "@jest/globals";
 
-import type { Message, Guild, TextChannel } from "discord.js";
+import type { Guild, TextChannel } from "discord.js";
 
 import type { DataSnapshot } from "@firebase/database-types";
 import type { Job } from "node-schedule";
@@ -715,15 +716,15 @@ export const msg = {
 			},
 		},
 	},
-	reply: jest.fn().mockResolvedValue({ delete: jest.fn() } as never),
+	editReply: jest.fn().mockResolvedValue({ delete: jest.fn() } as never),
 	delete: jest.fn(),
-} as unknown as Message;
+} as unknown as CommandInteraction;
 
-export const errMsg = {
-	channel: {},
-	guild: { id: "1234567" },
-	reply: jest.fn(),
-} as unknown as Message;
+// export const errMsg = {
+// 	channel: {},
+// 	guild: { id: "1234567" },
+// 	editReply: jest.fn(),
+// } as unknown as Message;
 
 export const guildData = {
 	_id: "1234567",

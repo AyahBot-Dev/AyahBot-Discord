@@ -6,21 +6,21 @@ import { convertToEmbed } from "../lib/utils";
 import type { CommandInteraction, Message } from "discord.js";
 
 export default {
-  name: "raquran",
-  description: "Show a random arabic ayah",
-  category: "Random-utils",
+	name: "raquran",
+	description: "Show a random arabic ayah",
+	category: "Random-utils",
 
-  usage: "",
+	usage: "",
 
-  cooldown: 3,
+	cooldown: 3,
 
-  slash: new SlashCommandBuilder()
-    .setName("raquran")
-    .setDescription("Show a random arabic ayah"),
+	slash: new SlashCommandBuilder()
+		.setName("raquran")
+		.setDescription("Show a random arabic ayah"),
 
-  async execute(message: Message | CommandInteraction) {
-    return await message.reply({
-      embeds: [await convertToEmbed(await Ayah.random(undefined, false, "ar"))],
-    });
-  },
+	async execute(message: CommandInteraction) {
+		return await message.editReply({
+			embeds: [await convertToEmbed(await Ayah.random(undefined, false, "ar"))],
+		});
+	},
 };

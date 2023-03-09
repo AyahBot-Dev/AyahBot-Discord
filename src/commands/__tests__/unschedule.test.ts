@@ -53,14 +53,14 @@ describe("Command: unschedule", () => {
 
 		await unscheduleCmd.execute(msg);
 		expect(job.cancel).toBeCalled();
-		expect(msg.reply).toBeCalledWith({ embeds: [unscheduledEmbed] });
+		expect(msg.editReply).toBeCalledWith({ embeds: [unscheduledEmbed] });
 	});
 
 	it("is returning error embed removing from database is unsuccessful", async () => {
 		mockedJobs.update.mockRejectedValue("");
 
 		await unscheduleCmd.execute(msg);
-		expect(msg.reply).toBeCalledWith({
+		expect(msg.editReply).toBeCalledWith({
 			embeds: [embed_error],
 		});
 	});
@@ -71,7 +71,7 @@ describe("Command: unschedule", () => {
 		mockedJobs.once.mockResolvedValue(data);
 
 		await unscheduleCmd.execute(msg);
-		expect(msg.reply).toBeCalledWith({ embeds: [scheduleNotDoneEmbed] });
+		expect(msg.editReply).toBeCalledWith({ embeds: [scheduleNotDoneEmbed] });
 	});
 
 	db.goOffline();

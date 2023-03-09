@@ -4,44 +4,43 @@ import { colors } from "../lib/embeds/infos";
 import { db } from "../lib/initDB";
 
 import type {
-  CacheType,
-  CommandInteraction,
-  CommandInteractionOption,
-  Message,
+	CacheType,
+	CommandInteraction,
+	CommandInteractionOption,
 } from "discord.js";
 
 import type { CustomClient } from "../lib/classes/CustomClient";
 
 export default {
-  name: "shutdown",
-  description: "Shutdown AyahBot",
+	name: "shutdown",
+	description: "Shutdown AyahBot",
 
-  usage: "<options>",
+	usage: "<options>",
 
-  ownerOnly: true,
-  cooldown: 3,
+	ownerOnly: true,
+	cooldown: 3,
 
-  async execute(
-    message: Message | CommandInteraction,
-    _args: string[] | readonly CommandInteractionOption<CacheType>[],
-    client: CustomClient
-  ) {
-    /* shutdown workflow:
+	async execute(
+		message: CommandInteraction,
+		_: readonly CommandInteractionOption<CacheType>[],
+		client: CustomClient
+	) {
+		/* shutdown workflow:
         1. turn off database
         2. destroy client
         3. exit the process
       */
 
-    await message.reply({
-      embeds: [
-        await create_embed(
-          "Allah hafez",
-          "I am also gonna be down shortly, Allah hafez!",
-          colors.success
-        ),
-      ],
-    });
+		await message.editReply({
+			embeds: [
+				await create_embed(
+					"Allah hafez",
+					"I am also gonna be down shortly, Allah hafez!",
+					colors.success
+				),
+			],
+		});
 
-    return cleanupAll(db, client);
-  },
+		return cleanupAll(db, client);
+	},
 };
