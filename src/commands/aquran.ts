@@ -34,14 +34,14 @@ export default {
 
 	async execute(
 		message: CommandInteraction,
-		args: string[] | readonly CommandInteractionOption<CacheType>[]
+		args: readonly CommandInteractionOption<CacheType>[]
 	) {
 		if (!args[0])
 			return await message.editReply({
 				embeds: [await syntax_error("<verse_key (e.g. 3:157 or 3:100-105)>")],
 			});
 
-		let verse_key: strring = args[0]?.value as string;
+		const verse_key: string = args[0]?.value as string;
 
 		const [surah, verse] = verse_key.split(":");
 		const isNotValid = verse

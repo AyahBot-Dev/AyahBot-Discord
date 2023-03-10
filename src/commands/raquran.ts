@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from "discord.js";
 import { Ayah } from "../lib/classes/Ayah";
 import { convertToEmbed } from "../lib/utils";
 
-import type { CommandInteraction, Message } from "discord.js";
+import type { CommandInteraction } from "discord.js";
 
 export default {
 	name: "raquran",

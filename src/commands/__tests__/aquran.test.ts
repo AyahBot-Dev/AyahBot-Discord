@@ -43,18 +43,6 @@ describe("Command: aquran", () => {
 		expect(msg.editReply).toBeCalledWith({ embeds: [singleEmbedArabic] });
 	});
 
-	it("is returning a single ayah on requesting a single ayah", async () => {
-		mockedGet.mockResolvedValueOnce({
-			data: output65Arabic,
-			status: 200,
-		} as AxiosResponse);
-
-		await aquranCmd.execute(msg, ["26:65"]);
-
-		expect(msg.editReply).toBeCalledTimes(1);
-		expect(msg.editReply).toBeCalledWith({ embeds: [singleEmbedArabic] });
-	});
-
 	it("is returning multiple ayahs on requesting multiple ayahs", async () => {
 		mockedGet
 			.mockResolvedValueOnce({
@@ -66,7 +54,9 @@ describe("Command: aquran", () => {
 				status: 200,
 			} as AxiosResponse);
 
-		await aquranCmd.execute(msg, ["26:65-66"]);
+		await aquranCmd.execute(msg, [
+			{ value: "26:65-66" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
 
 		expect(msg.editReply).toBeCalledTimes(1);
 		expect(msg.editReply).toBeCalledWith({ embeds: [multipleEmbedArabic] });
@@ -82,7 +72,9 @@ describe("Command: aquran", () => {
 	});
 
 	it("is returning datatype error on invalid verse_key", async () => {
-		await aquranCmd.execute(msg, ["26"]);
+		await aquranCmd.execute(msg, [
+			{ value: "26" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
 
 		expect(msg.editReply).toBeCalledTimes(1);
 		expect(msg.editReply).toBeCalledWith({

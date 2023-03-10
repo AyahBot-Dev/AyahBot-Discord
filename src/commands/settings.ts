@@ -4,7 +4,7 @@ import { embed_error, create_embed } from "../lib/embeds/embeds";
 import DBHandler from "../lib/DBHandler";
 import { colors } from "../lib/embeds/infos";
 
-import type { CommandInteraction, Message } from "discord.js";
+import type { CommandInteraction } from "discord.js";
 
 export default {
 	name: "settings",
