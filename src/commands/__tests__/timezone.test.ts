@@ -60,7 +60,7 @@ describe("Command: timezone", () => {
 		await timezoneCmd.execute(msg, [
 			{ value: "Asia/Dhaka" },
 		] as unknown as CommandInteractionOption<CacheType>[]);
-		expect(msg.reply).toBeCalledWith({ embeds: [tzChngedEmbed] });
+		expect(msg.editReply).toBeCalledWith({ embeds: [tzChngedEmbed] });
 	});
 
 	it("is successfully saving timezone data when time was already set", async () => {
@@ -69,8 +69,10 @@ describe("Command: timezone", () => {
 		mockedJobs.update.mockResolvedValue();
 		mockedJobs.once.mockResolvedValue(specSnap);
 
-		await timezoneCmd.execute(msg, ["Asia/Dhaka"]);
-		expect(msg.reply).toBeCalledWith({ embeds: [tzChngedEmbed] });
+		await timezoneCmd.execute(msg, [
+			{ value: "Asia/Dhaka" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
+		expect(msg.editReply).toBeCalledWith({ embeds: [tzChngedEmbed] });
 		expect(job.reschedule).toBeCalled();
 		delete schedule.scheduledJobs[guildData._id];
 	});
@@ -84,20 +86,24 @@ describe("Command: timezone", () => {
 		mockedJobs.update.mockResolvedValue();
 		mockedJobs.once.mockResolvedValue(data);
 
-		await timezoneCmd.execute(msg, ["Asia/Dhaka"]);
-		expect(msg.reply).toBeCalledWith({ embeds: [tzChngedEmbed] });
+		await timezoneCmd.execute(msg, [
+			{ value: "Asia/Dhaka" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
+		expect(msg.editReply).toBeCalledWith({ embeds: [tzChngedEmbed] });
 	});
 
 	it("is returning syntax error embed if timezone is not given", async () => {
 		await timezoneCmd.execute(msg, []);
-		expect(msg.reply).toBeCalledWith({
+		expect(msg.editReply).toBeCalledWith({
 			embeds: [await syntax_error("<timezone (e.g. Asia/Dhaka)>")],
 		});
 	});
 
 	it("is returning datatype error if timezone is not valid", async () => {
-		await timezoneCmd.execute(msg, ["blah"]);
-		expect(msg.reply).toBeCalledWith({
+		await timezoneCmd.execute(msg, [
+			{ value: "blah" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
+		expect(msg.editReply).toBeCalledWith({
 			embeds: [
 				await invalid_datatype(
 					"blah",
@@ -110,8 +116,10 @@ describe("Command: timezone", () => {
 	it("is returning error embed if storing gets failed", async () => {
 		mockedJobs.update.mockRejectedValue("");
 
-		await timezoneCmd.execute(msg, ["Asia/Dhaka"]);
-		expect(msg.reply).toBeCalledWith({ embeds: [embed_error] });
+		await timezoneCmd.execute(msg, [
+			{ value: "Asia/Dhaka" },
+		] as unknown as CommandInteractionOption<CacheType>[]);
+		expect(msg.editReply).toBeCalledWith({ embeds: [embed_error] });
 	});
 
 	db.goOffline();
