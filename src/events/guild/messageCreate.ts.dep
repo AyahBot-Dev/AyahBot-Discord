@@ -1,4 +1,4 @@
-import { APIEmbed, ChannelType, Collection } from "discord.js";
+/* import { APIEmbed, ChannelType, Collection } from "discord.js";
 
 import {
 	embed_error,
@@ -81,3 +81,4 @@ export default async (client: CustomClient, message: Message) => {
 		return await message.reply({ embeds: [embed_error] });
 	}
 };
+*/

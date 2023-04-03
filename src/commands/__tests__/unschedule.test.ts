@@ -45,7 +45,7 @@ describe("Command: unschedule", () => {
 	const mockedJobs = mocked(scheduledJobs);
 
 	it("is successfully removing data and schedules", async () => {
-		const data = await guildDFactory(false, true, true, true, true, true);
+		const data = await guildDFactory(false, true, true, true, true);
 		schedule.scheduledJobs[guildData._id] = job;
 
 		mockedJobs.update.mockResolvedValue();

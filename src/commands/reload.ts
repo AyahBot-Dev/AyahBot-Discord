@@ -28,7 +28,7 @@ export default {
 		// for that first check args - done
 
 		const option: string = args[0]?.value as string;
-		const options = ["jobs", "prefixes", "quranTrs", "slashes"];
+		const options = ["jobs", "quranTrs", "slashes"];
 
 		// now begin all of'em
 
@@ -39,8 +39,11 @@ export default {
 			});
 
 		if (option)
-			return await (await import(`../lib/handlers/${option}Loader`))
+			return await (
+				await import(`../lib/handlers/${option}Loader`)
+			)
 				.default(client)
+				// deepcode ignore PromiseNotCaughtGeneral: <Handled in handler>
 				.then(
 					async () =>
 						await message.editReply({

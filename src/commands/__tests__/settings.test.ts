@@ -40,9 +40,9 @@ jest.mock("../../lib/utils", () => {
 describe("Command: settings", () => {
 	const mockedJobs = mocked(scheduledJobs);
 
-	it("is returning a correct embed while quran, lang, timezone, channel, time, prefix is set", async () => {
-		const data = guildDFactory(false, true, true, true, true, true);
-		const toCompare = guildDExStrFactory(true, true, true, true, true);
+	it("is returning a correct embed while quran, lang, timezone, channel, time is set", async () => {
+		const data = guildDFactory(false, true, true, true, true);
+		const toCompare = guildDExStrFactory(true, true, true, true);
 		mockedJobs.once.mockResolvedValue(data);
 
 		await settingsCmd.execute(msg);

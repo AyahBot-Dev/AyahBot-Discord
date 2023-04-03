@@ -9,7 +9,6 @@ import { colors } from "./embeds/infos";
 import loadCommands from "./handlers/commandsLoader";
 import loadEvents from "./handlers/eventsLoader";
 import loadJobs from "./handlers/jobsLoader";
-import loadPrefixes from "./handlers/prefixesLoader";
 import loadSlashes from "./handlers/slashesLoader";
 
 import type { Guild, EmbedData } from "discord.js";
@@ -59,13 +58,11 @@ export const cleanupAll = (db?: Database, client?: CustomClient) => {
 		client.commands.clear();
 		client.cooldowns.clear();
 		client.helpCommands.clear();
-		client.prefixes.cache.clear();
 		client.quranTrs.cache.clear();
 
 		client.commands = null;
 		client.cooldowns = null;
 		client.helpCommands = null;
-		client.prefixes = null;
 		client.quranTrs = null;
 
 		client.destroy();
@@ -194,11 +191,10 @@ export const init = async (client: CustomClient) => (
 	await loadCommands(client),
 	await loadEvents(client),
 	await loadJobs(client),
-	await loadPrefixes(client),
 	await loadSlashes(client)
 ); // TODO: for using when able to clear import cache
 
 /* istanbul ignore next */
 export const initJPS = async (client: CustomClient) => (
-	await loadJobs(client), await loadPrefixes(client), await loadSlashes(client)
+	await loadJobs(client), await loadSlashes(client)
 );

@@ -13,8 +13,6 @@ import {
 	guildDFactory,
 	guildDExFactory,
 	guildDRFactory,
-	removeArtifact,
-	removeArgs,
 } from "../../helpers/tests/variables";
 import DBHandler from "../DBHandler";
 import { Lang } from "../../types";
@@ -46,9 +44,9 @@ describe("Object: DBHandler", () => {
 
 	describe("Object: settings", () => {
 		describe("Function: fetch()", () => {
-			it("is returning settings properly while quran, lang, timezone, channel, time, prefix is set", async () => {
-				const dataTI = await guildDFactory(false, true, true, true, true, true);
-				const toCompare = guildDExFactory(true, true, true, true, true);
+			it("is returning settings properly while quran, lang, timezone, channel, time is set", async () => {
+				const dataTI = await guildDFactory(false, true, true, true, true);
+				const toCompare = guildDExFactory(true, true, true, true);
 
 				mockedJobs.once.mockResolvedValue(dataTI);
 
@@ -127,15 +125,8 @@ describe("Object: DBHandler", () => {
 
 		describe("Function: fetchRaw()", () => {
 			it("is returning settings properly", async () => {
-				const dataTI = await guildDFactory(false, true, true, true, true, true);
-				const toCompare = await guildDRFactory(
-					false,
-					true,
-					true,
-					true,
-					true,
-					true
-				);
+				const dataTI = await guildDFactory(false, true, true, true, true);
+				const toCompare = await guildDRFactory(false, true, true, true, true);
 
 				mockedJobs.once.mockResolvedValue(dataTI);
 
@@ -171,18 +162,6 @@ describe("Object: DBHandler", () => {
 		});
 
 		describe("Function: remove()", () => {
-			it("is removing prefixes successfully", async () => {
-				mockedJobs.update.mockResolvedValue();
-
-				const dataRemoved = await DBHandler.settings.remove(
-					guildData._id,
-					...removeArgs
-				);
-
-				expect(mockedJobs.update).toBeCalledWith(removeArtifact);
-				expect(dataRemoved).toBeUndefined();
-			});
-
 			it("is handling errors", async () => {
 				mockedJobs.update.mockRejectedValue("");
 
@@ -193,14 +172,13 @@ describe("Object: DBHandler", () => {
 		});
 
 		describe("Function: store()", () => {
-			it("is storing data properly when quran, lang, timezone, channel, time, prefix is set", async () => {
+			it("is storing data properly when quran, lang, timezone, channel, time is set", async () => {
 				await DBHandler.settings.store(
 					guildData._id,
 					guildDataRaw.quran,
 					guildDataRaw.timezone,
 					guildDataRaw.channel,
 					guildDataRaw.spec,
-					guildData.prefix,
 					guildData.lang as Lang
 				);
 
@@ -217,7 +195,6 @@ describe("Object: DBHandler", () => {
 					guildDataRaw.timezone,
 					guildDataRaw.channel,
 					guildDataRaw.spec,
-					undefined,
 					guildDataRaw.lang as Lang
 				);
 
@@ -254,7 +231,6 @@ describe("Object: DBHandler", () => {
 
 				await DBHandler.settings.store(
 					guildData._id,
-					undefined,
 					undefined,
 					undefined,
 					undefined,

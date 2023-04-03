@@ -150,7 +150,6 @@ export default {
 				undefined,
 				channelId,
 				`${mm} ${hh}`,
-				undefined,
 				{ translated: "en", arabic: "ar", both: "mixed" }[ayah_type] as Lang // TODO: Simplify this in next major release
 			)) !== false &&
 			(await DBHandler.scheduler.init(
