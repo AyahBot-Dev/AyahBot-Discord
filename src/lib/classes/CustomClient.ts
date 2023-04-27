@@ -1,4 +1,5 @@
 import {
+	AutocompleteInteraction,
 	Client,
 	Collection,
 	CommandInteraction,
@@ -7,7 +8,6 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 
-import { PrefixManager } from "./PrefixManager";
 import { QuranTrsManager } from "./QuranTrsManager";
 
 import type {
@@ -26,6 +26,7 @@ export interface Command {
 	cooldown: number;
 	permissions: PermissionResolvable;
 	slash: SlashCommandBuilder;
+	autocomplete: (a: AutocompleteInteraction) => void;
 	execute: (
 		a: CommandInteraction,
 		b: readonly CommandInteractionOption<CacheType>[],
@@ -37,7 +38,6 @@ export class CustomClient extends Client {
 	public commands: Collection<string, Command>;
 	public cooldowns: Collection<string, Collection<number, number>>;
 	public helpCommands: Collection<string, EmbedBuilder>;
-	public prefixes: PrefixManager;
 	public quranTrs: QuranTrsManager;
 
 	constructor(clientOptions: ClientOptions) {
@@ -45,7 +45,6 @@ export class CustomClient extends Client {
 		this.commands = new Collection();
 		this.cooldowns = new Collection();
 		this.helpCommands = new Collection();
-		this.prefixes = new PrefixManager(this);
 		this.quranTrs = new QuranTrsManager(this);
 	}
 }

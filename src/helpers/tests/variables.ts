@@ -14,7 +14,6 @@ import type { Guild, TextChannel } from "discord.js";
 
 import type { DataSnapshot } from "@firebase/database-types";
 import type { Job } from "node-schedule";
-import type { DataDeletable } from "../../types";
 
 export const replacerBigInt = (_, v) =>
 	typeof v === "bigint" ? v.toString() : v;
@@ -733,7 +732,6 @@ export const guildData = {
 	channel: "12345678901",
 	spec: "00 00",
 	timezone: "Asia/Dhaka",
-	prefix: "!",
 };
 
 export const guildDFactory = (
@@ -741,11 +739,10 @@ export const guildDFactory = (
 	q = false,
 	cs = false,
 	t = false,
-	ln = false,
-	p = false
+	ln = false
 ) =>
 	({
-		val: async () => guildDRFactory(empty, q, cs, t, ln, p),
+		val: async () => guildDRFactory(empty, q, cs, t, ln),
 	} as unknown as DataSnapshot);
 
 export const guildDRFactory = (
@@ -753,8 +750,7 @@ export const guildDRFactory = (
 	q = false,
 	cs = false,
 	t = false,
-	ln = false,
-	p = false
+	ln = false
 ) =>
 	empty
 		? undefined
@@ -765,32 +761,28 @@ export const guildDRFactory = (
 				channel: cs ? "12345678901" : undefined,
 				spec: cs ? "00 00" : undefined,
 				timezone: t ? "Asia/Dhaka" : undefined,
-				prefix: p ? "!" : undefined,
 		  };
 
 export const guildDExFactory = (
 	q = false,
 	cs = false,
 	t = false,
-	ln = false,
-	p = false
+	ln = false
 ) => ({
 	"Quran Translation": q ? "haleem" : "hilali",
 	Showing: ln ? "Both translations and arabic" : "Not set",
 	Channel: cs ? "<#12345678901>" : "Not set",
 	Time: cs ? "00:00" : "Not set",
 	Timezone: t ? "Asia/Dhaka" : "Not set",
-	Prefix: p ? "`!`" : "`!ayah `",
 });
 
 export const guildDExStrFactory = (
 	q = false,
 	cs = false,
 	t = false,
-	ln = false,
-	p = false
+	ln = false
 ) => {
-	const data = guildDExFactory(q, cs, t, ln, p);
+	const data = guildDExFactory(q, cs, t, ln);
 	let dTE = "";
 	for (const key in data) {
 		dTE += key + `: ${data[key]}\n`;
@@ -804,7 +796,6 @@ export const guildDEx = {
 	Channel: "<#12345678901>",
 	Time: "00:00",
 	Timezone: "Asia/Dhaka",
-	Prefix: "`!`",
 };
 
 export const guildId = "1234567";
@@ -848,16 +839,9 @@ export const job = {
 } as unknown as Job;
 
 export const guildDExStr =
-	"Quran Translation: haleem\nArabic Script: uthmani\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\nPrefix: `!`\n";
+	"Quran Translation: haleem\nArabic Script: uthmani\nChannel: <#12345678901>\nTime: 00:00\nTimezone: Asia/Dhaka\n";
 
 export const clientCU = {
-	prefixes: {
-		cache: {
-			get: jest.fn(),
-			set: jest.fn(),
-			delete: jest.fn(),
-		},
-	},
 	quranTrs: {
 		cache: {
 			get: jest.fn(),
@@ -876,21 +860,12 @@ export const guildAllRaw = {
 		channel: "12345678901",
 		spec: "00 00",
 		timezone: "Asia/Dhaka",
-		prefix: "!",
 	},
 };
 
 export const guildAllSnap = {
 	val: async () => guildAllRaw,
 } as unknown as DataSnapshot;
-
-export const removeArgs: DataDeletable[] = ["spec", "prefix", "channel"];
-
-export const removeArtifact = {
-	spec: null,
-	prefix: null,
-	channel: null,
-};
 
 export const unscheduledEmbed = new EmbedBuilder({
 	title: "Successfully unscheduled",

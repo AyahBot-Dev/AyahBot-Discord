@@ -2,6 +2,7 @@ import { ChannelType, EmbedBuilder } from "discord.js";
 import nodemailer from "nodemailer";
 import moment from "moment-timezone";
 import schedule from "node-schedule";
+import levenshtein from "js-levenshtein";
 
 import { Ayah } from "./classes/Ayah";
 import { embed_error } from "./embeds/embeds";
@@ -9,7 +10,6 @@ import { colors } from "./embeds/infos";
 import loadCommands from "./handlers/commandsLoader";
 import loadEvents from "./handlers/eventsLoader";
 import loadJobs from "./handlers/jobsLoader";
-import loadPrefixes from "./handlers/prefixesLoader";
 import loadSlashes from "./handlers/slashesLoader";
 
 import type { Guild, EmbedData } from "discord.js";
@@ -59,13 +59,11 @@ export const cleanupAll = (db?: Database, client?: CustomClient) => {
 		client.commands.clear();
 		client.cooldowns.clear();
 		client.helpCommands.clear();
-		client.prefixes.cache.clear();
 		client.quranTrs.cache.clear();
 
 		client.commands = null;
 		client.cooldowns = null;
 		client.helpCommands = null;
-		client.prefixes = null;
 		client.quranTrs = null;
 
 		client.destroy();
@@ -194,11 +192,107 @@ export const init = async (client: CustomClient) => (
 	await loadCommands(client),
 	await loadEvents(client),
 	await loadJobs(client),
-	await loadPrefixes(client),
 	await loadSlashes(client)
 ); // TODO: for using when able to clear import cache
 
 /* istanbul ignore next */
 export const initJPS = async (client: CustomClient) => (
-	await loadJobs(client), await loadPrefixes(client), await loadSlashes(client)
+	await loadJobs(client), await loadSlashes(client)
 );
+
+export const findClosestMatchDIST = async (input: string, list: string[]) => {
+	const suggestions = [];
+	for (let i = 0; i < list.length && suggestions.length < 15; i++) {
+		levenshtein(input, list[i]) <= 4 ? suggestions.push(list[i]) : null;
+	}
+	return suggestions;
+};
+
+export const findClosestMatchesBS = async (query: string, arr: string[]) => {
+	const results = [];
+	let left = 0;
+	let right = arr.length - 1;
+	while (left <= right && results.length < 5) {
+		const mid = Math.floor((left + right) / 2);
+		const element = arr[mid];
+		if (element.startsWith(query)) {
+			results.push(element);
+			let i = mid - 1;
+			while (i >= 0 && arr[i].startsWith(query) && results.length < 5) {
+				results.push(arr[i]);
+				i--;
+			}
+			i = mid + 1;
+			while (i < arr.length && arr[i].startsWith(query) && results.length < 5) {
+				results.push(arr[i]);
+				i++;
+			}
+			break;
+		}
+		if (query < element) {
+			right = mid - 1;
+		} else {
+			left = mid + 1;
+		}
+	}
+	return results;
+};
+
+/* **FASTEST, but some bugs**
+function binarySearch(input, timezoneList){
+  const results= [];
+  let low = 0;
+  let high = timezoneList.length - 1;
+  let numResults = 0;
+  
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const name = timezoneList[mid];
+    
+    if (name.includes(input)) {
+      results.push(name);
+      numResults++;
+    }
+    
+    if (name >= input) {
+      high = mid - 1;
+    } else {
+      low = mid + 1;
+    }
+  }
+  
+  return results;
+}
+*/
+
+/* same bugs
+function binarySearch(input, timezoneList) {
+  const results = [];
+  let low = 0;
+  let high = timezoneList.length - 1;
+  let numResults = 0;
+  
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const name = timezoneList[mid];
+    
+    if (name.includes(input)) {
+      results.push(name);
+      numResults++;
+    }
+    
+    if (name >= input) {
+      high = mid - 1;
+    } else {
+      low = mid + 1;
+    }
+
+    if (numResults >= 5) {
+      break;
+    }
+  }
+  
+  return results;
+}*/
+
+// export const transl
