@@ -12,19 +12,19 @@ import {
 	msg,
 	output65Arabic,
 	singleEmbedArabic,
-} from "../../helpers/tests/variables";
-import { db } from "../../lib/initDB";
-import axios from "../../lib/axiosInstance";
+} from "../../../helpers/tests/variables";
+import { db } from "../../../lib/initDB";
+import axios from "../../../lib/axiosInstance";
 
 import raquranCmd from "../raquran";
 
 import type { AxiosResponse } from "axios";
 
-jest.mock("../../lib/axiosInstance", () => ({
+jest.mock("../../../lib/axiosInstance", () => ({
 	get: jest.fn(),
 }));
-jest.mock("../../lib/utils", () => {
-	const utils = jest.requireActual("../../lib/utils") as object;
+jest.mock("../../../lib/utils", () => {
+	const utils = jest.requireActual("../../../lib/utils") as object;
 	return { __esModule: true, ...utils, handleE: jest.fn() };
 });
 

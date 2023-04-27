@@ -1,4 +1,5 @@
 import {
+	AutocompleteInteraction,
 	Client,
 	Collection,
 	CommandInteraction,
@@ -25,6 +26,7 @@ export interface Command {
 	cooldown: number;
 	permissions: PermissionResolvable;
 	slash: SlashCommandBuilder;
+	autocomplete: (a: AutocompleteInteraction) => void;
 	execute: (
 		a: CommandInteraction,
 		b: readonly CommandInteractionOption<CacheType>[],

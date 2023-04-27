@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+	AutocompleteInteraction,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import moment from "moment-timezone";
 
 import {
@@ -6,15 +10,16 @@ import {
 	invalid_datatype,
 	embed_error,
 	create_embed,
-} from "../lib/embeds/embeds";
-import { colors } from "../lib/embeds/infos";
-import DBHandler from "../lib/DBHandler";
+} from "../../lib/embeds/embeds";
+import { colors } from "../../lib/embeds/infos";
+import DBHandler from "../../lib/DBHandler";
 
 import type {
 	CacheType,
 	CommandInteraction,
 	CommandInteractionOption,
 } from "discord.js";
+import { findClosestMatchesBS } from "../../lib/utils";
 
 export default {
 	name: "timezone",
@@ -34,17 +39,27 @@ export default {
 			option
 				.setName("timezone")
 				.setDescription("Enter a timezone (e.g. 'Asia/Dhaka')")
+				.setAutocomplete(true)
 				.setRequired(true)
 		)
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
 
+	async autocomplete(interaction: AutocompleteInteraction) {
+		const input = interaction.options.getFocused();
+		const filtered = await findClosestMatchesBS(input, moment.tz.names());
+		await interaction.respond(
+			filtered.map((choice: string) => ({ name: choice, value: choice }))
+		);
+	},
+
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[]
 	) {
 		// First: check if timezone valid
 		if (!args[0])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await syntax_error("<timezone (e.g. Asia/Dhaka)>")],
 			});
 
@@ -52,7 +67,7 @@ export default {
 
 		// let tzIsValid = await isValidTZ(args[0]);
 		if (!moment.tz.zone(timezone))
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(
 						timezone,
@@ -64,16 +79,16 @@ export default {
 		// Second: try to store the timezone value, show error if returned false
 		const res =
 			(await DBHandler.settings.store(
-				message.guild.id,
+				interaction.guild.id,
 				undefined,
 				timezone
 			)) !== false &&
-			(await DBHandler.scheduler.updateTZ(message.guild.id, timezone));
+			(await DBHandler.scheduler.updateTZ(interaction.guild.id, timezone));
 
 		if (!res && res !== null)
-			return await message.editReply({ embeds: [embed_error] });
+			return await interaction.editReply({ embeds: [embed_error] });
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [
 				await create_embed(
 					"Timezone settings: ",

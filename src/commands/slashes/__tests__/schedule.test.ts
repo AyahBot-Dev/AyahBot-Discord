@@ -1,23 +1,23 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import { mocked } from "jest-mock";
 
-import { guildDFactory, msg } from "../../helpers/tests/variables";
+import { guildDFactory, msg } from "../../../helpers/tests/variables";
 import {
 	create_embed,
 	embed_error,
 	invalid_datatype,
 	syntax_error,
-} from "../../lib/embeds/embeds";
-import { colors } from "../../lib/embeds/infos";
-import { db, scheduledJobs } from "../../lib/initDB";
+} from "../../../lib/embeds/embeds";
+import { colors } from "../../../lib/embeds/infos";
+import { db, scheduledJobs } from "../../../lib/initDB";
 
 import scheduleCmd from "../schedule";
 
 import type { CacheType, CommandInteractionOption } from "discord.js";
 
-jest.mock("../../lib/initDB", () => {
+jest.mock("../../../lib/initDB", () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const db = jest.requireActual("../../lib/initDB") as any;
+	const db = jest.requireActual("../../../lib/initDB") as any;
 	return {
 		__esModule: true,
 		...db,
@@ -31,8 +31,8 @@ jest.mock("../../lib/initDB", () => {
 	};
 });
 
-jest.mock("../../lib/utils", () => {
-	const utils = jest.requireActual("../../lib/utils") as object;
+jest.mock("../../../lib/utils", () => {
+	const utils = jest.requireActual("../../../lib/utils") as object;
 	return {
 		__esModule: true,
 		...utils,

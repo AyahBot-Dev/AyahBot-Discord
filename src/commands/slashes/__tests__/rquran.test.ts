@@ -16,21 +16,21 @@ import {
 	output65Arabic,
 	singleEmbedShortMixed,
 	singleEmbedShortMixedHaleem,
-} from "../../helpers/tests/variables";
-import { invalid_datatype } from "../../lib/embeds/embeds";
-import { db } from "../../lib/initDB";
-import axios from "../../lib/axiosInstance";
+} from "../../../helpers/tests/variables";
+import { invalid_datatype } from "../../../lib/embeds/embeds";
+import { db } from "../../../lib/initDB";
+import axios from "../../../lib/axiosInstance";
 
 import rquranCmd from "../rquran";
 
 import type { AxiosResponse } from "axios";
 import type { CacheType, CommandInteractionOption } from "discord.js";
 
-jest.mock("../../lib/axiosInstance", () => ({
+jest.mock("../../../lib/axiosInstance", () => ({
 	get: jest.fn(),
 }));
-jest.mock("../../lib/utils", () => {
-	const utils = jest.requireActual("../../lib/utils") as object;
+jest.mock("../../../lib/utils", () => {
+	const utils = jest.requireActual("../../../lib/utils") as object;
 	return { __esModule: true, ...utils, handleE: jest.fn() };
 });
 

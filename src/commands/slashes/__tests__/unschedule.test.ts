@@ -9,15 +9,15 @@ import {
 	msg,
 	unscheduledEmbed,
 	scheduleNotDoneEmbed,
-} from "../../helpers/tests/variables";
-import { embed_error } from "../../lib/embeds/embeds";
-import { db, scheduledJobs } from "../../lib/initDB";
+} from "../../../helpers/tests/variables";
+import { embed_error } from "../../../lib/embeds/embeds";
+import { db, scheduledJobs } from "../../../lib/initDB";
 
 import unscheduleCmd from "../unschedule";
 
-jest.mock("../../lib/initDB", () => {
+jest.mock("../../../lib/initDB", () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const db = jest.requireActual("../../lib/initDB") as any;
+	const db = jest.requireActual("../../../lib/initDB") as any;
 	return {
 		__esModule: true,
 		...db,
@@ -31,8 +31,8 @@ jest.mock("../../lib/initDB", () => {
 	};
 });
 
-jest.mock("../../lib/utils", () => {
-	const utils = jest.requireActual("../../lib/utils") as object;
+jest.mock("../../../lib/utils", () => {
+	const utils = jest.requireActual("../../../lib/utils") as object;
 	return {
 		__esModule: true,
 		...utils,

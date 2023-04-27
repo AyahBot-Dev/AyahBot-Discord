@@ -1,13 +1,18 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+	AutocompleteInteraction,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 
-import { translations } from "../lib/classes/Ayah";
+import { translations } from "../../lib/classes/Ayah";
 import {
 	invalid_datatype,
 	embed_error,
 	create_embed,
-} from "../lib/embeds/embeds";
-import DBHandler from "../lib/DBHandler";
-import { colors } from "../lib/embeds/infos";
+} from "../../lib/embeds/embeds";
+import DBHandler from "../../lib/DBHandler";
+import { colors } from "../../lib/embeds/infos";
+import { findClosestMatchDIST } from "../../lib/utils";
 
 import type {
 	CacheType,
@@ -15,7 +20,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "qdefault",
@@ -37,12 +42,25 @@ export default {
 				.setDescription(
 					"Enter a translation code (e.g. 'hilali') from our translations wiki to be default for your server"
 				)
+				.setAutocomplete(true)
 				.setRequired(true)
 		)
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
 
+	async autocomplete(interaction: AutocompleteInteraction) {
+		const input = interaction.options.getFocused();
+		const filtered = await findClosestMatchDIST(
+			input,
+			Object.keys(translations)
+		);
+		await interaction.respond(
+			filtered.map((choice: string) => ({ name: choice, value: choice }))
+		);
+	},
+
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
@@ -50,14 +68,15 @@ export default {
 
 		if (translation == "remove") {
 			const quranTrsIsRemoved =
-				(await DBHandler.settings.remove(message.guild.id, "quran")) !== false;
+				(await DBHandler.settings.remove(interaction.guild.id, "quran")) !==
+				false;
 
 			if (!quranTrsIsRemoved)
-				return await message.editReply({ embeds: [embed_error] });
+				return await interaction.editReply({ embeds: [embed_error] });
 
-			client.quranTrs.cache.delete(message.guild.id);
+			client.quranTrs.cache.delete(interaction.guild.id);
 
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Custom Quran Translation was removed successfully",
@@ -69,7 +88,7 @@ export default {
 		}
 
 		if (!translation || !translations[translation])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(
 						translation,
@@ -79,13 +98,15 @@ export default {
 			});
 
 		const quranIsSet =
-			(await DBHandler.settings.store(message.guild.id, translation)) !== false;
+			(await DBHandler.settings.store(interaction.guild.id, translation)) !==
+			false;
 
-		if (!quranIsSet) return await message.editReply({ embeds: [embed_error] });
+		if (!quranIsSet)
+			return await interaction.editReply({ embeds: [embed_error] });
 
-		client.quranTrs.cache.set(message.guild.id, translations[translation]);
+		client.quranTrs.cache.set(interaction.guild.id, translations[translation]);
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [
 				await create_embed(
 					"Default Quran translation saved",

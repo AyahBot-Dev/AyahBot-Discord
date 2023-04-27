@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { invalid_datatype } from "../lib/embeds/embeds";
+import { invalid_datatype } from "../../lib/embeds/embeds";
 
 import type {
 	CacheType,
@@ -8,7 +8,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "help",
@@ -33,7 +33,7 @@ export default {
 		),
 
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
@@ -47,14 +47,14 @@ export default {
 				option[0].toUpperCase() + option.slice(1).toLowerCase()
 			)
 		)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(option, "a valid category from the list"),
 				],
 			});
 
 		if (option)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await client.helpCommands.get(
 						option[0].toUpperCase() + option.slice(1).toLowerCase()
@@ -62,7 +62,7 @@ export default {
 				],
 			});
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [await client.helpCommands.get("main")],
 		});
 	},

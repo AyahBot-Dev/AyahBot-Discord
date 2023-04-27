@@ -1,7 +1,7 @@
-import { create_embed } from "../lib/embeds/embeds";
-import { cleanupAll } from "../lib/utils";
-import { colors } from "../lib/embeds/infos";
-import { db } from "../lib/initDB";
+import { create_embed } from "../../lib/embeds/embeds";
+import { cleanupAll } from "../../lib/utils";
+import { colors } from "../../lib/embeds/infos";
+import { db } from "../../lib/initDB";
 
 import type {
 	CacheType,
@@ -9,7 +9,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "shutdown",
@@ -21,7 +21,7 @@ export default {
 	cooldown: 3,
 
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		_: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
@@ -31,7 +31,7 @@ export default {
         3. exit the process
       */
 
-		await message.editReply({
+		await interaction.editReply({
 			embeds: [
 				await create_embed(
 					"Allah hafez",

@@ -1,13 +1,17 @@
-import { ChannelType, SlashCommandBuilder } from "discord.js";
+import {
+	ChannelType,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 
-import DBHandler from "../lib/DBHandler";
+import DBHandler from "../../lib/DBHandler";
 import {
 	embed_error,
 	create_embed,
 	invalid_datatype,
 	syntax_error,
-} from "../lib/embeds/embeds";
-import { colors } from "../lib/embeds/infos";
+} from "../../lib/embeds/embeds";
+import { colors } from "../../lib/embeds/infos";
 
 import type {
 	CacheType,
@@ -15,7 +19,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { Lang } from "../types";
+import type { Lang } from "../../types";
 
 export default {
 	name: "schedule",
@@ -59,10 +63,11 @@ export default {
 					{ name: "Both", value: "both" }
 				)
 		)
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
 
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[]
 	) {
 		const channelIdU = `<#${args[0]?.value}>`;
@@ -75,7 +80,7 @@ export default {
 			!/^\d{1,2}:\d{2}$/.test(time) ||
 			!(args.length === 3)
 		)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await syntax_error(
 						"<channel's @>",
@@ -86,7 +91,7 @@ export default {
 			});
 
 		if (!["translated", "arabic", "both"].includes(ayah_type))
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(
 						ayah_type,
@@ -96,8 +101,8 @@ export default {
 			});
 
 		const channelId = channelIdU.substring(2, channelIdU.indexOf(">"));
-		if (!message.guild.channels.cache.has(channelId))
-			return await message.editReply({
+		if (!interaction.guild.channels.cache.has(channelId))
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Channel not found",
@@ -108,13 +113,13 @@ export default {
 			});
 
 		// check perms
-		const channel = await message.guild.channels.cache.get(channelId);
-		const hasPerms = await message.guild.members.me
+		const channel = await interaction.guild.channels.cache.get(channelId);
+		const hasPerms = await interaction.guild.members.me
 			.permissionsIn(channel)
 			.has(["SendMessages", "ViewChannel", "EmbedLinks"]);
 
 		if (!hasPerms)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Insufficient permission I have",
@@ -125,7 +130,7 @@ export default {
 			});
 
 		if (channel.type != ChannelType.GuildText)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Only Text channels supported",
@@ -138,14 +143,14 @@ export default {
 		const [hh, mm] = time.split(":").map(Number);
 		// Second: check if time valid
 		if (hh > 23 || hh < 0 || mm < 0 || mm > 59)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await invalid_datatype(time, "a valid time in 24 hrs format")],
 			});
 
 		// Fourth: create a schedule from createSchedule() function
 		const res =
 			(await DBHandler.settings.store(
-				message.guild.id,
+				interaction.guild.id,
 				undefined,
 				undefined,
 				channelId,
@@ -153,13 +158,13 @@ export default {
 				{ translated: "en", arabic: "ar", both: "mixed" }[ayah_type] as Lang // TODO: Simplify this in next major release
 			)) !== false &&
 			(await DBHandler.scheduler.init(
-				message.guild,
+				interaction.guild,
 				channelId,
 				`${mm} ${hh} * * *`
 			));
 
 		if (res === null)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Timezone unconfigured",
@@ -169,9 +174,9 @@ export default {
 				],
 			});
 
-		if (!res) return await message.editReply({ embeds: [embed_error] });
+		if (!res) return await interaction.editReply({ embeds: [embed_error] });
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [
 				await create_embed(
 					"Schedules saved",

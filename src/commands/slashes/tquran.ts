@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SlashCommandBuilder } from "discord.js";
+import { AutocompleteInteraction, SlashCommandBuilder } from "discord.js";
 
-import { Ayah, sanitizeVerse, translations } from "../lib/classes/Ayah";
-import { syntax_error, invalid_datatype } from "../lib/embeds/embeds";
-import { convertToEmbed } from "../lib/utils";
+import { Ayah, sanitizeVerse, translations } from "../../lib/classes/Ayah";
+import { syntax_error, invalid_datatype } from "../../lib/embeds/embeds";
+import { convertToEmbed, findClosestMatchDIST } from "../../lib/utils";
 
 import type {
 	CacheType,
@@ -11,7 +11,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "tquran",
@@ -39,17 +39,28 @@ export default {
 				.setDescription(
 					"Enter a translation code (e.g. 'hilali') from our translations wiki"
 				)
-
+				.setAutocomplete(true)
 				.setRequired(false)
 		),
 
+	async autocomplete(interaction: AutocompleteInteraction) {
+		const input = interaction.options.getFocused();
+		const filtered = await findClosestMatchDIST(
+			input,
+			Object.keys(translations)
+		);
+		await interaction.respond(
+			filtered.map((choice: string) => ({ name: choice, value: choice }))
+		);
+	},
+
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
 		if (!args[0])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await syntax_error("<verse_key (e.g. 3:157 or 3:100-105)>")],
 			});
 
@@ -57,7 +68,7 @@ export default {
 		const verse_key = args[0]?.value as string;
 
 		if (translation && !translations[translation])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(
 						translation as string,
@@ -68,7 +79,7 @@ export default {
 
 		if (!translation)
 			translation =
-				(await (client.quranTrs.cache.get(message.guildId) as number)) ||
+				(await (client.quranTrs.cache.get(interaction.guildId) as number)) ||
 				undefined;
 
 		const [surah, verse] = verse_key.split(":");
@@ -77,11 +88,11 @@ export default {
 			: true;
 
 		if (isNotValid)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await invalid_datatype(verse_key, "a valid verse key")],
 			});
 
-		return message.editReply({
+		return interaction.editReply({
 			embeds: [
 				await convertToEmbed(
 					await Ayah.fetch(`${surah}:${verse}`, translation, "en")

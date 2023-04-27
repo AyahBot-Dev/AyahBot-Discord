@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import { AutocompleteInteraction, SlashCommandBuilder } from "discord.js";
 
-import { Ayah, translations } from "../lib/classes/Ayah";
-import { invalid_datatype } from "../lib/embeds/embeds";
-import { convertToEmbed } from "../lib/utils";
+import { Ayah, translations } from "../../lib/classes/Ayah";
+import { invalid_datatype } from "../../lib/embeds/embeds";
+import { convertToEmbed, findClosestMatchDIST } from "../../lib/utils";
 
 import type {
 	CacheType,
@@ -10,7 +10,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "rtquran",
@@ -30,19 +30,30 @@ export default {
 				.setDescription(
 					"Enter a translation code (e.g. 'hilali') from our translations wiki"
 				)
-
+				.setAutocomplete(true)
 				.setRequired(false)
 		),
 
+	async autocomplete(interaction: AutocompleteInteraction) {
+		const input = interaction.options.getFocused();
+		const filtered = await findClosestMatchDIST(
+			input,
+			Object.keys(translations)
+		);
+		await interaction.respond(
+			filtered.map((choice: string) => ({ name: choice, value: choice }))
+		);
+	},
+
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
 		let translation: string | number = args[0]?.value as string;
 
 		if (translation && !translations[translation])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [
 					await invalid_datatype(
 						translation as string,
@@ -53,10 +64,10 @@ export default {
 
 		if (!translation)
 			translation = (await client.quranTrs.cache.get(
-				message.guildId
+				interaction.guildId
 			)) as number;
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [
 				await convertToEmbed(await Ayah.random(translation, false, "en")),
 			],

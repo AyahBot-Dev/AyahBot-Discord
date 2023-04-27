@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SlashCommandBuilder } from "discord.js";
 
-import { Ayah, sanitizeVerse } from "../lib/classes/Ayah";
-import { syntax_error, invalid_datatype } from "../lib/embeds/embeds";
-import { convertToEmbed } from "../lib/utils";
+import { Ayah, sanitizeVerse } from "../../lib/classes/Ayah";
+import { syntax_error, invalid_datatype } from "../../lib/embeds/embeds";
+import { convertToEmbed } from "../../lib/utils";
 
 import type {
 	CacheType,
@@ -33,11 +33,11 @@ export default {
 		),
 
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[]
 	) {
 		if (!args[0])
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await syntax_error("<verse_key (e.g. 3:157 or 3:100-105)>")],
 			});
 
@@ -49,11 +49,11 @@ export default {
 			: true;
 
 		if (isNotValid)
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await invalid_datatype(verse_key, "a valid verse key")],
 			});
 
-		return message.editReply({
+		return interaction.editReply({
 			embeds: [
 				await convertToEmbed(
 					await Ayah.fetch(`${surah}:${verse}`, undefined, "ar")

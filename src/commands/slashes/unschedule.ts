@@ -1,9 +1,9 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { scheduledJobs } from "node-schedule";
 
-import { embed_error, create_embed } from "../lib/embeds/embeds";
-import { colors } from "../lib/embeds/infos";
-import DBHandler from "../lib/DBHandler";
+import { embed_error, create_embed } from "../../lib/embeds/embeds";
+import { colors } from "../../lib/embeds/infos";
+import DBHandler from "../../lib/DBHandler";
 
 import type { CommandInteraction } from "discord.js";
 
@@ -21,23 +21,24 @@ export default {
 	slash: new SlashCommandBuilder()
 		.setName("unschedule")
 		.setDescription("Unschedule your daily ayah reminder")
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
 
-	async execute(message: CommandInteraction) {
-		const dTC = await DBHandler.settings.fetchRaw(message.guild.id);
+	async execute(interaction: CommandInteraction) {
+		const dTC = await DBHandler.settings.fetchRaw(interaction.guild.id);
 		if (dTC?.spec && dTC?.channel) {
 			const fromDBDeleted =
 				(await DBHandler.settings.remove(
-					message.guild.id,
+					interaction.guild.id,
 					"spec",
 					"channel",
 					"lang"
 				)) !== false;
 			if (!fromDBDeleted)
-				return await message.editReply({ embeds: [embed_error] });
-			if (scheduledJobs[message.guild.id])
-				await scheduledJobs[message.guild.id].cancel();
-			return await message.editReply({
+				return await interaction.editReply({ embeds: [embed_error] });
+			if (scheduledJobs[interaction.guild.id])
+				await scheduledJobs[interaction.guild.id].cancel();
+			return await interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Successfully unscheduled",
@@ -47,7 +48,7 @@ export default {
 				],
 			});
 		} else
-			return message.editReply({
+			return interaction.editReply({
 				embeds: [
 					await create_embed(
 						"Not yet scheduled",

@@ -1,28 +1,28 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import { mocked } from "jest-mock";
 
-import axios from "../../lib/axiosInstance";
+import axios from "../../../lib/axiosInstance";
 import {
 	msg,
 	multipleEmbedArabic,
 	output65Arabic,
 	output66Arabic,
 	singleEmbedArabic,
-} from "../../helpers/tests/variables";
-import { invalid_datatype, syntax_error } from "../../lib/embeds/embeds";
-import { db } from "../../lib/initDB";
+} from "../../../helpers/tests/variables";
+import { invalid_datatype, syntax_error } from "../../../lib/embeds/embeds";
+import { db } from "../../../lib/initDB";
 
 import aquranCmd from "../aquran";
 
 import type { CacheType, CommandInteractionOption } from "discord.js";
 import type { AxiosResponse } from "axios";
 
-jest.mock("../../lib/axiosInstance", () => ({
+jest.mock("../../../lib/axiosInstance", () => ({
 	get: jest.fn(),
 }));
 
-jest.mock("../../lib/utils", () => {
-	const utils = jest.requireActual("../../lib/utils") as object;
+jest.mock("../../../lib/utils", () => {
+	const utils = jest.requireActual("../../../lib/utils") as object;
 	return { __esModule: true, ...utils, handleE: jest.fn() };
 });
 

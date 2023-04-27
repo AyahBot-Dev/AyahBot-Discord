@@ -1,11 +1,11 @@
 import { Api } from "@top-gg/sdk";
 
-import loadJobs from "../../lib/handlers/jobsLoader";
-import type { CustomClient } from "../../lib/classes/CustomClient";
-import loadQuranTrs from "../../lib/handlers/quranTrsLoader";
-import loadSlashes from "../../lib/handlers/slashesLoader";
-import { cleanupAll, handleE } from "../../lib/utils";
-import { db } from "../../lib/initDB";
+import loadJobs from "../lib/handlers/jobsLoader";
+import type { CustomClient } from "../lib/classes/CustomClient";
+import loadQuranTrs from "../lib/handlers/quranTrsLoader";
+import loadSlashes from "../lib/handlers/slashesLoader";
+import { cleanupAll, handleE } from "../lib/utils";
+import { db } from "../lib/initDB";
 
 export default async (client: CustomClient) => {
 	try {

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import { Ayah } from "../lib/classes/Ayah";
-import { convertToEmbed } from "../lib/utils";
+import { Ayah } from "../../lib/classes/Ayah";
+import { convertToEmbed } from "../../lib/utils";
 
 import type { CommandInteraction } from "discord.js";
 
@@ -18,8 +18,8 @@ export default {
 		.setName("raquran")
 		.setDescription("Show a random arabic ayah"),
 
-	async execute(message: CommandInteraction) {
-		return await message.editReply({
+	async execute(interaction: CommandInteraction) {
+		return await interaction.editReply({
 			embeds: [await convertToEmbed(await Ayah.random(undefined, false, "ar"))],
 		});
 	},

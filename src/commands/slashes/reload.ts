@@ -1,6 +1,6 @@
-import { invalid_datatype, create_embed } from "../lib/embeds/embeds";
-import { initJPS } from "../lib/utils";
-import { colors } from "../lib/embeds/infos";
+import { invalid_datatype, create_embed } from "../../lib/embeds/embeds";
+import { initJPS } from "../../lib/utils";
+import { colors } from "../../lib/embeds/infos";
 
 import type {
 	CacheType,
@@ -8,7 +8,7 @@ import type {
 	CommandInteractionOption,
 } from "discord.js";
 
-import type { CustomClient } from "../lib/classes/CustomClient";
+import type { CustomClient } from "../../lib/classes/CustomClient";
 
 export default {
 	name: "reload",
@@ -20,7 +20,7 @@ export default {
 	cooldown: 3,
 
 	async execute(
-		message: CommandInteraction,
+		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[],
 		client: CustomClient
 	) {
@@ -34,7 +34,7 @@ export default {
 
 		// first see if option exists in reloadable things
 		if (option && !options.includes(option))
-			return await message.editReply({
+			return await interaction.editReply({
 				embeds: [await invalid_datatype(option, "a valid reloadable item")],
 			});
 
@@ -46,7 +46,7 @@ export default {
 				// deepcode ignore PromiseNotCaughtGeneral: <Handled in handler>
 				.then(
 					async () =>
-						await message.editReply({
+						await interaction.editReply({
 							embeds: [
 								await create_embed(
 									"Successfully reloaded",
@@ -61,7 +61,7 @@ export default {
 		// FIXME: clear cache - not able in esm import
 		await initJPS(client);
 
-		return await message.editReply({
+		return await interaction.editReply({
 			embeds: [
 				await create_embed(
 					"Successfully reloaded",
