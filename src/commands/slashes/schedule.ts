@@ -58,9 +58,9 @@ export default {
 				)
 				.setRequired(true)
 				.addChoices(
-					{ name: "Translated", value: "translated" },
-					{ name: "Arabic", value: "arabic" },
-					{ name: "Both", value: "both" }
+					{ name: "Translated", value: "en" },
+					{ name: "Arabic", value: "ar" },
+					{ name: "Both", value: "mixed" }
 				)
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
@@ -70,16 +70,12 @@ export default {
 		interaction: CommandInteraction,
 		args: readonly CommandInteractionOption<CacheType>[]
 	) {
-		const channelIdU = `<#${args[0]?.value}>`;
-		const time: string = args[1].value as string;
+		const channelIdU = args[0]?.value as string;
+		const time = args[1].value as string;
 		const ayah_type: string = (args[2].value as string).toLowerCase();
 
-		// First: check if channelId and time are in correct format
-		if (
-			!/^<#(\d{10,})>$/.test(channelIdU) ||
-			!/^\d{1,2}:\d{2}$/.test(time) ||
-			!(args.length === 3)
-		)
+		// First: check if time is in correct format
+		if (!/^\d{1,2}:\d{2}$/.test(time))
 			return await interaction.editReply({
 				embeds: [
 					await syntax_error(
@@ -100,8 +96,7 @@ export default {
 				],
 			});
 
-		const channelId = channelIdU.substring(2, channelIdU.indexOf(">"));
-		if (!interaction.guild.channels.cache.has(channelId))
+		if (!interaction.guild.channels.cache.has(channelIdU))
 			return await interaction.editReply({
 				embeds: [
 					await create_embed(
@@ -113,7 +108,7 @@ export default {
 			});
 
 		// check perms
-		const channel = await interaction.guild.channels.cache.get(channelId);
+		const channel = await interaction.guild.channels.cache.get(channelIdU);
 		const hasPerms = await interaction.guild.members.me
 			.permissionsIn(channel)
 			.has(["SendMessages", "ViewChannel", "EmbedLinks"]);
@@ -153,13 +148,13 @@ export default {
 				interaction.guild.id,
 				undefined,
 				undefined,
-				channelId,
+				channelIdU,
 				`${mm} ${hh}`,
-				{ translated: "en", arabic: "ar", both: "mixed" }[ayah_type] as Lang // TODO: Simplify this in next major release
+				ayah_type as Lang
 			)) !== false &&
 			(await DBHandler.scheduler.init(
 				interaction.guild,
-				channelId,
+				channelIdU,
 				`${mm} ${hh} * * *`
 			));
 
