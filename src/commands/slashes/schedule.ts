@@ -86,13 +86,10 @@ export default {
 				],
 			});
 
-		if (!["translated", "arabic", "both"].includes(ayah_type))
+		if (!["en", "ar", "mixed"].includes(ayah_type))
 			return await interaction.editReply({
 				embeds: [
-					await invalid_datatype(
-						ayah_type,
-						"any of 'translated', 'arabic' and 'both'"
-					),
+					await invalid_datatype(ayah_type, "any of 'en', 'ar' and 'mixed'"),
 				],
 			});
 
@@ -101,7 +98,7 @@ export default {
 				embeds: [
 					await create_embed(
 						"Channel not found",
-						`The channel ${channelIdU} doesn't exist. Maybe forgot to create that?`,
+						`The channel <#${channelIdU}> doesn't exist. Maybe forgot to create that?`,
 						colors.error
 					),
 				],
@@ -118,7 +115,7 @@ export default {
 				embeds: [
 					await create_embed(
 						"Insufficient permission I have",
-						`I don't have permission to view, send messages \nand send embeds in ${channelIdU}. I at least need permissions to view the channel, send embeds and messages`,
+						`I don't have permission to view, send messages \nand send embeds in <#${channelIdU}>. I at least need permissions to view the channel, send embeds and messages`,
 						colors.warning
 					),
 				],
@@ -129,7 +126,7 @@ export default {
 				embeds: [
 					await create_embed(
 						"Only Text channels supported",
-						`I can't send messages and embeds in ${channelIdU} as it's not a text channel`,
+						`I can't send messages and embeds in <#${channelIdU}> as it's not a text channel`,
 						colors.warning
 					),
 				],
@@ -175,7 +172,7 @@ export default {
 			embeds: [
 				await create_embed(
 					"Schedules saved",
-					`In Shaa Allah, from now on, everyday ${ayah_type} ayahs will be sent in ${channelIdU} at ${time}`,
+					`In Shaa Allah, from now on, everyday ayahs will be sent in <#${channelIdU}> at ${time}`,
 					colors.success
 				),
 			],
