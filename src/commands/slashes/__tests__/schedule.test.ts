@@ -53,13 +53,13 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789012" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
 				await create_embed(
 					"Schedules saved",
-					"In Shaa Allah, from now on, everyday translated ayahs will be sent in <#123456789012> at 00:00",
+					"In Shaa Allah, from now on, everyday ayahs will be sent in <#123456789012> at 00:00",
 					colors.success
 				),
 			],
@@ -73,27 +73,22 @@ describe("Command: schedule", () => {
 			{ value: "blah" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
-			embeds: [
-				await invalid_datatype(
-					"blah",
-					"any of 'translated', 'arabic' and 'both'"
-				),
-			],
+			embeds: [await invalid_datatype("blah", "any of 'en', 'ar' and 'mixed'")],
 		});
 	});
 
 	it("is returning syntax error embed if channelId or time is not in correct format", async () => {
 		await scheduleCmd.execute(msg, [
-			{ value: "<invalidId>" },
+			{ value: "invalidId" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
-				await syntax_error(
-					"<channel's @>",
-					"<time (in 24 hrs format)>",
-					"<ayah_type>"
+				await create_embed(
+					"Channel not found",
+					`The channel <#invalidId> doesn't exist. Maybe forgot to create that?`,
+					colors.error
 				),
 			],
 		});
@@ -103,7 +98,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789021" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
@@ -120,7 +115,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789010" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
@@ -132,12 +127,11 @@ describe("Command: schedule", () => {
 			],
 		});
 	});
-
 	it("is returning channel not a text channel", async () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "12345678901" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 
 		expect(msg.editReply).toBeCalledWith({
@@ -155,7 +149,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789012" },
 			{ value: "24:60" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
@@ -170,7 +164,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789012" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [embed_error],
@@ -186,7 +180,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789012" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [
@@ -205,7 +199,7 @@ describe("Command: schedule", () => {
 		await scheduleCmd.execute(msg, [
 			{ value: "123456789012" },
 			{ value: "00:00" },
-			{ value: "translated" },
+			{ value: "en" },
 		] as CommandInteractionOption<CacheType>[]);
 		expect(msg.editReply).toBeCalledWith({
 			embeds: [embed_error],
