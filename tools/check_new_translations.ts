@@ -15,8 +15,10 @@ const notifyUpdate = async (text: string): Promise<boolean> => {
 		.then(async () => {
 			return true;
 		})
-		.catch(() => process.exit(1));
+		.catch((err) => {(console.error(err)); process.exit(1)});
 };
+
+let text = ""
 
 const translationsArr = Object.values(translations);
 
@@ -32,17 +34,20 @@ translationsArr.sort((a, b) => a - b);
 
 // check the length first:
 if (translationsdTC.length != translationsArr.length) {
-	await notifyUpdate("Length doesn't match");
+	text += "Length doesn't match";
+	text += `AyahBot: ${translationsArr.length}, Original: ${translationsdTC.length}`
 	await new Promise((r) => setTimeout(r, 3000));
 }
 
 // then iterate if all ok
 await translationsdTC.forEach(async (v, i) => {
 	if (v.id != translationsArr[i] || !translationsArr[i]) {
-		await notifyUpdate(
-			`So, in index ${i}, translations list (online) has ${v.id}, but we have ${translationsArr[i]}`
-		);
+		text += '\n' + 
+			`So, in index ${i}, translations list (online) has ${v.id}, but we have ${translationsArr[i]}\n`
+		
 		await new Promise((r) => setTimeout(r, 3000));
 	}
 	i == translationsdTC.length - 1 ? process.exit(0) : null;
 });
+
+console.log(text)

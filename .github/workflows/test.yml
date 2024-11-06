@@ -10,7 +10,7 @@ jobs:
       - name: Test using Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18.1"
+          node-version: "19"
       - name: Testing 🧪
         run: |
           yarn install --frozen-lockfile
