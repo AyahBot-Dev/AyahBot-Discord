@@ -13,7 +13,6 @@ const bot = new AyahBot(
       GatewayIntentBits.GuildMessageTyping,
       GatewayIntentBits.DirectMessages,
       GatewayIntentBits.DirectMessageTyping,
-      GatewayIntentBits.MessageContent,
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   }),
