@@ -12,7 +12,7 @@ jobs:
       - name: Test using Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "19"
+          node-version: "20"
       - name: Check for translations update
         run: |
           yarn install --frozen-lockfile
