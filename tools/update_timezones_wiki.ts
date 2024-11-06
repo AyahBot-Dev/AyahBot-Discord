@@ -1,12 +1,12 @@
 import { writeFile } from "fs/promises";
-import ct from "countries-and-timezones";
+import {Country, getAllCountries} from "countries-and-timezones";
 
-const tzData = await ct.getAllCountries();
+const tzData = await getAllCountries();
 
 let string = "";
 
 for (const c in tzData) {
-  const data: ct.Country = tzData[c];
+  const data: Country = tzData[c];
   string += `### ${data.name} (Country code: '${c}')\n\n`;
   data.timezones.forEach((v) => (string += `- \`${v}\`\n`));
   string += "\n";
